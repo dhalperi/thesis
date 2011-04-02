@@ -1,11 +1,67 @@
 \documentclass[pdftex,letterpaper,twocolumn,10pt]{article}
 \usepackage{usenix_shorttitle}
 
-\newcommand{\TITLE}{Dan's generals paper}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Paper info and meta-data                %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\AUTHORS}{Daniel Halperin}
+\newcommand{\TITLE}{Dan's Generals Paper}
+\newcommand{\TITLECLEAN}{Dan's Generals Paper}
+\newcommand{\KEYWORDS}{Put your keywords here} % Used below in ACM keywords
+\newcommand{\CONFERENCE}{University of Washington CSE}
 
+\usepackage[colorlinks,citecolor=blue,pdftex]{hyperref}
+\hypersetup{%
+pdfauthor = {\AUTHORS},
+pdftitle = {\TITLECLEAN},
+pdfsubject = {\CONFERENCE},
+%pdfkeywords = {\KEYWORDS},
+bookmarksopen = {false},
+pdfpagemode = {UseNone},
+pdfcreator = {},
+pdfproducer = {},
+}
 \title{\TITLE}
+\author{Daniel Halperin\\\\Advised by David Wetherall and Tom Anderson}
 
-%%%%%%%%%%%%%%%%%%%%  START DOCUMENT  %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Formatting sections                     %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\secref}[1]{\S\ref{#1}}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+\newcommand{\heading}[1]{\vspace{4pt}\noindent\textbf{#1}}
+\newcommand{\topheading}[1]{\noindent\textbf{#1}}
+\newcommand{\noheading}[0]{\vspace{4pt}\noindent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Units                                   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\GHz}{\,\text{GHz}\xspace}
+\newcommand{\MHz}{\,\text{MHz}\xspace}
+\newcommand{\Gbps}{\,\text{Gbps}\xspace}
+\newcommand{\Mbps}{\,\text{Mbps}\xspace}
+\newcommand{\KB}{\,\text{KB}\xspace}
+\newcommand{\dB}{\,\text{dB}\xspace}
+\newcommand{\dBi}{\,\text{dBi}\xspace}
+\newcommand{\dBm}{\,\text{dBm}\xspace}
+\newcommand{\W}{\,\text{W}\xspace}
+\newcommand{\mW}{\,\text{mW}\xspace}
+\newcommand{\us}{\,\text{$\mu$s}\xspace}
+\newcommand{\ms}{\,\text{ms}\xspace}
+\newcommand{\mm}{\,\text{mm}\xspace}
+\newcommand{\h}{\,\text{h}\xspace}
+\newcommand{\m}{\,\text{m}\xspace}
+\newcommand{\degree}{\ensuremath{^\circ}\xspace}
+\newcommand{\degrees}{\degree}
+\newcommand{\NB}{\text{NB}\xspace}
+\newcommand{\WB}{\text{WB}\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Start document                          %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
 \maketitle
