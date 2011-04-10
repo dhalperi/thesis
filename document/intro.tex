@@ -1,10 +1,30 @@
 \section{Introduction}
-Introduction to the area and motivation for the problem(s) you
-propose to solve.  Include a proposed principal hypothesis that the
-thesis will demonstrate, and a synopsis of the likely contributions of
-the work.
+\label{sec:intro}
+%Introduction to the area and motivation for the problem(s) you propose to solve.  Include a proposed principal hypothesis that the thesis will demonstrate, and a synopsis of the likely contributions of the work.
 
-\heading{Questions for committee:}
-\begin{itemize}
-\item any expectation of the distribution of section sizes?
-\end{itemize}
+Commodity wireless LAN technology has improved dramatically in the past decade. The low cost, small physical footprint, and minimal power consumption have led to the increasingly pervasive adoption of IEEE~802.11 (Wi-Fi) in a diverse set of consumer devices. These devices vary widely: they may be mobile or static, large or small, plugged in or battery powered; and the way these characteristics manifest can change over time depending on how devices are used. I summarize some representative commercial Wi-Fi devices in \tabref{tab:wifi-devices}.
+
+This ubiquity of Wi-Fi, in symbiosis with the dramatically increased speeds---from 2\Mbps to 600\Mbps between 802.11 (1997) and 802.11n (2009)---has led to a recent spate of proposed applications that combine multiple of these devices. Examples of these applications include wireless system backup, wireless streaming of high definition video and audio from a Blu-ray player to an HD TV and surround sound speakers, and even pervasive interactive interfaces to the home via wireless cameras and projectors in the Microsoft Home~\cite{microsoft_home}.
+
+\begin{table*}[ht]
+\centering
+\begin{tabulary}{\textwidth}{cCc}
+\toprule
+\bf Device & \bf Description & \bf Characteristics \\
+\midrule
+Eye-Fi~\cite{eyefi}  & Wi-Fi SD card used to transfer photos from digital camera & Mobile, small, battery power  \\
+WiDi~\cite{widi} receiver~\cite{widi-rx}  & Laptop screen sharing with HD TV & Static, large, plugged in  \\
+WiDi~\cite{widi} transmitter  & Built into laptops with Intel Wi-Fi & Mobile$^*$, large, battery power$^*$  \\
+Printer, scanner, fax & Transfer documents to/from printers & Static, large, plugged in \\
+AirTunes~\cite{airtunes} & Streaming audio & Static, small, plugged in \\
+Laptop & Flexible computing device & Mobile, large, battery power \\
+Tablet/Netbook & Flexible computing device & Mobile, medium, battery power \\
+Smartphone & Handheld applications & Mobile, small, battery power \\
+Smartphone & Handheld applications & Mobile, small, battery power \\
+\bottomrule
+\end{tabulary}
+\label{tab:wifi-devices}
+\caption{Some Wi-Fi enabled consumer devices.}
+\end{table*}
+
+%This set spans not just mobile personal computers such as laptops, tablets, and smartphones, but also fixed-function devices such as printers, cameras, media storage devices like cards, 
