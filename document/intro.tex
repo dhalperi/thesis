@@ -2,29 +2,56 @@
 \label{sec:intro}
 %Introduction to the area and motivation for the problem(s) you propose to solve.  Include a proposed principal hypothesis that the thesis will demonstrate, and a synopsis of the likely contributions of the work.
 
-Commodity wireless LAN technology has improved dramatically in the past decade. The low cost, small physical footprint, and minimal power consumption have led to the increasingly pervasive adoption of IEEE~802.11 (Wi-Fi) in a diverse set of consumer devices. These devices vary widely: they may be mobile or static, large or small, plugged in or battery powered; and the way these characteristics manifest can change over time depending on how devices are used. I summarize some representative commercial Wi-Fi devices in \tabref{tab:wifi-devices}.
+Commodity wireless LAN technology has improved dramatically in the past decade. The low cost, small physical footprint, and minimal power consumption have led to the increasingly pervasive adoption of IEEE~802.11~\cite{80211} (Wi-Fi) in a diverse set of consumer devices. This ubiquity of Wi-Fi, in symbiosis with dramatically increased speeds---from 2\Mbps to 600\Mbps between 1997 (802.11) and 2009 (802.11n~\cite{80211n})---makes it suitable to replace wires in a wide set of applications, and to enable many new ones. This has spawned a number of academic and industrial research and standardization efforts into innovative home applications~\cite{dixon_homeos,microsoft_home,wireless_hd,wifi_direct,xxx}.
 
-This ubiquity of Wi-Fi, in symbiosis with the dramatically increased speeds---from 2\Mbps to 600\Mbps between 802.11 (1997) and 802.11n (2009)---has led to a recent spate of proposed applications that combine multiple of these devices. Examples of these applications include wireless system backup, wireless streaming of high definition video and audio from a Blu-ray player to an HD TV and surround sound speakers, and even pervasive interactive interfaces to the home via wireless cameras and projectors in the Microsoft Home~\cite{microsoft_home}.
+A key idea for these visions is that any functionality offered by any device, such as input, output, actuation, computation, storage, or data, should be accessible via the network by any other device. This is not a new idea, indeed it dates back at least to the HomeRF project~\cite{nagus_homerf} that predates Wi-Fi. However, only recently has the market achieved the numbers and diversity of low cost, network-enabled devices necessary to develop rich applications.
+%This idea manifests in applications such as Apple's AirPlay, which enables streaming music from any computer, iPad, iPhone, or iPad to a wireless speaker, 
 
-\begin{table*}[ht]
-\centering
-\begin{tabulary}{\textwidth}{cCc}
-\toprule
-\bf Device & \bf Description & \bf Characteristics \\
-\midrule
-Eye-Fi~\cite{eyefi}  & Wi-Fi SD card used to transfer photos from digital camera & Mobile, small, battery power  \\
-WiDi~\cite{widi} receiver~\cite{widi-rx}  & Laptop screen sharing with HD TV & Static, large, plugged in  \\
-WiDi~\cite{widi} transmitter  & Built into laptops with Intel Wi-Fi & Mobile$^*$, large, battery power$^*$  \\
-Printer, scanner, fax & Transfer documents to/from printers & Static, large, plugged in \\
-AirTunes~\cite{airtunes} & Streaming audio & Static, small, plugged in \\
-Laptop & Flexible computing device & Mobile, large, battery power \\
-Tablet/Netbook & Flexible computing device & Mobile, medium, battery power \\
-Smartphone & Handheld applications & Mobile, small, battery power \\
-Smartphone & Handheld applications & Mobile, small, battery power \\
-\bottomrule
-\end{tabulary}
-\label{tab:wifi-devices}
-\caption{Some Wi-Fi enabled consumer devices.}
-\end{table*}
+The hallmark of these new applications is that they involve device-to-device communication within the home;
+%, rather than the device-to-Internet connections typical of the standard 802.11 ``access point'' (AP) model.
+access to the Internet is no longer the primary purpose of wireless connectivity. Instead, the Internet is now only one service of many offered in the home network. Yet, home networks predominantly use the 802.11 infrastructure model of operation that centralizes all communication in the network at the access point (AP). This decision creates a mismatch between the application workloads and the underlying network topology that can limit performance, flexibility, and reliability.
+%Yet, this assumption that Internet access is the main reason for the network is a fundamental part of home network design, and can limit application performance, flexibility, and reliability. I propose to explore how this shift in workload offers an opportunity for revisiting and improving the topology of home networks to better meet the needs of future applications.
+
+In the access point model, all packets in the network are sent via the AP\@. This includes transmissions between wireless clients; 802.11 provides no mechanism to short-circuit the AP when clients are within range. Sending directly, clients can halve transmission count by sending each packet only once. When close to each other and far from the AP, devices can use faster rates, and in the case of MIMO, potentially more spatial streams. And by removing the AP as intermediary, devices are no longer constrained to all use the same frequency. A device-device pair can shift to a different channel that might have better (frequency-selective) fading and/or to operate in a different carrier sense contention domain from other ongoing communications.
+
+%The 802.11 access point mode uses a star topology with the AP at the hub and clients as leaves. In these networks, the AP centralizes control and communication: clients gain admission to the network by associating
+%(and perhaps authenticating)
+%to the AP, and this link forms their only connection to the network. 
+%Packets sent between clients must transit through the client-AP links.
+%Packets sent between clients transit through the AP
+% two distant clients may not be able to communicate, and 802.11 provides no mechanism to short-circuit the AP when they can. 
+%Finally, the access point also buffers packets intended for battery-powered clients that have gone to sleep to save energy.
+
+%This design for a wireless network is simple, but limiting in more diverse workloads. The AP's operating frequency constrains all devices to use a single channel, but .
+
+
+
+%By removing the need for a wired connection, Wi-Fi eases deployment, adds convenience, and enables much smaller devices, such as the $\approx$1\insq Eye-Fi~\cite{eyefi} SD cards that share photos over a network from inside a digital camera.
+%makes Wi-Fi an attractive technology for use in new home applications.
+%has led to a spate of proposed applications that combine multiple of these devices.
+%Examples of these applications include wireless system backup, wireless streaming of high definition video and audio from a Blu-ray player to an HD TV and surround sound speakers, and even pervasive interactive interfaces to the home via wireless cameras and projectors in the Microsoft Home~\cite{microsoft_home}.
+
+%These devices vary widely: they may be mobile or static, large or small, plugged in or battery powered; and the way these characteristics manifest can change over time depending on how devices are used. I summarize some representative commercial Wi-Fi devices in \tabref{tab:wifi-devices}.
+
+%\begin{table*}[ht]
+%\centering
+%\begin{tabulary}{\textwidth}{cCc}
+%\toprule
+%\bf Device & \bf Description & \bf Characteristics \\
+%\midrule
+%Eye-Fi~\cite{eyefi}  & Wi-Fi SD card used to transfer photos from digital camera & Mobile, small, battery power  \\
+%WiDi~\cite{widi} receiver~\cite{widi-rx}  & Laptop screen sharing with HD TV & Static, large, plugged in  \\
+%WiDi~\cite{widi} transmitter  & Built into laptops with Intel Wi-Fi & Mobile$^*$, large, battery power$^*$  \\
+%Printer, scanner, fax & Transfer documents to/from printers & Static, large, plugged in \\
+%AirTunes~\cite{airtunes} & Streaming audio & Static, small, plugged in \\
+%Laptop & Flexible computing device & Mobile, large, battery power \\
+%Tablet/Netbook & Flexible computing device & Mobile, medium, battery power \\
+%Smartphone & Handheld applications & Mobile, small, battery power \\
+%Smartphone & Handheld applications & Mobile, small, battery power \\
+%\bottomrule
+%\end{tabulary}
+%\label{tab:wifi-devices}
+%\caption{Some Wi-Fi enabled consumer devices.}
+%\end{table*}
 
 %This set spans not just mobile personal computers such as laptops, tablets, and smartphones, but also fixed-function devices such as printers, cameras, media storage devices like cards, 
