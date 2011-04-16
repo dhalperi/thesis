@@ -5,7 +5,26 @@ strengths and weaknesses of your approach to date, including what it can
 and cannot do (or in the case of results, what those results show and
 what are the limitations of your results).
 
+\subsection{Meaningful RF Measurements}
+The mechanisms we intend to use to for improving performance, flexibility, and reliability in wireless systems rely on finding good operating points in a large search space. For instance, as a device moves through the home, it might concurrently choose between different link rates, different numbers of spatial streams, multiple transmit or receive antennas, and possible intermediaries. It is important to converge to a solution quickly or the network will be unreliable and have low performance. As we will show, accurate physical layer measurements can help guide this search. We first describe the poor state of RF measurements in Wi-Fi today, and then describe our recent work to build a prototype that measures 802.11n CSI.
+
+\subsubsection{Prior systems: RSSI}
+Until recently, the 802.11 standard did not define any mechanism that allowed senders and receivers to share information about the underlying RF environment in which their links operated. The standard did, however, define a way for a receiver's physical layer (PHY) to communicate to the higher layers a measure of channel quality called the Received Signal Strength Indicator (RSSI).
+
+RSSI represents ``a measure by the PHY of the energy observed at the antenna''~\cite[\S14.2.3.2]{80211}. RSSI is used by the PHY in the standard 802.11 CSMA protocol to determine when to defer to ongoing transmissions. Though the RSSI reporting primitive is optional in 802.11, its necessity for CSMA and general utility for introspection and debugging in the driver have made it available in nearly all commercial 802.11 NICs. RSSI has become the de facto standard for RF channel measurement in Wi-Fi.
+
+However, the RSSI has a number of well known problems. It is known to be unstable and inaccurate, and indeed the 802.11 definition of RSSI notes that ``absolute accuracy of the RSSI reading is not specified.'' We discuss these problems in more depth below in \secref{sec:esnr}.
+
+\subsubsection{Our work: Obtain 802.11n CSI}
+The 802.11n Channel State Information (CSI) is a fine-grained measurement of the RF environment. For 802.11n links, which use multiple antennas (MIMO) and OFDM, the CSI comprises a collection of $M$x$N$ matrices $H_s$ in which each matrix describes the RF path (SNR and phase) between all pairs of $N$ transmit and $M$ receive antennas for one OFDM subcarrier $s$.
+
+We have built a prototype that uses commodity Intel Wi-Fi NICs to measure the CSI. 
+
+\subsection{Effective SNR on Commodity Wi-Fi NICs}
+\label{sec:esnr}
+
 \begin{itemize}
+\item CSI Measurement~\cite{halperin_esnr}.
 \item Effective SNR~\cite{halperin_esnr}.
 \item Troubadour~\cite{halperin_troubadour}.
 \item Power management~\cite{halperin_power}.
