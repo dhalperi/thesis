@@ -23,14 +23,16 @@ Researchers have proposed many mechanisms to improve performance that relax the 
 
 At the same time, a wireless home network must be \emph{reliable}, as reliability represents both one key component of user satisfaction and one key challenge to adoption~\cite{edwards_challenges}. A network network should be robust even as people and objects move around or leave the home, devices turn off or switch between wall and battery power, and new application workloads add stress to the network. These requirements make it even more important for a flexible system to converge on an efficient operating point---in the complete search space---quickly and accurately.
 
-It is our hypothesis that a wireless network can be built that meets these needs. There are extant techniques in the research literature that can likely be combined to make a flexible, efficient network architecture that will support rich wireless applications. The main challenge
+It is our hypothesis that a wireless network can be built that meets these needs. In preliminary work, we built a tool that provides fine-grained measurements of 802.11n RF channel state information~\cite{halperin_csitool}. We have used this tool to optimize a single wireless link: with a single measurement, our algorithm can select between configurations of different rates, power levels, transmit antennas, or spatial streams to meet application needs~\cite{halperin_esnr}. In this document, we propose to extend this system to multiple links and indeed to multiple applications. The extant techniques in the research literature can likely be combined to make a flexible, efficient network architecture; the challenge is which mechanisms to adopt and how to traverse the resultant search space rapidly and in a distributed fashion. Addressing this challenge is likely to be the key contribution of this thesis.
+% that will adequately support rich wireless applications.
+%The main remaining challenge is combining these techniques
 
 %The earliest ``smart home'' visions covered mainly sensing and actuation---lighting or temperature could automatically be adapted to the location and preferences of users---but a transition to a media-centric 
 
-The principle hypothesis we propose to demonstrate in the thesis is: \emph{It is possible to create a wireless system to support rich home applications that uses practical, distributed mechanisms to efficiently utilize available devices and spectrum resources and maintain reliable communication in the face of mobility and churn.}
+In summary, the principle hypothesis we propose to demonstrate in the thesis is: \emph{It is possible to create a wireless system to support rich home applications that uses practical, distributed mechanisms to efficiently utilize available devices and spectrum resources and maintain reliable communication in the face of mobility and churn.}
 
 The likely contributions of this thesis include:
-\begin{itemize}
+\begin{itemize}[leftmargin=1em,itemsep=0pt,topsep=3pt,labelsep=0.5em]
 	\item A tool that provides fine-grained measurements of RF channels in the form of 802.11n Channel State Information (CSI).
 	\item An algorithm that uses the CSI to make accurate, real-time predictions about 802.11 packet delivery for wireless links across a wide range of configurations.
 	\item Distributed protocols and algorithms for a flexible network that efficiently and rapidly adapts the communication topology and spectral use in response to changing workload, environment, and devices.
