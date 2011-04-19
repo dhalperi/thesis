@@ -31,6 +31,7 @@ pdfproducer = {},
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{xspace}
+\newcommand{\term}[1]{\texttt{#1}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%        Fancy tables                            %%%
@@ -42,6 +43,19 @@ pdfproducer = {},
 %%%        Lists with reduced spacing              %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Figures                                 %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+% Caption package both lets you set the spacing between figure and caption
+% and also makes the \figref{} point to the right place.
+\usepackage[font=bf,aboveskip=6pt,belowskip=-4mm]{caption}
+%\usepackage{caption}
+% Get the caption package to work with ACM style
+\DeclareCaptionType[placement=b,within=none]{copyrightbox}
+% Allow subfigures, make them bold
+\usepackage[bf,BF,small]{subfigure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%        Formatting sections                     %%%
@@ -66,8 +80,9 @@ pdfproducer = {},
 \newcommand{\dBm}{\,\text{dBm}\xspace}
 \newcommand{\W}{\,\text{W}\xspace}
 \newcommand{\mW}{\,\text{mW}\xspace}
-\newcommand{\us}{\,\text{$\mu$s}\xspace}
+\newcommand{\uW}{\,\text{$\mu$W}\xspace}
 \newcommand{\ms}{\,\text{ms}\xspace}
+\newcommand{\us}{\,\text{$\mu$s}\xspace}
 \newcommand{\h}{\,\text{h}\xspace}
 \newcommand{\m}{\,\text{m}\xspace}
 \newcommand{\cm}{\,\text{cm}\xspace}
@@ -117,6 +132,16 @@ pdfproducer = {},
 % Ratul
 
 %% Bibliography
+\let\oldthebibliography=\thebibliography
+\let\endoldthebibliography=\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+    \begin{oldthebibliography}{#1}%
+      \setlength{\parskip}{0ex}%
+      \setlength{\itemsep}{0ex}%
+}%
+{%
+\end{oldthebibliography}%
+}
 %\small
 %\footnotesize % SPACE
 \bibliographystyle{abbrv}

@@ -1,8 +1,33 @@
 \section{Proposed work}
 \label{sec:proposed}
-Proposed work section that describes the main challenges and
+\emph{\color{red}Proposed work section that describes the main challenges and
 innovations that are needed to accomplish the proposed hypothesis, with
-as much description as possible of how you will tackle each one.
+as much description as possible of how you will tackle each one.}
+
+In \secref{sec:preliminary}, we described our tool to measure the 802.11n channel state information (CSI), and how we have used the CSI to compute effective SNR and predict packet delivery for wireless links. In this section, we describe an architecture for a 
+
+\subsection{Wireless Network Architecture}
+\heading{Federated Tree Structure.}
+Keep one device as coordinator, on 2.4\GHz band. Centralized place to keep logs. Other powered, many-antenna devices can act as localized repeaters similar to ``range extenders'' in today's networks. Coordinators take on many functionalities of APs today: broadcast/multicast traffic, and buffering, for clients. Disadvantage: multiple broadcasts. Advantage: can do multicast rate selection. Another advantage: improved power consumption for clients that use a nearer repeater with better rates, also fewer other clients to listen to. Both possible in today's networks but require user to purchase dedicated hardware; here any device can choose to be a coordinator and provide these benefits.
+
+Believe that this will typically have at most 2 levels of coordinators.
+
+Generalized model of that provided in Wi-Fi Direct Spec, which has some support in current hardware; key is that as in 802.11 standard there is no guide as to how to make any decisions.
+
+\heading{State.}
+As in AP networks, coordinators share local state via beacons/heartbeats. This includes setting up a periodic time (and channel) to meet to share multicast/broadcast packets (typically every 200--400\ms in Wi-Fi today).
+
+\heading{Association.}
+With lots of repeaters, hard to know to which device to associate. In devices with wireless range extenders, common problem today is to have good links to multiple nodes. Only want to pick a repeater if benefits of relaying are strong or load is high (e.g., two concurrent conversations with different destinations, can multiplex the second hops to keep client fully occupied). Send probes in decreasing order of spatial streams to measure channel state to receivers; receivers reply with ESNR, capabilities, and uplink speeds if applicable. Also perform bidir measurement.
+
+\heading{Short-Circuit Routing.}
+Assume the tree structure described above, and that all coordinators are on the same channel. In the default case, packets are routed up or down the tree; this is the same as wireless extenders today. In the default network, static routing, ARP, ARP response, done. In this routing, send a WARP and get a WARP response. ARPs turn into WARPs and vice versa at wired/wireless bridges, e.g., AP. WARP includes path, node, channel, and link quality information, in particular the MAC address, TX/RX capabilities, operating channel, and bi-dir single-hop link quality. Nodes can use this info to probe short-circuits.
+
+\heading{Channel Selection.}
+As in Bahl et al.~\cite{bahl_repeater}, use queues to determine wireless congestion as signal to look for new channel. Don't look randomly, do targeted search, using ESNR to estimate link quality (instead of e.g., micro-probing). Look at distribution of per-subcarrier-stream SNRs, that will tell us how ``good'' this channel is. Also, know RSSI difference between bands, give us a hint as to the likely rate available in different parts of the spectrum. 
+
+\heading{Mobility Detection.}
+In addition to queueing, use mobility to determine when to look for new channel or relay. Hard problem is detecting mobility, e.g., Ravindranath, et al.~\cite{ravindranath_sensorhints} claim that RSSI is too slow and also reflects environmental mobility too much. Need to solve both problems: true positive and false positive. Temporal correlation should do it, I think.
 
 \heading{Mechanisms:}
 \begin{itemize}
