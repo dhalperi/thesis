@@ -27,12 +27,14 @@ The coordinator need not take on all the roles of the AP, however. In particular
 We also assume that all devices on the network support the mechanisms we describe, and defer handling of legacy devices and backwards compatibility for later.
 
 \subsubsection{Clients and Repeaters}
+\label{sec:client_repeater}
 In addition to the coordinator, there are two more roles that devices will play in the network, also inspired by roles of devices in AP networks. In our network architecture, all non-coordinator nodes are clients. Clients act as they do in 802.11, associating with the coordinator and perhaps using power-saving techniques when inactive and/or on battery power.
 %As in MultiNet and Wi-Fi Direct, clients in our network architecture may associate with multiple nodes and operate on multiple channels when beneficial to do so. We will describe these mechanisms below.
 
 Some clients in the network may additionally act as \emph{repeaters} and relay packets between other devices in the network. Unlike in standard access point networks, any client may choose to be a repeater, not just a special-purpose device purchased to extend the network. The decision to become a repeater is a local choice, but we envision that repeaters will typically be capable nodes with multiple antennas that are also connected to a large power source. The former constraint implies that their repeater functionality is likely to improve rates for some clients, and the latter that the repeater can tolerate the added energy consumption that comes from relaying transmissions for others. As in AP networks, repeaters broadcast beacons advertising their presence and respond to probe requests.
 
 \subsubsection{Adding Flexibility via Relaxed Association}
+\label{sec:flexible}
 The notion of association is crucial to the functioning of AP networks. Indeed, we observe here that we can recreate all the above constraints of an AP network simply by scrutinizing the notion of association between two wireless devices. When one device associates to another, this creates a \emph{parent}-\emph{child} relationship between them, and implicitly defines the tree along which traffic is sent. Second, the notion of association constrains the client to the multicast/broadcast transmission schedule of the parent. Third, association defines the operating channel of the client, which adopts the channel that its parent uses.
 
 \heading{Flexible Topology.}
