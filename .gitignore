@@ -15,4 +15,6 @@ uwthesis.aux
 
 uwthesis.synctex.gz
 
-uwthesis.synctex.gz
+uwthesis.lot
+
+*.texshop

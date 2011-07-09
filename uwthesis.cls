@@ -1,5 +1,5 @@
 %  ========================================================================
-%  Copyright (c) 1995-2008 The University of Washington
+%  Copyright (c) 1995-2011 The University of Washington
 %
 %  Licensed under the Apache License, Version 2.0 (the "License");
 %  you may not use this file except in compliance with the License.
@@ -27,7 +27,9 @@
 %
 % Version history
 %
-% 6.12,04/15/08, Re-Fix first page bottom margin; raise quote slip 
+% 7.00,06/27/11, Fix output page bug, add copyright page
+% 6.14,07/24/08, Remove large font from abstract title
+% 6.14,04/15/08, Re-Fix first page bottom margin; raise quote slip 
 % 6.13,03/31/08, Fix first page bottom margin; 
 % 6.12,03/21/07, Better handling of label inside footnote with chapternotes
 % 6.11,08/02/06, Bold "abstract", "Page" heading on toc
@@ -68,7 +70,7 @@
 % Documentation is in the companion document (uwthesis.tex)
 %
 
-\ProvidesClass{uwthesis}[2008/04/15]
+\ProvidesClass{uwthesis}[2011/06/27]
 \NeedsTeXFormat{LaTeX2e}
  
 %
@@ -607,7 +609,19 @@
 \def\Programtext#1{\gdef\@Programtext{#1}}  
        \Programtext{Program Authorized to Offer Degree:\ \ }
  
+\def\copyrightpage{                   % Prints the copyright page
+    \vspace{7pc}
+    \begin{center}
+      \par\vskip\z@ plus4fill\relax
+      \copyright Copyright \@Year
+      \par
+      \@Author
+      \par\vskip\z@ plus2fill\relax
+    \end{center}
+  \let\copyrightpage\relax\relax}
+ 
 \def\titlepage{                   % Prints the title page
+    \cleardoublepage
     \vspace{7pc}
     \begin{center}
       {\def\baselinestretch{1.0}\normalfont\Large
@@ -802,6 +816,7 @@
 %  normal parameters
 \def\textofAbstract#1{\gdef\@textofAbstract{#1}}  \textofAbstract{Abstract}
 
+\newsavebox\abs@savebox% (\abs@savebox compliments of blerner@cs.washington.edu)
 \long\def\abstract#1{
    \cleardoublepage
    \begin{center}
@@ -809,7 +824,7 @@
       \par\vskip1pc
       {\bf\@textofAbstract}%
       \par\vskip1pc
-      {\def\baselinestretch{1.0}\normalfont\large \@Title \par}
+      {\def\baselinestretch{1.0}\normalfont \@Title \par}
       \par\vskip1pc
       \@Author
       \par\vskip1pc
@@ -828,7 +843,8 @@
    \if@twoside
     \begingroup % have to set multiple abstract pages 1-sided
     \def\@blankpage{\if\@@blankpage B
-               \shipout\vbox{}\global\advance\count\z@ by1\fi
+            \setbox\abs@savebox\box255\shipout\vbox{}\setbox255\box\abs@savebox
+            \global\advance\count\z@ by1\fi
             \global\def\@@blankpage{B}}
     \def\@@blankpage{A}
     \output=\expandafter{\expandafter\@blankpage\the\output}
