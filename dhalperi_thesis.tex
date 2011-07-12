@@ -14,63 +14,29 @@
 %  limitations under the License.
 %  ========================================================================
 %
-
-% Documentation for UW thesis document style for LaTeX
-% by Jim Fox
-% fox@washington.edu
-%
-%    Revised for version 2008/04/15 of uwthesis.cls
-%
-%    This document is contained in a single file ONLY because
-%    I wanted to be able to distribute it easily.  A real thesis ought
-%    to be contained on many files (e.g., one for each chapter, at least).
-%
-%    To help you identify the files and sections in this large file
-%    I use the string '==========' to identify new files.
-%
-%    To help you ignore the unusual things I do with this sample document
-%    I try to use the notation
-%       
-%    % --- sample stuff only -----
-%    special stuff for my document, but you don't need it in your thesis
-%    % --- end-of-sample-stuff ---
-
-
-%    Printed in twoside style now that that's allowed
-%
  
 \documentclass [11pt, twoside] {uwthesis}
 
 \usepackage{color}
+\usepackage{url}
  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Euler for math | Palatino for rm | Helvetica for ss | Courier for tt
 %
-% The following line would print the thesis in a postscript font 
-
-% \usepackage{newcent}
+% From: http://www.tug.org/mactex/fonts/LaTeX_Preamble-Font_Choices.html
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\rmdefault}{ppl} % rm
+\linespread{1.05}        % Palatino needs more leading
+\usepackage[scaled]{helvet} % ss
+\usepackage{courier} % tt
+\usepackage{eulervm} % a better implementation of the euler package (not in gwTeX)
+\normalfont
+\usepackage[T1]{fontenc}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \setcounter{tocdepth}{1}  % Print the chapter and sections to the toc
  
 
-% ==========   Local defs and mods
-%
-
-% --- sample stuff only -----
-% These format the sample code in this document
-
-\usepackage{alltt}  % 
-\newenvironment{demo}
-  {\begin{alltt}\leftskip3em
-     \def\\{\ttfamily\char`\\}%
-     \def\{{\ttfamily\char`\{}%
-     \def\}{\ttfamily\char`\}}}
-  {\end{alltt}}
- 
-% metafont font.  If logo not available, use the second form
-%
-% \font\mffont=logosl10 scaled\magstep1
-\let\mffont=\sf
-% --- end-of-sample-stuff ---
- 
 \Title{Coordination in Dense Wireless Networks}
 \Author{Daniel Chaim Halperin}
 \Year{2011}
