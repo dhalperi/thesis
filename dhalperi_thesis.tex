@@ -17,8 +17,9 @@
  
 \documentclass [11pt, twoside] {uwthesis}
 
-\usepackage{color}
-\usepackage{url}
+\input{packages}
+\input{shortcuts}
+\input{formatting}
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Euler for math | Palatino for rm | Helvetica for ss | Courier for tt
@@ -36,6 +37,8 @@
 
 \setcounter{tocdepth}{1}  % Print the chapter and sections to the toc
  
+
+\input{hypersetup}
 
 \Title{Coordination in Dense Wireless Networks}
 \Author{Daniel Chaim Halperin}
@@ -122,6 +125,14 @@
  
 % ==========   Chapters   ==========
 \input{introduction}
+\input{background}
+\input{esnr_intro}
+\input{esnr_eval}
+\input{flyways_intro}
+\input{flyways_eval}
+\input{discussion}
+\input{future}
+\input{conclusion}
  
 
 % ==========   End notes   ==========
@@ -133,7 +144,7 @@
 %
 %\nocite{*}   % include everything in the uwthesis.bib file
 \bibliographystyle{plain}
-\bibliography{uwthesis}
+\bibliography{dhalperi_thesis}
 %
 % ==========   Appendices
 %
