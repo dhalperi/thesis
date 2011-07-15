@@ -39,7 +39,7 @@ The \term{iwl5300} calculates the quantities RSSI and Noise as the respective su
 			\includegraphics[width=0.4\textwidth,viewport=2 0 217 124,clip]{figures/esnr/embed_scatterplot_meas_snr_small.pdf}
 		}
 \hfill%
-	\caption{\label{fig:rssi_predictions}Measured (single antenna) 802.11n packet delivery over wired and real channels.}%
+	\caption[Packet delivery over wired and real 802.11 channels.]{\label{fig:rssi_predictions}Measured (single antenna) 802.11n packet delivery over wired and real channels.}%
 \end{figure}
 \topheading{Packet Delivery versus RSSI/SNR\@.}
 Textbook analyses of modulation schemes give delivery probability for a single signal in terms of the signal-to-noise (SNR) ratio~\cite{Goldsmith}, %The SNR is defined as the ratio of the signal power to the thermal noise power, typically expressed on a logarithmic scale in decibels, i.e., SNR = $10\log_{10}(S/N)$. 
@@ -106,7 +106,7 @@ First, MIMO processing separates the signals of multiple spatial streams that ha
 \begin{figure*}[ht!]
 \centering
 \includegraphics[width=6in]{figures/esnr/mimo_ofdm_decoding_process.pdf}
-\caption{\label{fig:ofdm_decoding} The 802.11n MIMO-OFDM decoding process. MIMO receiver separates the RF signal~(0) for each spatial stream~(1). Demodulation converts the separated signals into bits~(2). Bits from the multiple streams are deinterleaved and combined~(3) followed by convolutional decoding~(4) to correct errors. Finally, scrambling that randomizes bit patterns is removed and the packet is processed~(5).}
+\caption[The 802.11n MIMO-OFDM decoding process.]{\label{fig:ofdm_decoding} The 802.11n MIMO-OFDM decoding process. MIMO receiver separates the RF signal~(0) for each spatial stream~(1). Demodulation converts the separated signals into bits~(2). Bits from the multiple streams are deinterleaved and combined~(3) followed by convolutional decoding~(4) to correct errors. Finally, scrambling that randomizes bit patterns is removed and the packet is processed~(5).}
 \end{figure*}
 
 \heading{Modeling Delivery.}
