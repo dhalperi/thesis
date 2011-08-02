@@ -14,27 +14,33 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{xspace}
 \newcommand{\unitsep}{\texorpdfstring{\,}{ }}
-\newcommand{\GHz}{\unitsep\text{GHz}\xspace}
-\newcommand{\MHz}{\unitsep\text{MHz}\xspace}
-\newcommand{\kHz}{\unitsep\text{kHz}\xspace}
-\newcommand{\Gbps}{\unitsep\text{Gbps}\xspace}
-\newcommand{\Mbps}{\unitsep\text{Mbps}\xspace}
-\newcommand{\KB}{\unitsep\text{KB}\xspace}
-\newcommand{\dB}{\unitsep\text{dB}\xspace}
-\newcommand{\dBi}{\unitsep\text{dBi}\xspace}
-\newcommand{\dBm}{\unitsep\text{dBm}\xspace}
-\newcommand{\W}{\unitsep\text{W}\xspace}
-\newcommand{\mW}{\unitsep\text{mW}\xspace}
-\newcommand{\uW}{\unitsep\text{$\mu$W}\xspace}
-\newcommand{\ms}{\unitsep\text{ms}\xspace}
-\newcommand{\us}{\unitsep\text{$\mu$s}\xspace}
-\newcommand{\h}{\unitsep\text{h}\xspace}
-\newcommand{\m}{\unitsep\text{m}\xspace}
-\newcommand{\s}{\unitsep\text{s}\xspace}
-\newcommand{\km}{\unitsep\text{mm}\xspace}
-\newcommand{\cm}{\unitsep\text{mm}\xspace}
-\newcommand{\mm}{\unitsep\text{mm}\xspace}
-\newcommand{\mmsq}{\unitsep\text{mm$^\text{2}$}\xspace}
-\newcommand{\insq}{\unitsep\text{in$^\text{2}$}\xspace}
+\def\unit#1{% from: http://www.tex.ac.uk/cgi-bin/texfaq2html?label=csname "Defining a macro from an argument"
+  \expandafter\def\csname #1\endcsname{\unitsep\text{#1}\xspace}%
+}
+\def\varunit#1#2{% from: http://www.tex.ac.uk/cgi-bin/texfaq2html?label=csname "Defining a macro from an argument"
+  \expandafter\def\csname #1\endcsname{\unitsep\text{#2}\xspace}%
+}
+\unit{GHz}
+\unit{MHz}
+\unit{kHz}
+\unit{Gbps}
+\unit{Mbps}
+\unit{KB}
+\unit{dB}
+\unit{dBi}
+\unit{dBm}
+\unit{W}
+\unit{mW}
+\varunit{uW}{$\mu$W}
+\unit{ms}
+\varunit{us}{$\mu$s}
+\unit{h}
+\unit{m}
+\unit{s}
+\unit{km}
+\unit{cm}
+\unit{mm}
+\varunit{mmsq}{mm$^\text{2}$}
+\varunit{insq}{in$^\text{2}$}
 \newcommand{\degree}{\ensuremath{^\circ}\xspace}
 \newcommand{\degrees}{\degree}
