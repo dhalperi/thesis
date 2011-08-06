@@ -157,7 +157,8 @@
 
 % ---------------
 
-\def\baselinestretch{1.5}    % not quite doublespaced
+%\def\baselinestretch{1.5}    % not quite doublespaced
+\usepackage[onehalfspacing]{setspace}
 
 \setcounter{totalnumber}{5}
 \setcounter{topnumber}{5}
@@ -456,33 +457,33 @@
 %        If (x) is (a) or (A) then caption number is incremented,
 %        else it is same numbered.
 
-\def\thecaptionletter{}
-\newif\ifcaptiontotoc\captiontotoctrue
-
-\def\caption{\@ifnextchar({\@specialcaption}{\@normalcaption}}
-
-\def\@normalcaption{\refstepcounter\@captype \@dblarg{\@caption\@captype}}
-\def\@specialcaption(#1){%
-  \def\thecaptionletter{#1}%
-  \captiontotocfalse
-  \if#1-\def\thecaptionletter{}\fi
-  \if#1a\refstepcounter\@captype\captiontotoctrue\fi
-  \if#1A\refstepcounter\@captype\captiontotoctrue\fi
-  \@dblarg{\@caption\@captype}}
-
-\long\def\@caption#1[#2]#3{\par
-  \ifcaptiontotoc
-    \addcontentsline{\csname
-    ext@#1\endcsname}{#1}{\protect\numberline{\csname
-    the#1\endcsname}{\ignorespaces #2}}%
-  \fi
-  \begingroup
-    \@parboxrestore
-    \def\baselinestretch{1.0}
-    \normalsize  % UW grad school doesn't allow \footnotesize
-    \@makecaption{\csname fnum@#1\endcsname
-        \thecaptionletter}{\ignorespaces #3}\par
-  \endgroup}
+%\def\thecaptionletter{}
+%\newif\ifcaptiontotoc\captiontotoctrue
+%
+%\def\caption{\@ifnextchar({\@specialcaption}{\@normalcaption}}
+%
+%\def\@normalcaption{\refstepcounter\@captype \@dblarg{\@caption\@captype}}
+%\def\@specialcaption(#1){%
+%  \def\thecaptionletter{#1}%
+%  \captiontotocfalse
+%  \if#1-\def\thecaptionletter{}\fi
+%  \if#1a\refstepcounter\@captype\captiontotoctrue\fi
+%  \if#1A\refstepcounter\@captype\captiontotoctrue\fi
+%  \@dblarg{\@caption\@captype}}
+%
+%\long\def\@caption#1[#2]#3{\par
+%  \ifcaptiontotoc
+%    \addcontentsline{\csname
+%    ext@#1\endcsname}{#1}{\protect\numberline{\csname
+%    the#1\endcsname}{\ignorespaces #2}}%
+%  \fi
+%  \begingroup
+%    \@parboxrestore
+%    \def\baselinestretch{1.0}
+%    \normalsize  % UW grad school doesn't allow \footnotesize
+%    \@makecaption{\csname fnum@#1\endcsname
+%        \thecaptionletter}{\ignorespaces #3}\par
+%  \endgroup}
 
 \def\@listI{\leftmargin\leftmargini \parsep 7\p@ plus 3\p@ minus 1\p@\topsep
  12\p@ plus 5\p@ minus 6\p@\itemsep 7\p@ plus 3\p@ minus 1\p@}

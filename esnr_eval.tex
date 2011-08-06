@@ -7,7 +7,7 @@ In the previous chapter, we defined the Effective SNR and showed that it can acc
 	\centering
 	\begin{tabular}{lc}
 	\toprule
-		Application of Effective SNR & Status \\
+		\textbf{Application of Effective SNR} & \textbf{Status} \\
 	\midrule
 		Bitrate/MCS selection & \cite{Halperin_ESNR}\\
 		Channel width selection & \cite{Halperin_ESNR}\\
@@ -31,7 +31,7 @@ In the previous chapter, we defined the Effective SNR and showed that it can acc
 	\centering
 	\begin{tabular}{lc}
 	\toprule
-		Application of CSI & Status \\
+		\textbf{Application of CSI} & \textbf{Status} \\
 	\midrule
 		Mobility classification & \secref{sec:esnr_mobility}\\
 		Localization \\
@@ -45,7 +45,7 @@ In this chapter, we explore CSI and Effective SNR approaches to implementing fou
 \section{Channel selection}\label{sec:esnr_chansel}
 \begin{itemize}
 \item there are 27 orthogonal 20\MHz channels in unlicensed 802.11 spectrum, 3 in 2.4\GHz band and 24 in 5\GHz band. (Varying availability around the world). If nodes start a peer-to-peer Wi-Fi link, without being fixed to a channel decided by AP, the question of which channel arises.
-\item with multiple antennas, all channels within a band are roughly equivalent RSS. in 5\GHz, can see variability attributable to the actual antenna response.
+\item with multiple antennas, all channels within a band are roughly equivalent RSS. in 5\GHz, can see variability plausibly attributable to the actual antenna response.
 
 \begin{figure}[htp]
 	\centering
@@ -96,7 +96,7 @@ In this chapter, we explore CSI and Effective SNR approaches to implementing fou
 \section{AP selection}\label{sec:esnr_apsel}
 In a dense network, a new client may need to select its parent from many available repeaters in addition to the network coordinator. In enterprise AP and Wireless Distribution System networks today, clients typically choose the node whose probe response has the highest SNR\@. (\xxx{though there is heaps of related work doing more complex things.}) In dual-band networks, some devices may prefer a 5\GHz AP with slightly lower SNR, as long as it exceeds a minimum threshold, based on the optimistic assumption that interference is lower in the 5\GHz band. Here, we describe a procedure that uses the Effective SNR to improve this decision process and select a good parent.
 
-Normally, a client scanning for a network cycles through the available channels, sends a probe request at the lowest rate (including a single stream and 20\MHz channels), and all APs or repeaters in range respond. We propose that the client instead send multiple probes that use the lowest 6.5\Mbps rate, but vary the number of antennas and channel width in decreasing order. In this way, the coordinator and all repeaters that measure CSI from the probes can compute the Effective SNR for the uplink. The probe responses can now include the computed Effective SNR to better inform the client's choice. If the client includes its transmit power level in the probe request (or if the responder makes a conservative estimate), then the responder can combine this information with the CSI measured from the probe to compute the Effective SNR for the downlink. It can then send the probe response at a faster rate than the base rate and reduce the overhead of the probe response.
+Normally, a client scanning for a network cycles through the available channels sends a probe request at the lowest rate (including a single stream and 20\MHz channels), and all APs or repeaters in range respond. We propose that the client instead send multiple probes that use the lowest 6.5\Mbps rate, but vary the number of streams and channel width in decreasing order. In this way, the coordinator and all repeaters that measure CSI from the probes can compute the Effective SNR for the uplink. The probe responses can now include the computed Effective SNR to better inform the client's choice. If the client includes its transmit power level in the probe request (or if the responder makes a conservative estimate), then the responder can combine this information with the CSI measured from the probe to compute the Effective SNR for the downlink. It can then send the probe response at a faster rate than the base rate and reduce the overhead of the probe response.
 
 \subsection{Evaluation methodology}
 Compare the following strategies:

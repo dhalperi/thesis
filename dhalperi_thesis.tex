@@ -17,29 +17,13 @@
  
 \documentclass [11pt, twoside] {uwthesis}
 
+\setcounter{tocdepth}{1}  % Print the chapter and sections to the toc
+
 \input{packages}
+\input{hypersetup}
 \input{shortcuts}
 \input{formatting}
  
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Euler for math | Palatino for rm | Helvetica for ss | Courier for tt
-%
-% From: http://www.tug.org/mactex/fonts/LaTeX_Preamble-Font_Choices.html
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\renewcommand{\rmdefault}{ppl} % rm
-\linespread{1.05}        % Palatino needs more leading
-\usepackage[scaled]{helvet} % ss
-\usepackage{courier} % tt
-\usepackage{eulervm} % a better implementation of the euler package (not in gwTeX)
-\normalfont
-\usepackage[T1]{fontenc}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\setcounter{tocdepth}{1}  % Print the chapter and sections to the toc
- 
-
-\input{hypersetup}
-
 \Title{Coordination in Dense Wireless Networks}
 \Author{Daniel Chaim Halperin}
 \Year{2011}
