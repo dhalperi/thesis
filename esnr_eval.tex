@@ -117,7 +117,15 @@ While this solution is practical and effective, the use of 802.11n networks, sig
 Note that the problem of path selection does not differ significantly from that of AP selection, except that when choosing between repeaters (or a direct link) the entire path must be considered rather than merely the last hop.\footnote{For simplicity, we assume that the network diameter is small such that pipelining~\cite{Rodrig_thesis} is of limited benefit, and do not consider schemes that forward along multiple unreliable paths such as ExOR~\cite{Biswas_ExOR}.} Instead, in this section we focus on how 802.11n and heterogeneous devices change the opportunities available from relaying, and whether Effective SNR delivers these improvements.
 
 \subsection{Measurements on 802.11a vs 802.11n}
+Denote node in center of testbed as AP, and pick a channel. Consider nodes in decreasing order of RSS: have them associate to the network, then turn into repeaters from which the next node can choose. Assume optimal decisions are made at each step. Compare 1x1, 1x3, and 3x3 versions of this scenario.
+\begin{itemize}
+\item What is the distribution of distance (\#hops) from each node to AP? [How often is repeating used, and at what scale?]
+\item What is the distribution of end-to-end tpt? Of the fraction of max (i.e., 65\Mbps or 195\Mbps)? Of the improvement? [This gets at whether the gains get larger or smaller with various device changes.]
+\end{itemize}
+Same scenario with randomly assigned 3x3, 2x3, and 1x3 devices. How does heterogeneity affect these results?
+
 \subsection{Measurements of Effective SNR}
+Perform the same experiments as described above, this time predicting rate by RSSI and then by Effective SNR. (Use this only for topology choice, but assume rate selection finds the correct rate.)
 
 \section{Mobility classification}\label{sec:esnr_mobility}
 In wireless systems, simply knowing whether a device is mobile can improve performance and reliability. For example, recent work of Ravindranath, et al.\ \cite{Ravindranath_SensorHints} demonstrated a system that improved 802.11a performance on a mobile phone by selecting between different bitrate adaptation algorithms based on whether the device was moving. When the device is static, they use algorithms that can conduct a fine-grained search of the rate space to choose the optimum bitrate. When the device is moving, they use an algorithm that performs a coarser search, but does a better job of tracking a moving optimum. In their experiments, the fine-grained algorithms performed 10\%--30\% better in static scenarios, while the coarse-grained algorithm performed 25\%--75\% better in mobile scenarios.
