@@ -5,7 +5,16 @@
 	pdfpagelabels,
 	pagebackref=true,
             ]{hyperref}
-%\usepackage{breakurl}
+\renewcommand*{\backref}[1]{}% for backref < 1.33 necessary
+\renewcommand*{\backrefalt}[4]{%
+  \ifcase #1 %
+    (No citations.)%
+  \or
+    (Cited on page #2.)%
+  \else
+    (Cited on pages #2.)%
+  \fi
+}
 
 \hypersetup{%
 pdfauthor = {Daniel Chaim Halperin},
