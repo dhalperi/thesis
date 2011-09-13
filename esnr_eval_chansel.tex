@@ -125,7 +125,7 @@ To evaluate the three channel selection algorithms I presented in the previous s
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Channel selection accuracy}
-\figref{fig:chan_sel_ratio_opt} shows the performance relative to the optimal algorithm when using Effective SNR and RSS to choose between channels. I plot the complementary CDF of the links, so that each $(x,y)$ point in the graph shows the fraction of links $y$ that achieved performance at least a fraction $x$ of the optimal algorithm. The line for an accurate algorithm would be located in the upper right corner of the graph: most links would achieve most of the best possible throughput. This figure shows that both algorithms perform well, though choosing channel based on Effective SNR is more accurate than based on RSS.
+\figref{fig:chan_sel_ratio_opt} shows the performance relative to the optimal algorithm when using Effective SNR and RSS to choose between channels. I plot the complementary CDF of the links, so that each $(x,y)$ point in the graph shows the fraction of links $y$ that achieved performance at least a fraction $x$ of the optimal algorithm. The line for an accurate algorithm would be located in the upper right corner of the graph: most links would achieve most of the best possible throughput. This figure shows that both algorithms perform well, though choosing channel based on Effective SNR is more accurate than based on RSS\@.
 
 \begin{figure}[htp]
 	\centering
@@ -141,7 +141,7 @@ In this figure, Effective SNR chooses an optimal channel for 121 links (60\%), w
 	\caption{\label{fig:chan_sel_delta_opt}Channel selection algorithm performance loss from optimal algorithm.}
 \end{figure}
 
-Next, I compare the absolute performance loss of the channel selection algorithms in \figref{fig:chan_sel_delta_opt}. Here, each $(x,y)$ point represents the fraction of links $y$ that choose a channel within $y$\Mbps of the best channel with a particular algorithm. The area over the curves represents the performance lost by each algorithm; an accurate algorithm would be in the top left corner, losing little throughput for only a few links. This area is 2.9$\times$ larger for the RSS-based selection algorithm, showing that Effective SNR is significantly more accurate. This difference translates to about 10\Mbps more per link when selecting channels via the Effective SNR.
+Next, I compare the absolute performance loss of the channel selection algorithms in \figref{fig:chan_sel_delta_opt}. Here, each $(x,y)$ point represents the fraction of links $y$ that choose a channel within $y$\Mbps of the best channel with a particular algorithm. The area over the curves represents the performance lost by each algorithm; an accurate algorithm would be in the top left corner, losing little throughput for only a few links. This area is 2.9$\times$ larger for the RSS-based selection algorithm, showing that Effective SNR is significantly more accurate. This difference translates to about 10\Mbps more per link when selecting channels via the Effective SNR\@.
 
 \begin{figure}[htp]
 	\centering
@@ -156,7 +156,7 @@ In conclusion, these results shows that both Effective SNR- and RSS-based channe
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Channel discrimination}
 \begin{itemize}
-\item with multiple antennas, all channels within a band are roughly equivalent RSS. in 5\GHz, can see variability plausibly attributable to the actual antenna response.
+\item with multiple antennas, all channels within a band are roughly equivalent RSS\@. in 5\GHz, can see variability plausibly attributable to the actual antenna response.
 
 \begin{figure}[htp]
 	\centering
