@@ -42,79 +42,9 @@ In the previous chapter, we defined the Effective SNR and showed that it can acc
 
 In this chapter, we explore CSI and Effective SNR approaches to implementing four of the above applications.
 
-\section{Channel selection}\label{sec:esnr_chansel}
-\begin{itemize}
-\item there are 27 orthogonal 20\MHz channels in unlicensed 802.11 spectrum, 3 in 2.4\GHz band and 24 in 5\GHz band. (Varying availability around the world). If nodes start a peer-to-peer Wi-Fi link, without being fixed to a channel decided by AP, the question of which channel arises.
-\item with multiple antennas, all channels within a band are roughly equivalent RSS. in 5\GHz, can see variability plausibly attributable to the actual antenna response.
-
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=\textwidth]{figures/esnr/rssi_vs_freq_24.png}
-	\caption{\label{fig:rssi_vs_freq_24}RSS versus 2.4\GHz channel for 249 links. Solid line shows the median for each channel.}
-\end{figure}
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=\textwidth]{figures/esnr/rssi_vs_freq_5.png}
-	\caption{\label{fig:rssi_vs_freq_5}RSS versus 5\GHz channel for 163 links. Solid line shows the median for each channel.}
-\end{figure}
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=\textwidth]{figures/esnr/rssi_freq_dev.png}
-	\caption{\label{fig:rssi_freq_dev}Standard deviation and max-min spread of RSS across channels within the same band.}
-\end{figure}
-
-\item however, channel selection can matter in practice. \figref{fig:tpt_diff} and \figref{fig:rel_diff}, measured over 25 nodes (600 pairs, 311 links deliver some packets on some 5 GHz channel) in the UW CSE testbed motivate this fact.
-
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/esnr/tpt_diff.pdf}
-	\caption{\label{fig:tpt_diff}The absolute difference in rate over 802.11n channels.}
-\end{figure}
-
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/esnr/rel_diff.pdf}
-	\caption{\label{fig:rel_diff}The relative difference in rate over 802.11n channels.}
-\end{figure}
-
-\item \figref{fig:rel_diff_draws} shows that, depending on how close to optimal you want to be, need to look at 5, 10, or 15 of the 24 channels in 5\GHz band. If we can evaluate the rate offered by a channel quickly, we can look at more channels in the same amount of time to pick the best rate.
-\end{itemize}
-
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/esnr/rel_diff_draws.pdf}
-	\caption{\label{fig:rel_diff_draws}The expected rate after choosing the best of $k$ 802.11n channels.}
-\end{figure}
-
-\subsection{Evaluation methodology}
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/esnr/chan_sel_ratio.png}
-	\caption{\label{fig:chan_sel_ratio}The relative throughput selecting channels by Packet SNR or by Effective SNR\@.}
-\end{figure}
-
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/esnr/chan_sel_ratio_opt.png}
-	\caption{\label{fig:chan_sel_ratio_opt}Channel selection using Packet SNR or Effective SNR compared to Optimal.}
-\end{figure}
-
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/esnr/chan_sel_delta_opt.png}
-	\caption{\label{fig:chan_sel_delta_opt}The difference in throughput using channels selected by Packet SNR or Effective SNR compared to Optimal.}
-\end{figure}
-
-\topheading{Accuracy.} To evaluate how well Effective SNR enables us to select channels, we compare an algorithm that uses the Effective SNR-predicted rate to select the channel with one that chooses the channel with the highest SNR. We using 25 nodes in the UW testbed, we selected the 158 links that can operate with 3 streams in 5\GHz. \figref{fig:chan_sel_ratio} shows the relative performance when using Effective SNR and SNR to select channels. For 80 links, about half of the 158 links total, the channels selected by each algorithm perform equally well. Of the remaining 78 links, Effective SNR picks a better channel in 64 cases, and most of these provide better than 20\% additional throughput. In contrast, of the 14 links where maximizing RSS offers a better channel, the Effective SNR is within 20\% in 12 cases. Thus, maximizing the Effective SNR-predicted rate results in better channels than maximizing the RSS\@.
-
-We also compare to an optimal algorithm in \figref{fig:chan_sel_ratio_opt}. Effective SNR chooses an optimal channel for 84 links (53\%), whereas RSS is optimal for only 52 links (32\%). Effective SNR is within 90\% of optimal for 117 links (74\%), 80\% for 129 links (82\%), and 70\% for 140 links (89\%). In contrast, maximizing RSS only gets within 90\% of optimal for 76 links (48\%).
-
-Finally, we compare the absolute performance less than optimal for these two algorithms in \figref{fig:chan_sel_delta_opt}. The area over the curves represents the performance lost by each algorithm. This area is 2.3$\times$ larger for RSS, showing that Effective SNR is significantly more accurate. This difference translates to about 12\Mbps more per link when selecting rates via the Effective SNR.
-
-\heading{Performance.}  given time to hop $\mathcal{O}$(1\ms), time to execute a CSI probe $\mathcal{O}$(500\us), and time to execute a rate probe (unknown), how many channels can we look at in $T$ time? Reference \figref{fig:rel_diff_draws} to see what fraction of optimal this enables.
-
-\heading{Completion Time.} The difference between the Effective SNR and the SNR is a proxy for how ``good'' a channel is, based on how flat it is. Given that RSS is similar across channels, the flattest channel will likely offer the best rate. Can we use this to detect a good channel and stop looking early?
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{esnr_eval_chansel}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{AP selection}\label{sec:esnr_apsel}
 In a dense network, a new client may need to select its parent from many available repeaters in addition to the network coordinator. In enterprise AP and Wireless Distribution System networks today, clients typically choose the node whose probe response has the highest SNR\@. (\xxx{though there is heaps of related work doing more complex things.}) In dual-band networks, some devices may prefer a 5\GHz AP with slightly lower SNR, as long as it exceeds a minimum threshold, based on the optimistic assumption that interference is lower in the 5\GHz band. Here, we describe a procedure that uses the Effective SNR to improve this decision process and select a good parent.
 
@@ -146,6 +76,7 @@ Compare the following strategies:
 \item max measured rate
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Path selection}\label{sec:esnr_pathsel}
 In the last section, we looked at the benefits of AP selection; we now consider the more general problem of path selection. While today's AP and WDS\footnote{Actually, a WDS client implicitly makes a routing decision when joining the network---which access point it chooses can make a large difference in its connection quality.} networks use tree-structured topologies and have only a single path between any two nodes, a future device-to-device wireless network may offer many paths along which packets can be routed. Research in multi-hop routing for wireless mesh networks~\cite{Bahl_repeater,Rodrig_thesis} has shown that the choice of path can effect a large difference in connection quality.
 
@@ -166,6 +97,7 @@ Same scenario with randomly assigned 3x3, 2x3, and 1x3 devices. How does heterog
 \subsection{Measurements of Effective SNR}
 Perform the same experiments as described above, this time predicting rate by RSSI and then by Effective SNR. (Use this only for topology choice, but assume rate selection finds the correct rate.)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Mobility classification}\label{sec:esnr_mobility}
 In wireless systems, simply knowing whether a device is mobile can improve performance and reliability. For example, recent work of Ravindranath et al.\ \cite{Ravindranath_SensorHints} demonstrated a system that improved 802.11a performance on a mobile phone by selecting between different bitrate adaptation algorithms based on whether the device was moving. When the device is static, they use algorithms that can conduct a fine-grained search of the rate space to choose the optimum bitrate. When the device is moving, they use an algorithm that performs a coarser search, but does a better job of tracking a moving optimum. In their experiments, the fine-grained algorithms performed 10\%--30\% better in static scenarios, while the coarse-grained algorithm performed 25\%--75\% better in mobile scenarios.
 
@@ -176,7 +108,7 @@ The implementation by Ravindranath et al.\ detected mobility using the accelerom
 In this section, I explore whether it is possible to classify whether a device is mobile based solely on passively measured RF information. If successful, such an implementation would eliminate all of these drawbacks by requiring no extra hardware and supporting unilateral adoption by either endpoint of the link, including the static device. Ravindranath et al.\ made a preliminary attempt to classify mobility using RSSI, but were not successful. They list three challenges: (1) that RSSI is unstable even for static links in a quiet environment; (2) that RSSI varies by different amounts at different absolute signal strengths, and thus needs to be calibrated; and (3) that RSSI was extremely sensitive to movement in the environment and triggered many false hints. Here, I show that the CSI can overcome these challenges and provide a robust solution.
 
 \subsection{Experimental setup}
-I configured a SIMO experiment using a single-antenna laptop as the client device, and several of the testbed nodes as three-antenna monitors. The client sent 100,000 back-to-back short packets using MCS0 (1 stream, 6.5\Mbps), approximately one packet every 300\us for 20\s. In my initial data collection described here, I took four traces. Two of the traces were taken with a \emph{static} client in the UW CSE Networking Lab and students present, but not moving in the room. I then took a trace with \emph{environmental mobility} in which I left the client static, but waved my hand within a few centimeters of the antenna and then walked around the room and opened doors. Finally, I took a \emph{mobile device} trace in which I picked up the laptop and moved it around within a meter of its original location. Chronologically, the traces were taken in the order described within a 10-minute window, with the second static trace taken last. \xxx{These results are from only a single receiver and a single mobile experiment; I could look at more traces and conduct more experiments to flesh out the results and to address claim (2) above.}
+I configured a SIMO experiment using a single-antenna laptop as the client device, and several of the testbed nodes as three-antenna monitors. The client sent 100,000 back-to-back short packets using MCS~0 (1 stream, 6.5\Mbps), approximately one packet every 300\us for 20\s. In my initial data collection described here, I took four traces. Two of the traces were taken with a \emph{static} client in the UW CSE Networking Lab and students present, but not moving in the room. I then took a trace with \emph{environmental mobility} in which I left the client static, but waved my hand within a few centimeters of the antenna and then walked around the room and opened doors. Finally, I took a \emph{mobile device} trace in which I picked up the laptop and moved it around within a meter of its original location. Chronologically, the traces were taken in the order described within a 10-minute window, with the second static trace taken last. \xxx{These results are from only a single receiver and a single mobile experiment; I could look at more traces and conduct more experiments to flesh out the results and to address claim (2) above.}
 
 \subsection{Evaluation}
 \topheading{Classifying mobility with RSS\@.} \figref{fig:mobility_rssi} shows the RSS in dBm measured by one receiver for these four traces. Each line shows the RSS for one of the three receive antennas. I note several interesting effects visible in these measurements. First, the RSS is actually extremely stable in static scenarios. This deviation from Ravindranath et al.\ is likely attributable to the better calibration of the newer 802.11n hardware we use, compared with older hardware used to run experiments with the MadWiFi driver. Second, though RSS does vary with environmental mobility, the variation is fairly small and mostly limited to the periods of activity directly next to the client---later in the trace, when I moved across the room, the RSS variation decreased to the static scenario. It also appears that the variation is not completely correlated across antennas; in several parts of the trace (e.g., at the beginning and around 10--12\s) one or two experience antennas see variation in RSS while the others do not. Finally, the mobile trace exhibits the RSS variation with the largest magnitude, and shows consistent variation throughout the trace and across all antennas. Based on this visual evidence, I conclude it likely that the static scenario can be identified using RSS, and hypothesize that it may also be possible to distinguish between environmental and device mobility. However, I deferred from exploring this possibility further because, as I will show next, the CSI can conclusively classify a device's activity into these three states.
