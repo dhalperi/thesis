@@ -1,3 +1,143 @@
 \cleardoublepage
-\chapter{Further Applications}
-\label{chap:applications}
+\chapter{Applications of Effective SNR}
+\label{chap:esnr_eval}
+
+In the previous chapter, we defined the Effective SNR and showed that it can accurately predict packet delivery for 802.11 rates. In this chapter, we explore applications of Effective SNR to various problems of wireless links and wireless networks.
+
+\begin{table}[htp]
+	\centering
+	\begin{tabular}{lc}
+	\toprule
+		\textbf{Application of Effective SNR} & \textbf{Status} \\
+	\midrule
+		Bitrate/MCS selection & \cite{Halperin_ESNR}\\
+		Channel width selection & \cite{Halperin_ESNR}\\
+		Antenna selection & \cite{Halperin_ESNR}\\
+		Power control & \cite{Halperin_ESNR}\\
+		Channel selection & \secref{sec:esnr_chansel}\\
+		AP selection & \secref{sec:esnr_apsel}\\
+		Path selection/BSS selection in WDS & \secref{sec:esnr_pathsel}\\
+		Interference planning \\
+		Partial packet recovery/FEC & \cite{Bhartia_FreqDiv}\\
+		Beamforming \\
+		Multicast rate selection \\
+	\bottomrule
+	\end{tabular}
+	\caption{\label{tab:esnr_uses}A variety of applications of Effective SNR\@.}
+\end{table}
+
+\tabref{tab:esnr_uses} shows a list of several potential applications of Effective SNR\@. These range from optimizing various parameters of a single Wi-Fi link, such as the MCS or antenna set used, to coordinating many 802.11 nodes in a dense wireless network. Additionally, we identify applications that can be implemented by looking at other aspects of the Channel State Information in \tabref{tab:csi_uses}. These provide useful primitives that can enable systems to adapt behavior based on the location and movement of the user. Combined, we believe these form the critical building blocks for dense 802.11 networks.
+
+\begin{table}[htp]
+	\centering
+	\begin{tabular}{lc}
+	\toprule
+		\textbf{Application of CSI} & \textbf{Status} \\
+	\midrule
+		Mobility classification & \secref{sec:esnr_mobility}\\
+		Indoor localization \\
+	\bottomrule
+	\end{tabular}
+	\caption{\label{tab:csi_uses}A variety of applications of Channel State Information.}
+\end{table}
+
+In this chapter, we explore CSI and Effective SNR approaches to implementing four of the above applications.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{esnr_eval_chansel}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{AP selection}\label{sec:esnr_apsel}
+In a dense network, a new client may need to select its parent from many available repeaters in addition to the network coordinator. In enterprise AP and Wireless Distribution System networks today, clients typically choose the node whose probe response has the highest SNR\@. (\xxx{though there is heaps of related work doing more complex things.}) In dual-band networks, some devices may prefer a 5\GHz AP with slightly lower SNR, as long as it exceeds a minimum threshold, based on the optimistic assumption that interference is lower in the 5\GHz band. Here, we describe a procedure that uses the Effective SNR to improve this decision process and select a good parent.
+
+Normally, a client scanning for a network cycles through the available channels sends a probe request at the lowest rate (including a single stream and 20\MHz channels), and all APs or repeaters in range respond. We propose that the client instead send multiple probes that use the lowest 6.5\Mbps rate, but vary the number of streams and channel width in decreasing order. In this way, the coordinator and all repeaters that measure CSI from the probes can compute the Effective SNR for the uplink. The probe responses can now include the computed Effective SNR to better inform the client's choice. If the client includes its transmit power level in the probe request (or if the responder makes a conservative estimate), then the responder can combine this information with the CSI measured from the probe to compute the Effective SNR for the downlink. It can then send the probe response at a faster rate than the base rate and reduce the overhead of the probe response.
+
+\subsection{Evaluation methodology}
+Compare the following strategies:
+\begin{figure}[htp]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/esnr/ap_sel_ratio.png}
+	\caption{\label{fig:ap_sel_ratio}The relative throughput selecting APs by Packet SNR or by Effective SNR\@.}
+\end{figure}
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/esnr/ap_sel_ratio_opt.png}
+	\caption{\label{fig:ap_sel_ratio_opt}AP selection using Packet SNR or Effective SNR compared to Optimal.}
+\end{figure}
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[width=0.6\textwidth]{figures/esnr/ap_sel_delta_opt.png}
+	\caption{\label{fig:ap_sel_delta_opt}The difference in throughput using APs selected by Packet SNR or Effective SNR compared to Optimal.}
+\end{figure}
+\begin{itemize}
+\item first AP seen
+\item max RSSI
+\item max CSI predicted rate
+\item max measured rate
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Path selection}\label{sec:esnr_pathsel}
+In the last section, we looked at the benefits of AP selection; we now consider the more general problem of path selection. While today's AP and WDS\footnote{Actually, a WDS client implicitly makes a routing decision when joining the network---which access point it chooses can make a large difference in its connection quality.} networks use tree-structured topologies and have only a single path between any two nodes, a future device-to-device wireless network may offer many paths along which packets can be routed. Research in multi-hop routing for wireless mesh networks~\cite{Bahl_repeater,Rodrig_thesis} has shown that the choice of path can effect a large difference in connection quality.
+
+The practical state of the art in this area is the recent work by Bahl et al.~\cite{Bahl_repeater} on an opportunistic repeater scheme for 802.11a. In this design, when a client with a strong link detects rate anomaly~\cite{Heusse_RateAnomaly}---that is, that its throughput is hurt by a client with a weak link monopolizing airtime---the strong client evaluates whether relaying that client's packets would improve throughout for both. In certain scenarios, they showed that this could improve aggregate performance of the network by 50\%--200\%.
+
+While this solution is practical and effective, the use of 802.11n networks significantly complicates the picture. First, the scheme of Bahl et al.\ uses a link's RSSI to select between the 8 available 802.11a rates. In contrast, as we have shown in \chapref{chap:esnr_intro}, RSSI does not accurately predict the rate for 802.11n links, nor does it enable devices to choose between different MIMO modes. Bahl et al.\ used a homogenous network of single-antenna 802.11a chipsets; the set of devices in 802.11n networks includes those with differing numbers of antennas and asymmetric transmit/receive capabilities. While it is not clear how to handle these challenges via the RSSI, the Effective SNR offers the ability to overcome them. In this section, we evaluate the ability of Effective SNR to deliver the benefits of opportunistic repeaters in 802.11n networks.
+
+Note that the problem of path selection does not differ significantly from that of AP selection, except that when choosing between repeaters (or a direct link) the entire path must be considered rather than merely the last hop.\footnote{For simplicity, we assume that the network diameter is small such that pipelining~\cite{Rodrig_thesis} is of limited benefit, and do not consider schemes that forward along multiple unreliable paths such as ExOR~\cite{Biswas_ExOR}.} Instead, in this section we focus on how 802.11n and heterogeneous devices change the opportunities available from relaying, and whether Effective SNR delivers these improvements.
+
+\subsection{Measurements on 802.11a vs 802.11n}
+Denote node in center of testbed as AP, and pick a channel. Consider nodes in decreasing order of RSS: have them associate to the network, then turn into repeaters from which the next node can choose. Assume optimal decisions are made at each step. Compare 1x1, 1x3, and 3x3 versions of this scenario.
+\begin{itemize}
+\item What is the distribution of distance (\#hops) from each node to AP? [How often is repeating used, and at what scale?]
+\item What is the distribution of end-to-end tpt? Of the fraction of max (i.e., 65\Mbps or 195\Mbps)? Of the improvement? [This gets at whether the gains get larger or smaller with various device changes.]
+\end{itemize}
+Same scenario with randomly assigned 3x3, 2x3, and 1x3 devices. How does heterogeneity affect these results?
+
+\subsection{Measurements of Effective SNR}
+Perform the same experiments as described above, this time predicting rate by RSSI and then by Effective SNR\@. (Use this only for topology choice, but assume rate selection finds the correct rate.)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Mobility classification}\label{sec:esnr_mobility}
+In wireless systems, simply knowing whether a device is mobile can improve performance and reliability. For example, recent work of Ravindranath et al.\ \cite{Ravindranath_SensorHints} demonstrated a system that improved 802.11a performance on a mobile phone by selecting between different bitrate adaptation algorithms based on whether the device was moving. When the device is static, they use algorithms that can conduct a fine-grained search of the rate space to choose the optimum bitrate. When the device is moving, they use an algorithm that performs a coarser search, but does a better job of tracking a moving optimum. In their experiments, the fine-grained algorithms performed 10\%--30\% better in static scenarios, while the coarse-grained algorithm performed 25\%--75\% better in mobile scenarios.
+
+Detecting mobility can also be used to enhance reliability in networks that support dynamic topology, such as today's cellular phone networks, enterprise Wi-Fi wireless distribution systems (WDSes), and networks that support relaying mechanisms such as described above. By proactively looking for a better AP or relay when the device starts moving, service quality can be improved and downtime reduced. \xxx{find some references about cell handoff, WDS handoff, etc.}
+
+The implementation by Ravindranath et al.\ detected mobility using the accelerometer in a mobile phone. While this technique is accurate and responsive, it has a few disadvantages. The use of an on-board sensor means that detection can only be performed by the mobile client, and thus requires protocol changes to communicate a device's mobile state to the other endpoint of the link, and is not backwards-compatible. Also, this technique can only be implemented on devices that have accelerometers, and requires that this sensor be powered on.
+
+In this section, I explore whether it is possible to classify whether a device is mobile based solely on passively measured RF information. If successful, such an implementation would eliminate all of these drawbacks by requiring no extra hardware and supporting unilateral adoption by either endpoint of the link, including the static device. Ravindranath et al.\ made a preliminary attempt to classify mobility using RSSI, but were not successful. They list three challenges: (1) that RSSI is unstable even for static links in a quiet environment; (2) that RSSI varies by different amounts at different absolute signal strengths, and thus needs to be calibrated; and (3) that RSSI was extremely sensitive to movement in the environment and triggered many false hints. Here, I show that the CSI can overcome these challenges and provide a robust solution.
+
+\subsection{Experimental setup}
+I configured a SIMO experiment using a single-antenna laptop as the client device, and several of the testbed nodes as three-antenna monitors. The client sent 100,000 back-to-back short packets using MCS~0 (1 stream, 6.5\Mbps), approximately one packet every 300\us for 20\s. In my initial data collection described here, I took four traces. Two of the traces were taken with a \emph{static} client in the UW CSE Networking Lab and students present, but not moving in the room. I then took a trace with \emph{environmental mobility} in which I left the client static, but waved my hand within a few centimeters of the antenna and then walked around the room and opened doors. Finally, I took a \emph{mobile device} trace in which I picked up the laptop and moved it around within a meter of its original location. Chronologically, the traces were taken in the order described within a 10-minute window, with the second static trace taken last. \xxx{These results are from only a single receiver and a single mobile experiment; I could look at more traces and conduct more experiments to flesh out the results and to address claim (2) above.}
+
+\subsection{Evaluation}
+\topheading{Classifying mobility with RSS\@.} \figref{fig:mobility_rssi} shows the RSS in dBm measured by one receiver for these four traces. Each line shows the RSS for one of the three receive antennas. I note several interesting effects visible in these measurements. First, the RSS is actually extremely stable in static scenarios. This deviation from Ravindranath et al.\ is likely attributable to the better calibration of the newer 802.11n hardware we use, compared with older hardware used to run experiments with the MadWiFi driver. Second, though RSS does vary with environmental mobility, the variation is fairly small and mostly limited to the periods of activity directly next to the client---later in the trace, when I moved across the room, the RSS variation decreased to the static scenario. It also appears that the variation is not completely correlated across antennas; in several parts of the trace (e.g., at the beginning and around 10--12\s) one or two experience antennas see variation in RSS while the others do not. Finally, the mobile trace exhibits the RSS variation with the largest magnitude, and shows consistent variation throughout the trace and across all antennas. Based on this visual evidence, I conclude it likely that the static scenario can be identified using RSS, and hypothesize that it may also be possible to distinguish between environmental and device mobility. However, I deferred from exploring this possibility further because, as I will show next, the CSI can conclusively classify a device's activity into these three states.
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/esnr/mobility_rssi.png}
+	\caption{\label{fig:mobility_rssi}RSSI variation in different mobility scenarios.}
+\end{figure}
+
+\heading{Classifying mobility with CSI\@.} Here, we examine the same four traces through the lens of the CSI\@. To start, recall that the RSSI yields a single power measurement per sample, whereas the CSI gives a 3-D matrix of complex numbers that represent magnitude and phase on spatial paths and frequency. To quantify the deviation in RSSI, we can simply look at its variation---e.g., absolute difference between samples, or windowed variance---over time. In contrast, we first need a method to quantify the variation in the CSI over time. One simple approach is to use the Pearson correlation function for each spatial path between a transmit-receive antenna pair. The Pearson correlation is the ``standard'' correlation function and is defined as
+$$
+\text{corr}(\vec{x},\vec{y}) = \frac{\sum_{i=1}^n(x_i-\overline{x})(y_i-\overline{y})}{\sqrt{\sum_{i=1}^n(x_i-\overline{x})^2 \sum_{i=1}^n(y_i-\overline{y})^2}}
+$$
+for $n$-element vectors $\vec{x},\vec{y}$ indexed by $i$ and with respective means $\overline{x}$ and $\overline{y}$. To apply this to CSI, let $\vec{r}_{pt}$ represent the magnitudes of the CSI coefficients across subcarriers for spatial path $p$ at time sample $t$. Then we can quantify the change between sample $t$ and sample $t+1$ by $\text{corr}(\vec{r}_{pt},\vec{r}_{p(t+1)})$.
+
+The correlations for the four traces and for the three received antennas are shown in \figref{fig:mobility_csi}. We see that the static traces show near-perfect correlation, the environmental mobility trace shows a little deviation, and the mobile trace varies wildly with correlations as low as 0.3. \figref{fig:mobility_csi_cdf} shows the CDF of the correlation (combined across antennas) over time. Static traces never show a correlation below 0.98; the trace with environmental mobility never drops to 0.9, and about 3\% of the correlations in the mobile trace are below 0.9. Though the low-correlation outliers occur infrequently, the fact that they are distributed throughout the traces means a windowed thresholding will accurately be able to distinguish between these three states. Note that the mobility state of a device will change slowly---on the order of seconds or longer---and the outliers are frequent enough at this time scale to prevent false negatives.
+
+%In wireless networks today, laptops tend to be ``portable, but not mobile''~\cite{Woodruff_portable}. That is, though they can move from location to location, laptops are infrequently used while actually in motion.
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/esnr/mobility_csi.png}
+	\caption{\label{fig:mobility_csi}CSI variation as measured by correlation in different mobility scenarios.}
+\end{figure}
+\begin{figure}[htp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/esnr/mobility_csi_cdf.png}
+	\caption{\label{fig:mobility_csi_cdf}CDF of CSI variation as measured by correlation in different mobility scenarios.}
+\end{figure}
+
