@@ -1,33 +1,24 @@
 
-dhalperi_thesis.toc
+*.toc
 
-dhalperi_thesis.pdf
+*.pdf
 
-dhalperi_thesis.log
+*.log
 
-dhalperi_thesis.lof
+*.lof
 
-dhalperi_thesis.blg
+*.blg
 
-dhalperi_thesis.bbl
+*.bbl
 
-dhalperi_thesis.aux
+*.aux
 
-dhalperi_thesis.synctex.gz
+*.synctex.gz
 
-dhalperi_thesis.lot
+*.lot
 
-dhalperi_thesis.out
+*.out
 
-dhalperi_thesis.brf
+*.brf
 
 .DS_Store
-
-chapter_*.aux
-chapter_*.pdf
-chapter_*.log
-chapter_*.bbl
-chapter_*.blg
-chapter_*.synctex.gz
-chapter_*.out
-chapter_*.brf
