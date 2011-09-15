@@ -11,7 +11,7 @@
 \heading{802.11 Packet Reception.}
 The model must account for the action of the 802.11 receiver on the received signal. This is a complex process described in many pages of the 802.11n specification~\cite{80211n}. Our challenge is to capture it well enough with a fairly simple model. We begin by describing the main steps involved (\figref{fig:ofdm_decoding}).
 
-First, MIMO processing separates the signals of multiple spatial streams that have been mixed by the channel. As wireless channels are frequency-selective, this operation happens separately for each subcarrier. The demodulator converts each subcarrier's symbols into the bits of each stream from constellations of several different modulations (BPSK, QPSK, QAM-16, QAM-64). This happens in much the same way as demodulating a narrowband channel. The bits are then deinterleaved to undo an encoding that spreads errors that are bursty in frequency across the data stream. A parallel to serial converter combines the bits into a single stream. Forward error correction at any of several rates (1/2, 2/3, 3/4, and 5/6) is then decoded. Finally, the descrambler exclusive-ORs the bitstream with a pseudorandom bitmask added at the transmitter to avoid data-dependent deterministic errors.
+First, MIMO processing separates the signals of multiple spatial streams that have been mixed by the channel. As wireless channels are frequency-selective, this operation happens separately for each subcarrier. The demodulator converts each subcarrier's symbols into the bits of each stream from constellations of several different modulations (BPSK, QPSK, 16-QAM, 64-QAM). This happens in much the same way as demodulating a narrowband channel. The bits are then deinterleaved to undo an encoding that spreads errors that are bursty in frequency across the data stream. A parallel to serial converter combines the bits into a single stream. Forward error correction at any of several rates (1/2, 2/3, 3/4, and 5/6) is then decoded. Finally, the descrambler exclusive-ORs the bitstream with a pseudorandom bitmask added at the transmitter to avoid data-dependent deterministic errors.
 
 \begin{figure*}[ht!]
 \centering
@@ -27,8 +27,8 @@ First, MIMO processing separates the signals of multiple spatial streams that ha
 Modulation & Bits/Symbol ($k$) & BER$_k$($\rho$) \\
 \midrule BPSK & 1 & $Q\left(\sqrt{2\rho}\right)$ \\
 QPSK & 2 & $Q\left(\sqrt{\rho}\right)$\\
-QAM-16 & 4 & $\frac{3}{4}Q\left(\sqrt{\rho/5}\right)$\\
-QAM-64 & 6 & $\frac{7}{12}Q\left(\sqrt{\rho/21}\right)$\\
+16-QAM & 4 & $\frac{3}{4}Q\left(\sqrt{\rho/5}\right)$\\
+64-QAM & 6 & $\frac{7}{12}Q\left(\sqrt{\rho/21}\right)$\\
 \bottomrule
 \end{tabular}
 \caption[Bit error rate as a function of the symbol SNR for OFDM modulations]{\label{tab:ber_snr}Bit error rate as a function of the symbol SNR $\rho$ for narrowband signals and OFDM modulations. $Q$ is the standard normal CDF\@.}
@@ -40,7 +40,7 @@ Standard formulas summarized in \tabref{tab:ber_snr} relate SNR (denoted $\rho$)
 
 In OFDM, decoding is applied across the demodulated bits of subcarriers. If we assume frequency-flat fading for the moment, then all the subcarriers have the same SNR\@. The link will behave the same as in our wired experiments in which RSSI reflect real performance and it will be easy to make predictions for a given SNR and modulation combination. We can use \figref{fig:snr_prr_attenuator} to measure the fixed transition points between rates and thus make our choice.
 
-Frequency-selective fading complicates this picture as some weak subcarriers will be much more likely to have errors than others that are stronger. To model a link in this case, we turn to the notion of an \textbf{\em Effective SNR}. This is defined as the SNR that would give the \emph{same error performance on a narrowband channel}~\cite{nanda_effectiveSNR}. For example, the links in \figref{fig:example_fsf_shape} will have Effective SNR values that are nearly equal because they perform similarly, even though their RSSIs are spread over 15\dB.
+Frequency-selective fading complicates this picture as some weak subcarriers will be much more likely to have errors than others that are stronger. To model a link in this case, we turn to the notion of an \textbf{\em Effective SNR}\@. This is defined as the SNR that would give the \emph{same error performance on a narrowband channel}~\cite{nanda_effectiveSNR}. For example, the links in \figref{fig:example_fsf_shape} will have Effective SNR values that are nearly equal because they perform similarly, even though their RSSIs are spread over 15\dB.
 
 The Effective SNR is \emph{not} simply the average subcarrier SNR; indeed, assuming a uniform noise floor, that average is indeed equivalent to the packet SNR derived from the RSSI\@. Instead, the Effective SNR is biased towards the weaker subcarrier SNRs because it is these subcarriers that produce most of the errors. If we ignore coding for the moment, then we can compute the Effective SNR by averaging the subcarrier BERs and then finding the corresponding SNR\@. That is:
 \begin{equation}
