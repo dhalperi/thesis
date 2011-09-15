@@ -1,3 +1,9 @@
+\ifx\mainfile\undefined
+\input{chapter_head}
+\setcounter{chapter}{7} % Set to n-1!
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \cleardoublepage
 \chapter{Applications of Effective SNR}
 \label{chap:esnr_eval}
@@ -23,7 +29,7 @@ In the previous chapter, we defined the Effective SNR and showed that it can acc
 		Multicast rate selection \\
 	\bottomrule
 	\end{tabular}
-	\caption{\label{tab:esnr_uses}A variety of applications of Effective SNR\@.}
+	\caption[A variety of applications of Effective SNR]{\label{tab:esnr_uses}A variety of applications of Effective SNR\@.}
 \end{table}
 
 \tabref{tab:esnr_uses} shows a list of several potential applications of Effective SNR\@. These range from optimizing various parameters of a single Wi-Fi link, such as the MCS or antenna set used, to coordinating many 802.11 nodes in a dense wireless network. Additionally, we identify applications that can be implemented by looking at other aspects of the Channel State Information in \tabref{tab:csi_uses}. These provide useful primitives that can enable systems to adapt behavior based on the location and movement of the user. Combined, we believe these form the critical building blocks for dense 802.11 networks.
@@ -38,7 +44,7 @@ In the previous chapter, we defined the Effective SNR and showed that it can acc
 		Indoor localization \\
 	\bottomrule
 	\end{tabular}
-	\caption{\label{tab:csi_uses}A variety of applications of Channel State Information.}
+	\caption[A variety of applications of Channel State Information]{\label{tab:csi_uses}A variety of applications of Channel State Information.}
 \end{table}
 
 In this chapter, we explore CSI and Effective SNR approaches to implementing four of the above applications.
@@ -141,3 +147,7 @@ The correlations for the four traces and for the three received antennas are sho
 	\caption{\label{fig:mobility_csi_cdf}CDF of CSI variation as measured by correlation in different mobility scenarios.}
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifx\mainfile\undefined
+\input{chapter_tail}
+\fi

@@ -876,7 +876,8 @@
 %
 
 \def\textofLoF#1{\gdef\@textofLoF{#1}}  \textofLoF{List of Figures}
-\def\listoffigures{\chapter*{\@textofLoF\@mkboth{}{}}
+\def\listoffigures{\cleardoublepage
+   \chapter*{\@textofLoF\@mkboth{}{}}
    \thispagestyle{plain}
    \addcontentsline{toc}{chapter}{\protect\@textofLoF}
    \hbox to\textwidth{Figure Number \hfill Page}
@@ -889,7 +890,8 @@
 %   List of tables
 %
 \def\textofLoT#1{\gdef\@textofLoT{#1}}  \textofLoT{List of Tables}
-\def\listoftables{\chapter*{\@textofLoT\@mkboth{}{}}
+\def\listoftables{\cleardoublepage
+   \chapter*{\@textofLoT\@mkboth{}{}}
    \thispagestyle{plain}
    \addcontentsline{toc}{chapter}{\protect\@textofLoT}
    \hbox to\textwidth{Table Number \hfill Page}
@@ -902,7 +904,8 @@
 %  Bibliography
 %
 \def\textofBIB#1{\gdef\@textofBIB{#1}}  \textofBIB{Bibliography}
-\def\thebibliography#1{\chapter*{\@textofBIB\@mkboth{}{}}
+\def\thebibliography#1{\cleardoublepage
+ \chapter*{\@textofBIB\@mkboth{}{}}
  \addcontentsline{toc}{chapter}{\protect\@textofBIB}
  \list
  {[\arabic{enumi}]}{\settowidth\labelwidth{[#1]}\leftmargin\labelwidth
