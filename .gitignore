@@ -1,8 +1,6 @@
 
 *.toc
 
-*.pdf
-
 *.log
 
 *.lof
@@ -22,3 +20,11 @@
 *.brf
 
 .DS_Store
+
+delivery.pdf
+model.pdf
+tool.pdf
+dhalperi_thesis.pdf
+applications.pdf
+background.pdf
+
