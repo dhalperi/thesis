@@ -90,6 +90,21 @@ Note that this procedure differs from the typical approach of simulation-based a
 As an example, \figref{fig:eff_example} shows the CSI for a SISO link (steps 1--2) as a fading profile across subcarriers, with the computed Effective SNRs for all modulations (step 3). These Effective SNRs are compared with pre-determined thresholds (\figref{fig:snr_prr_attenuator}) to correctly predict that the best working rate will be 39\Mbps. 
 Note that these Effective SNRs are well below the RSSI-based packet SNR that is biased towards the stronger subcarriers (note the logarithmic $y$-axis scale). This link does a poor job of harnessing the received power because it is badly faded, so its SNR is a poor predictor of rate.
 
+\begin{table}
+\begin{tabular}{ccccccc}
+\toprule
+\multirow{2}{*}{Algorithm} & \multirow{2}{*}{802.11a/b/g} & \multirow{2}{*}{MIMO} & Antenna & \multirow{2}{*}{TX Power} & Channel & \multirow{2}{*}{Real NICs} \\
+& & & Selection & & Width \\
+\midrule
+SoftRate~\cite{Vutukuru_SoftRate} & \checkmark \\
+AccuRate~\cite{Sen_AccuRate} & \checkmark & & & \checkmark & \checkmark \\
+EEC~\cite{Chen_EEC} & \checkmark & & & & & \checkmark \\
+Effective SNR & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark\\
+\bottomrule
+\end{tabular}
+\caption[Comparison of link error rate prediction algorithms]{\label{tab:algorithm_comparison}A comparison of Effective SNR to other recent algorithms that purport to predict the performance of a wireless link. Effective SNR can predict packet delivery in the largest space because it looks at the raw channel response, whereas the other techniques mostly apply only to single-stream links with fixed antennas and transmit power.}
+\end{table}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined
 \input{chapter_tail}
