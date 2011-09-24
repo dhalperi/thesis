@@ -80,7 +80,7 @@ We aim to evaluate the ability of these algorithms to respond to changing channe
 \topheading{SISO Performance.} We first examine the performance of ESNR for SISO rates. \figref{fig:siso_rate_time_opt_eff} shows the rate over time for ESNR and OPT over our trace. The performance metric is the average rate over an interval because each algorithm gets an opportunity to send a packet at the same point in the trace. The rate is averaged over a window of 100 packets to smooth the data for readability. ESNR performs excellently. It is below OPT but consistently overlaps Previous-OPT, which is an upper bound for schemes that track the channel and do not predict the future. ESNR is accurate on 75\% of packets, with the expected 10\% target over-selection.
 
 \figref{fig:siso_rate_skip_opt_eff} shows the effects of mobility on SISO channels. Each line plots the average rate as a function of the speed at which we play the trace. We cover a large range of speeds to show trends, in doubling increments from 1$\times$ (walking speed, $\approx$3\mph) to 128$\times$ ($>$300\mph). All schemes fall off with increased speed, and the gap between OPT and Previous-OPT grows from 20\% at human speeds to 1/3 at the fastest speeds. However, even in these mobile channels, ESNR holds up very well and tracks Previous-OPT within 10\%.
-Note that packet SNR was observed to fare quite poorly~\cite{Vutukuru_SoftRate} in mobile channels, but since effective SNR reflects actual link quality its estimates are more accurate (\secref{sec:delivery}) and stable (2--3$\times$ less variance).
+Note that packet SNR was observed to fare quite poorly~\cite{Vutukuru_SoftRate} in mobile channels, but since effective SNR reflects actual link quality its estimates are more accurate (\chapref{chap:delivery}) and stable (2--3$\times$ less variance).
 %Note this is much better than trained SNR techniques~\cite{Vutukuru_SoftRate}, because packet SNR primarily reflects strong subcarriers, while effective SNR reflects actual performance and is hence more stable.
 
 \heading{SISO Comparison.}
@@ -138,7 +138,7 @@ Finally, note that with 3 antennas there are only four two- and three-stream rat
 
 
 \heading{Enhancements.}
-One strength of our model is that it can accommodate choices other than rates. This lets us add other functionality to ESNR without increasing complexity. We demonstrated an example enhancement to trim excess transmit power in \secref{sec:delivery}.
+One strength of our model is that it can accommodate choices other than rates. This lets us add other functionality to ESNR without increasing complexity. We demonstrated an example enhancement to trim excess transmit power in \chapref{chap:delivery}.
 % Our example in \secref{sec:delivery} showed that our model has sufficient predictive power to do this. 
 
 A second enhancement is to select the best transmit antenna when there are spare antennas. %A common scenario is an 802.11n AP sending to an 802.11a/g client. The
