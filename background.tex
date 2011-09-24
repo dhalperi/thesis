@@ -8,6 +8,26 @@
 \chapter{Background}
 \label{chap:background}
 
+\begin{table}
+\centering
+%\footnotesize
+\begin{tabular}{cccc}
+\toprule
+MCS & Modulation & Coding Rate & Data Rate (Mbps) \\
+\midrule
+0 & BPSK & 1/2 & 6.5 \\
+1 & QPSK & 1/2 & 13.0\\
+2 & QPSK & 3/4 & 19.5\\
+3 & 16-QAM & 1/2 & 26.0\\
+4 & 16-QAM & 3/4 & 39.0\\
+5 & 64-QAM & 2/3 & 52.0\\
+6 & 64-QAM & 3/4 & 58.5\\
+7 & 64-QAM & 5/6 & 65.0\\
+\bottomrule
+\end{tabular}
+\caption[The 802.11n single-stream rates.]{\label{tab:siso_mcs} The single-stream 802.11n modulation and coding schemes. The first seven rates correspond to 802.11a/g rates (excluding 9\Mbps) with four added OFDM subcarriers; the highest data rate uses a new 5/6-rate code. The data rates are given for 20\MHz channels with and 4\ms symbols.}
+\end{table}
+
 \section{Motivation: Inadequacy of RSSI}
 \begin{figure}[t]
 	\centering
