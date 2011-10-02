@@ -61,11 +61,13 @@ All of these make it a likely choice in practice.
 %This assumption allows us to use standard formulas to map channel matrices for each subcarrier (from CSI) to per-stream subcarrier SNRs.
 %The $N$ per-stream MMSE output SNRs for subcarrier $s$ are 
 The SNR of the $i^{\text{th}}$ stream after MMSE processing for subcarrier $s$ is 
-given by $\rho_{s,i} = 1/Y_{ii}-1$, where
-%\begin{equation}
-%\label{eq:mmse_snr}
-	$Y = \left(H_s^H H_s+I\right)^{-1}$
-%\end{equation}
+given by
+\begin{equation}
+\centering
+\label{eq:mmse_snr}
+\rho_{s,i} = \frac{1}{Y_{ii}}-1, \text{ where }
+Y = \left(H_s^H H_s+I\right)^{-1}
+\end{equation}
 for $i \in [1,N]$ and $N$x$N$ identity matrix $I$~\cite{Tse}. For MIMO, the model computes the effective BER averaged across both subcarriers and streams.
 
 Coding interacts with the notion of Effective SNR in a way that is difficult to analyze. One challenge is that the ability to correct bit errors depends on the position of the errors in the data stream. To sidestep this problem, we rely on the interleaving that randomizes the coded bits across subcarriers and spatial streams. Assuming perfect interleaving and robust coding, bit errors in the stream should look no different from bit errors for flat channels (but at a lower SNR). Thus our estimate of the effective BER in \eqref{eq:effective_ber} will accurately reflect the uncoded error performance of the link. Our algorithm now proceeds as in the case of a flat-fading channel described above: we take the computed Effective SNR value and use the measurements from a flat-fading link (\figref{fig:snr_prr_attenuator}) to determine transmission success or failure. As in CHARM~\cite{Judd_CHARM}, we support different packet lengths with different SNR thresholds.
