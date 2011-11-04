@@ -10,7 +10,7 @@ To start my investigation of channel selection algorithms, I first measured how 
 \label{sec:chan_sel_data}
 The \term{iwl5300} devices in the testbed can operate on 35 channels, each 20\MHz wide, defined by IEEE 802.11 standard. Of these 35 channels, 11 overlap in the 83-\MHz wide unlicensed 2.4\GHz band, and the remaining 24 non-overlapping channels are spread across three non-contiguous bands between 5.170\GHz and 5.835\GHz.
 
-For the results presented in this section, I measured the physical RF channel (using both RSS and CSI) and actual packet delivery using each of the 24 IEEE 802.11n modulation and coding schemes (MCS~0--MCS~23) that use  1-, 2-, or 3-streams. I measured these data for all links between 24 testbed nodes at UW\@. Each sender transmits packets with random payloads, sending a total of 2400 packets by interleaving 100 packets from each of the 1-, 2-, or 3-stream 802.11n rates. Each receiver uses 3 antennas for spatial diversity and/or spatial multiplexing. From these data, we can compute the expected throughput $T$ for a particular link $\ell$ and MCS~$m$ as
+For the results presented in this section, I measured the physical RF channel (using both RSS and CSI) and actual packet delivery using each of the 24 IEEE 802.11n modulation and coding schemes (MCS~0--MCS~23) that use  1-, 2-, or 3-streams. I measured these data for all links between 24 testbed nodes at UW\@. Each sender transmits packets with random payloads, sending a total of 2400 packets by interleaving 100 packets from each of the 1-, 2-, or 3-stream 802.11n rates. Each receiver uses 3 antennas for spatial diversity and/or spatial multiplexing. From these data, we can compute the measured throughput $T$ for a particular link~$\ell$ and MCS~$m$ as
 \begin{equation}
 	\label{eq:prr_throughput}
 	T(\ell,m) = \frac{P(\ell,m)}{100} \cdot B(m),
@@ -41,22 +41,22 @@ From these results, I conclude that a strategy that picks a fixed channel or a r
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Channel selection algorithms}
-\algref{alg:chan_sel_basic} is a template for a channel selection algorithm. It takes as input a list of channels to evaluate $C$, and a sender $s$ and receiver $r$ that together define a link. The two nodes hop across channels, using the \fcall{PredictChannelThroughput} function to evaluate the performance of the link on each. The algorithm tracks the best performing channel, labeled $c_{\max}$ and returns that value. (\fcall{ChannelSelection} can also return $\emptyset$ if all channels have zero predicted throughput, but we only consider links that can communicate on at least 1 channel.) Using this template, different channel selection algorithms can be instantiated by providing different implementations of \fcall{PredictChannelThroughput}.
+\algref{alg:chan_sel_basic} is a template for a channel selection algorithm. It takes as input a list of channels to evaluate $C$, and a sender $s$ and receiver $r$ that together define a link. The two nodes hop across channels, using the \fcall{PredictThroughput} function to evaluate the performance of the link on each. The algorithm tracks the best performing channel, labeled $c_{\max}$ and returns that value. (\fcall{ChannelSelection} can also return $\emptyset$ if all channels have zero predicted throughput, but we only consider links that can communicate on at least 1 channel.) Using this template, different channel selection algorithms can be instantiated by providing different implementations of \fcall{PredictThroughput}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{algorithm}[htp]
 \caption{\label{alg:chan_sel_basic}\fcall{ChannelSelection($C, s, r$)}}
 \begin{algorithmic}
 \STATE $t_{\max}\gets 0\Mbps$
-\STATE $c_{\max} \gets \emptyset$
+\STATE $c_{\best} \gets \emptyset$
 \FORALL{$c \in C$}
 \STATE Both $s$ and $r$ switch to channel $c$
-\STATE $t \gets \fcall{PredictChannelThroughput($c, s, r$)}$
+\STATE $t \gets \fcall{PredictThroughput($s, r$)}$
 \IF{$t > t_{\max}$}
 	\STATE $t_{\max} \gets t$
-	\STATE $c_{\max} \gets c$
+	\STATE $c_{\best} \gets c$
 \ENDIF
-\RETURN $c_{\max}$
+\RETURN $c_{\best}$
 \ENDFOR
 \end{algorithmic}
 \end{algorithm}
@@ -66,7 +66,7 @@ I consider three different channel selection algorithms in this section. The fir
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{algorithm}[tp]
-\caption{\label{alg:chan_sel_probe}\fcall{ProbeChannelThroughput($c, s, r$)}}
+\caption{\label{alg:chan_sel_probe}\fcall{ProbeThroughput($s, r$)}}
 \begin{algorithmic}
 \STATE $p_0,p_1,\dots,p_{23} \gets 0$
 \STATE $N \gets \text{number of probes at each MCS}$
@@ -85,7 +85,7 @@ I consider three different channel selection algorithms in this section. The fir
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{algorithm}[tp]
-\caption{\label{alg:chan_sel_rss}\fcall{PredictChannelThroughputRSS($c, s, r$)}}
+\caption{\label{alg:chan_sel_rss}\fcall{PredictThroughputRSS($s, r$)}}
 \begin{algorithmic}
 \STATE $s$ sends one packet with 0-byte payload at MCS~0
 \STATE $r$ computes the RSS $R$ and returns it along with the ACK
@@ -99,7 +99,7 @@ I consider three different channel selection algorithms in this section. The fir
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{algorithm}[tp]
-\caption{\label{alg:chan_sel_esnr}\fcall{PredictChannelThroughputESNR($c, s, r$)}}
+\caption{\label{alg:chan_sel_esnr}\fcall{PredictThroughputESNR($s, r$)}}
 \begin{algorithmic}
 \FOR{$m \in \{16, 8, 0\}$}
 \STATE $s$ sends one packet with 0-byte payload at MCS~$m$

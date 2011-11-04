@@ -41,7 +41,7 @@ In the previous chapter, we defined the Effective SNR and showed that it can acc
 		\textbf{Application of CSI} & \textbf{Status} \\
 	\midrule
 		Mobility classification & \secref{sec:esnr_mobility}\\
-		Indoor localization \\
+		Indoor localization & \cite{Sen_PinLoc} \\ 
 	\bottomrule
 	\end{tabular}
 	\caption[A variety of applications of Channel State Information]{\label{tab:csi_uses}A variety of applications of Channel State Information.}
@@ -51,38 +51,7 @@ In this chapter, we explore CSI and Effective SNR approaches to implementing fou
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{esnr_eval_chansel}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{AP selection}\label{sec:esnr_apsel}
-In a dense network, a new client may need to select its parent from many available repeaters in addition to the network coordinator. In enterprise AP and Wireless Distribution System networks today, clients typically choose the node whose probe response has the highest SNR\@. (\xxx{though there is heaps of related work doing more complex things.}) In dual-band networks, some devices may prefer a 5\GHz AP with slightly lower SNR, as long as it exceeds a minimum threshold, based on the optimistic assumption that interference is lower in the 5\GHz band. Here, we describe a procedure that uses the Effective SNR to improve this decision process and select a good parent.
-
-Normally, a client scanning for a network cycles through the available channels sends a probe request at the lowest rate (including a single stream and 20\MHz channels), and all APs or repeaters in range respond. We propose that the client instead send multiple probes that use the lowest 6.5\Mbps rate, but vary the number of streams and channel width in decreasing order. In this way, the coordinator and all repeaters that measure CSI from the probes can compute the Effective SNR for the uplink. The probe responses can now include the computed Effective SNR to better inform the client's choice. If the client includes its transmit power level in the probe request (or if the responder makes a conservative estimate), then the responder can combine this information with the CSI measured from the probe to compute the Effective SNR for the downlink. It can then send the probe response at a faster rate than the base rate and reduce the overhead of the probe response.
-
-\subsection{Evaluation methodology}
-Compare the following strategies:
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/esnr/ap_sel_ratio.png}
-	\caption{\label{fig:ap_sel_ratio}The relative throughput selecting APs by Packet SNR or by Effective SNR\@.}
-\end{figure}
-
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/esnr/ap_sel_ratio_opt.png}
-	\caption{\label{fig:ap_sel_ratio_opt}AP selection using Packet SNR or Effective SNR compared to Optimal.}
-\end{figure}
-
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=0.6\textwidth]{figures/esnr/ap_sel_delta_opt.png}
-	\caption{\label{fig:ap_sel_delta_opt}The difference in throughput using APs selected by Packet SNR or Effective SNR compared to Optimal.}
-\end{figure}
-\begin{itemize}
-\item first AP seen
-\item max RSSI
-\item max CSI predicted rate
-\item max measured rate
-\end{itemize}
-
+\input{esnr_eval_apsel}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Path selection}\label{sec:esnr_pathsel}
 In the last section, we looked at the benefits of AP selection; we now consider the more general problem of path selection. While today's AP and WDS\footnote{Actually, a WDS client implicitly makes a routing decision when joining the network---which access point it chooses can make a large difference in its connection quality.} networks use tree-structured topologies and have only a single path between any two nodes, a future device-to-device wireless network may offer many paths along which packets can be routed. Research in multi-hop routing for wireless mesh networks~\cite{Bahl_repeater,Rodrig_thesis} has shown that the choice of path can effect a large difference in connection quality.

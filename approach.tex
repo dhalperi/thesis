@@ -8,7 +8,14 @@
 \chapter{Approach}
 \label{chap:approach}
 
-Approach text.
+\section{Effective SNR Model for 802.11n}
+The example of \figref{fig:example_fsf_shape} indicated that the extra information in CSI can help explain performance for real wireless links. Here, we develop a model that can accurately predict the packet delivery probability of commodity 802.11 NICs for a given physical layer configuration operating over a given channel. We want our model to be simple and practical, so that it can be readily deployed, and to cover a wide range of physical layer configurations, so that it can be applied in many settings and for many tasks. In particular, the scope of our model is 802.11n including multiple antenna modes, including OFDM and MIMO\@. This scope is sufficient for many current and future networks. In our preliminary work, we have modeled delivery for single packet transmission only.
+
+\heading{Model Design.}
+The structure of our model is simple: given 1) a current CSI measurement of the RF channel between transmitter and receiver, and 2) a target physical layer configuration of the transmit and receive NICs, it predicts whether that link will reliably deliver packets in that configuration.
+With this simple decision primitive, we can easily build higher layer optimization protocols. These include selecting the best rate, number of spatial streams, or transmit antenna set; whether to use 20\MHz or the entire 40\MHz channel; or choosing the lowest transmit power at which the link supports a particular rate.
+
+For the model output, we define that the link will work, i.e., will reliably deliver packets, if we predict $\geq$90\% packet reception rate. We do not try to make predictions in the transition region during which a link changes from lossy to reliable. Predictions there are likely to be variable, and simply knowing when the link starts to work is useful information in practice.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined
