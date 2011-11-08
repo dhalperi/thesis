@@ -13,6 +13,18 @@ The model must account for the action of the 802.11 receiver on the received sig
 
 First, MIMO processing separates the signals of multiple spatial streams that have been mixed by the channel. As wireless channels are frequency-selective, this operation happens separately for each subcarrier. The demodulator converts each subcarrier's symbols into the bits of each stream from constellations of several different modulations (BPSK, QPSK, 16-QAM, 64-QAM). This happens in much the same way as demodulating a narrowband channel. The bits are then deinterleaved to undo an encoding that spreads errors that are bursty in frequency across the data stream. A parallel to serial converter combines the bits into a single stream. Forward error correction at any of several rates (1/2, 2/3, 3/4, and 5/6) is then decoded. Finally, the descrambler exclusive-ORs the bitstream with a pseudorandom bitmask added at the transmitter to avoid data-dependent deterministic errors.
 
+\begin{figure*}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/11n_link_simplified_bigger_fonts.pdf}
+\caption[An 802.11n link]{Caption goes here}
+\end{figure*}
+
+\begin{figure*}[ht]
+\centering
+\includegraphics[angle=90,height=\textheight]{figures/11n_link_simplified.pdf}
+\caption[An 802.11n link]{Caption goes here}
+\end{figure*}
+
 \begin{figure*}[ht!]
 \centering
 \includegraphics[width=6in]{figures/esnr/mimo_ofdm_decoding_process.pdf}
