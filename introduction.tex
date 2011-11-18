@@ -8,24 +8,42 @@
 \chapter{Introduction}
 \label{chap:intro}
 
-Computer scientists have long envisioned a networked home, in which services and functionality offered by different devices can be easily shared and combined to create a new style of rich applications. Though this vision dates back decades, it has recently been brought closer to reality by the sharp growth in the number and diversity of network-enabled consumer devices. A key component of this change has been the availability of cheap wireless connectivity to enable flexible and convenient deployment of devices.
+Wireless communication forms the dominant consumer-facing networking technology in the world. Billions of people worldwide use cellular phones to provide global voice communication service, and in the past decade smartphones have begun to provide digital access to the Internet while mobile. These innovations are revolutionizing the way people interact with their devices, with each other, and with the world.
 
-The leading consumer wireless technology today---and for the foreseeable future---is IEEE 802.11~\cite{80211}, also called Wi-Fi. An ABI Research report from late 2010 forecast the shipment of 1~billion Wi-Fi (IEEE 802.11~\cite{80211}) chipsets in 2011, with more than half of these chipsets used in consumer electronics, handsets, and other mobile devices. Wi-Fi's popularity can be attributed to its low cost, small physical footprint, and dramatically increased speeds that can now reach up to 600\Mbps with the 2009 update to IEEE 802.11n~\cite{80211n}. These attributes bring the vision of rich home applications close to being realized.
+Cellular data networks provide mobile connectivity to the Internet over a long range and at relatively low rates. Complementing these, Wi-Fi (IEEE~802.11~\cite{80211}) is used today in locations such as caf\'{e}s, shopping malls, corporate offices, and homes to provide connectivity at much higher rates over much shorter range. With its low cost, small physical footprint, and dramatically increased speeds (up to 600\Mbps in IEEE~802.11n~\cite{80211n}), Wi-Fi is not limited to traditional computing devices such as laptop and desktop computers, but is also being adopted by consumer electronics such as televisions and DVD players. An ABI Research report~\cite{ABI_Research_2010} from late 2010 forecast that more than half of the 1 billion Wi-Fi chipsets shipped in 2011 would be used in consumer electronics.
+%, Wi-Fi today connects devices such as laptops, desktops, tablets, and phones to the Internet at high-speed.
+%The latest revision to Wi-Fi, called IEEE~802.11n~\cite{80211n}, enables individual devices to transmit data as fast as 600\Mbps.
 
-However, one major impediment stands in the way of this vision: the Wi-Fi networks in use today are not architected to support these applications. In particular, three trends of the future wireless home will push today's home networks beyond their limits:
+Due to its dramatic improvement in recent years and rapid adoption in a diverse set of devices, Wi-Fi is thus at the heart of the next networking revolution: the combining of these diverse consumer devices to build rich applications that leverage each device's unique features rather than simply interacting with the Internet at large. A new protocol, called Wi-Fi Direct~\cite{wifi_direct} was standardized in late 2010 to enable Wi-Fi devices to build networks that better match their applications, and has seen great uptake. Another ABI Research study~\cite{ABI_Research_2011}, conducted in late 2011, measured a 50\% annual growth rate of Wi-Fi direct, and predicts that there will be 2~billion Wi-Fi Direct-enabled devices by 2016.
 
-\begin{enumerate}
-\item Home wireless networks will become increasingly \emph{dense}. Whereas today the use of Wi-Fi scales in the number of occupants---one access point plus some laptops, tablets, and smartphones---tomorrow, it will scale with the number of objects. Rather than a handful of wireless devices per home, there will be five, ten, or hundreds of devices per room.
+%The next networking revolution will be for local wireless networks, in the enterprise and especially in the home.
+%%, short-range, high-rate local area networks in the
+%% enterprise and the
+%%home that complement cellular networks.
+%, these indoor networks will be used to build rich device-to-device applications in a comparably small area and at much higher rates. Wi-Fi (IEEE 802.11) is the dominant consumer wireless technology, and 
+%By both dwarfing the speeds of commercial cellular networks and enabling much denser deployments of many devices that use unlicensed spectrum, Wi-Fi is on the cusp of enabling a new generation of rich device-to-device applications.
+%Already, consumer electronics have begun gaining Wi-Fi functionality with dramatic uptake: a 2011 ABI Research report measured a 50\% annual growth rate of devices that support Wi-Fi Direct~\cite{wifi_direct} (a new standard protocol for device-to-device networks) and forecasts that there will be 2~billion Wi-Fi Direct-enabled devices by 2016.
 %
-\item Consumer devices will be increasingly \emph{heterogeneous} in their wireless capabilities. For instance, the number of antennas a device has determines its maximum rate (for IEEE 802.11n), and the available spectrum depends on whether it has a single-band or dual-band radio. These factors are determined independently by manufacturers as a function of size, workload, and profit margin. In three contrasting examples: (1) Small devices like the $\approx$1\insq Eye-Fi SD cards~\cite{EyeFi} may not fit multiple antennas; (2) an HDTV has room for many antennas and the demand for high speeds; and (3) printers are sold at such low margins that they may only support 2.4\GHz bands and single antenna systems despite their large form factor. Devices may also take on different roles in the network depending on whether they are fixed or mobile, or using battery or wall power.
-%
-\item Communication patterns are tending towards \emph{device-to-device}. The defining characteristic of this new generation of applications is that any functionality offered by any device, such as input, output, actuation, computation, storage, or data, should be accessible via the network by any other device. Access to the Internet is no longer the primary purpose of wireless connectivity; the Internet is now only one service of many.%
-\footnote{Though there is also a shift towards the Cloud, applications will still include content generated in the home, such as live video, and can be more interactive using local resources, such as computation~\cite{Satya_Cloudlets}.}
-\end{enumerate}
+%With this shift, the decades-old ``Internet of Things'' vision is becoming a reality, and researchers have begun building systems such as HomeOS~\cite{Dixon_HomeOS} to design, implement, and program applications that run across the devices in a home.
+%Now that network-ready consumer devices are available, protocols to connect them have been developed, and systems to control them and help them interoperate are being researched, we have most of the pieces to build the home networks that will support these rich new applications. The last networking component, identified in studies of users who have deployed inchoate versions of home networking systems~\cite{Brush_HomeAutomation}, is a reliable, high-bandwidth wireless network to keep these home devices connected.
 
-To scale in order to handle these trends, a wireless network should make efficient use of all of its resources. For instance, 
+%This change is happening fast: an ABI Research report from late 2010 forecast the shipment of 1~billion Wi-Fi (IEEE 802.11~\cite{80211}) chipsets in 2011, with more than half of these chipsets used in consumer electronics, handsets, and other mobile devices. 
 
-The ``access point'' (AP) model used predominantly in home wireless networks today will simply not scale in the face of these trends. AP networks are designed to permit only a single ongoing transmission network-wide, 
+Despite these great technology, standardization, and adoption trends towards this potentially bright future, one major factor challenges these systems. While these networks have significant potential for speed, capacity, and reliability, realizing these benefits requires that the network is configured in an efficient and effective way, and that it can adapt rapidly to changing conditions. The issue is that the underlying Wi-Fi technologies and network architectures have become rather complex, and how to configure and control them has become a significant decision problem without a simple, comprehensive solution.
+
+In this thesis, I develop a practical solution to this problem. In particular, I develop a comprehensive metric to inform these complex decision problems using information available in commercial commodity Wi-Fi hardware. Throughout the rest of this chapter, I first explain in further detail the problem (\secref{sec:intro_problem}), then present my approach to solving it (\secref{sec:intro_approach}). I conclude this chapter by discussing the contributions of my work (\secref{sec:intro_contributions}) and the organization of the rest of this thesis (\secref{sec:intro_organization}).
+
+\section{The Problem}
+\label{sec:intro_problem}
+
+\section{My Approach}
+\label{sec:intro_approach}
+
+\section{Contributions}
+\label{sec:intro_contributions}
+
+\section{Organization of This Thesis}
+\label{sec:intro_organization}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined
