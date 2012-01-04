@@ -40,6 +40,7 @@ However, it is important to note three trends for Wi-Fi links. First, they are i
 
 In this thesis, I develop a practical solution to this problem. In particular, I develop a comprehensive metric to inform these complex decision problems using information available in commercial commodity Wi-Fi hardware. Throughout the rest of this chapter, I first explain in further detail the problem (\secref{sec:intro_problem}), then present my approach to solving it (\secref{sec:intro_approach}). I conclude this chapter by discussing the contributions of my work (\secref{sec:intro_contributions}) and the organization of the rest of this thesis (\secref{sec:intro_organization}).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Problem}
 \label{sec:intro_problem}
 As stated above, the major challenge for Wi-Fi networks today is configuration of the wireless network. To introduce the problem, I present the main configuration problems in these systems, and briefly explain why today's Wi-Fi solutions are insufficient.
@@ -48,7 +49,7 @@ As stated above, the major challenge for Wi-Fi networks today is configuration o
 \label{sec:intro_single_link_problems}
 The most basic wireless network is a single link (\figref{fig:wifi_link}), in which a transmitter sends data to one receiver, with no other devices present. In this section, I will show that fully optimizing a single wireless link involves choosing the right operating point in a large multi-dimensional space. 
 
-\begin{figure}[thp]
+\begin{figure}[tp]
 	\centering
 	\includegraphics[width=2in]{figures/single_link_circle}
 	\caption{\label{fig:wifi_link}A single Wi-Fi link, in which the transmitter $T$ sends data to the receiver $R$. No other wireless devices are present.}
@@ -60,11 +61,29 @@ Perhaps the simplest configuration goal for a wireless link is \define{rate sele
 In principle, selecting a rate for a wireless link should be trivial. Whether a transmission sent with a particular modulation and coding scheme is received
 %As demonstrated by the seminal works of Ralph Hartley~\cite{Hartley_law} and Claude Shannon~\cite{Shannon_coding,Shannon_capacity}, the maximum data rate that can be delivered over a particular noisy channel (such as a wireless radio link)
 is determined entirely by the amount of power delivered to the receiver and the noise level present. This limit is quantified in the \define{signal-to-noise ratio}, or \define{SNR\@}.
-The transmitter need only measure the channel SNR and apply textbook formulas that can compute the error rates of particular modulations. The fastest rate can then be easily selected.
+The transmitter need only measure the channel SNR and apply textbook formulas that can compute the error rates of particular modulations. The fastest rate can then be easily selected. This approach is described in \figref{fig:rate_selection_theory}.
+
+\begin{figure}[t]
+	\centering
+		\subfigure[The theoretical approach to rate selection based on measurements.]{
+			\label{fig:rate_selection_theory}
+			\hspace{0.1in}
+			\includegraphics[width=2in]{figures/rate_selection_theory}
+			\hspace{0.1in}
+		}
+			\hspace{0.1in}
+		\subfigure[The probe-based approach to rate selection used in practice.]{
+			\hspace{0.1in}
+			\label{fig:rate_selection_practice}
+			\includegraphics[width=2in]{figures/rate_selection_practice}
+			\hspace{0.1in}
+		}
+	\caption[Approaches to rate selection.]{\label{fig:rate_selection_algorithms}Approaches to rate selection.}%
+\end{figure}
 
 In practice, this approach has never worked for Wi-Fi links. The 802.11 standard defines a channel metric related to the SNR called the Receive Signal Strength Indicator, or RSSI, that captures the total amount of power in the channel and in most chipsets is indeed a direct measure of the SNR. However, Wi-Fi systems have never used RSSI as more than a coarse indicator of expected performance. There have simply been too many ways in which the observed measurements and actual performance fail to match the predictions of theory. For example, hardware estimates of RSSI can be mis-calibrated, the wireless channel can vary over packet reception, and can be corrupted by interference; all of these are known to be issues in practice~\cite{Camp_rateadapt,Judd_CHARM,Reis_sigcomm06}.
 
-Since rate selection based on RSSI has never worked for Wi-Fi, practical systems use \define{rate adaptation} algorithms instead~\cite{Bicket_SampleRate,Minstrel,Wong_RRAA}. These are guided search schemes that simply test individual rates to see how well they work. When the loss rate is too high, a lower rate is used; otherwise a higher rate is tested. This approach is effective for slowly varying channels and simple links, since the best setting will soon be found.
+Since rate selection based on RSSI has never worked for Wi-Fi, practical systems use \define{rate adaptation} algorithms instead~\cite{Bicket_SampleRate,Minstrel,Wong_RRAA}. These algorithms, exemplified by \figref{fig:rate_selection_practice}, are guided search schemes that simply test individual rates to see how well they work. When the loss rate is too high, a lower rate is used; otherwise a higher rate is tested. This approach is effective for slowly varying channels and simple links, since the best setting will soon be found.
 
 However, remember the Wi-Fi trends we mentioned earlier: the transmit configuration of a single Wi-Fi link now includes not just rate, but additional dimensions that take into account the use of multiple antennas or channel widths, and these devices are increasingly being used while mobile. Thus algorithms to configure the rates of these links need to respond faster to match changing channels, while simultaneously choosing from among more possibilities. As a result, rate adaptation algorithms are getting less efficient as these systems change.
 
@@ -76,7 +95,7 @@ In practice, the solution taken by hardware/driver manufacturers today is to sim
 \label{sec:intro_network_problems}
 In this section, I will illustrate how a network of devices has a significantly larger configuration space than a single link. I frame this discussion using the examples in \figref{fig:network_examples}, which represent the three key network-level configuration problems that Wi-Fi Direct networks will have to solve to build rich device-to-device applications. Depending on the problem being solved, these configuration problems can have increased complexity that is linear in the number of devices (AP selection), quadratic (Multi-hop routing), or even exponential (Spatial reuse).
 
-\begin{figure}[thp]
+\begin{figure}[tp]
 	\centering
 	\includegraphics[width=\textwidth]{figures/network}
 	\caption{\label{fig:network_examples} The three key configuration problems in multi-device networks. \textit{Left:} access point selection. \textit{Center:} Multi-hop mesh routing. \textit{Right:} Spatial reuse. }
@@ -97,27 +116,44 @@ Once again, deciding which of these two possibilities is better requires the sys
 practical works on spatial reuse for Wi-Fi has simply fixed the entire network to a single rate during experiments.
 
 \subsection{Summary}
-In this section, I first showed that the configuration problems for a single link have grown dramatically with the switch to 802.11n technology, and then presented the three key network-level configuration problems for Wi-Fi Direct-like networks and explained why their solution space is even larger than for a single link. The main conclusion from this section is that the heuristic and adaptation-based approaches used in the simple network problems solved today will likely not scale to these bigger problems. (I will demonstrate this later in the thesis in \secref{sec:eval_esnr}). Instead, what we need is a way to accurately and rapidly assess the quality of links for all the factors mentioned in \secref{sec:intro_single_link_problems}, and use this process to inform joint optimization problems such as those described in \secref{sec:intro_network_problems}. I present my approach to solving this problem in the next section.
+In this section, I first showed that the configuration problems for a single link have grown dramatically with the switch to 802.11n technology, and then presented the three key network-level configuration problems for Wi-Fi Direct-like networks and explained why their solution space is even larger than for a single link. The main conclusion from this section is that the heuristic and adaptation-based approaches used in the simple network problems solved today will likely not scale to these bigger problems. (I will demonstrate this later in the thesis in \chapref{chap:applications}). Instead, what we need is a way to accurately and rapidly assess the quality of links for all the factors mentioned in \secref{sec:intro_single_link_problems}, and use this process to inform joint optimization problems such as those described in \secref{sec:intro_network_problems}. I present my approach to solving this problem in the next section.
 
 %Depending on the problem being solved, these configuration problems can have increased complexity that is linear in the number of devices (AP selection), quadratic (Multi-hop routing), or even exponential (Spatial reuse). 
 %Additionally, these scenarios tend to differ from the single link case in that their solutions can not be fluidly adapted while online. For instance, a transmitter on a single link could rapidly adapt its rate or antenna selection, and a poor choice will be rapidly corrected. Conversely, a client in today's wireless networks cannot switch between access point at short time scales. Thus it is especially important that these network-level decision problems are made accurately the first time.
 
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Approach}
 \label{sec:intro_approach}
-My approach to the Wi-Fi network configuration problem is to return to the basic strategy of using theory to connect the performance of 802.11 devices on real links to measurements of their underlying radio channels in practice. My hypothesis is that it is possible to use channel measurements readily available in 802.11n Wi-Fi devices to inform decisions about wireless network device configurations. Rather than using the heuristic and adaptation-based approaches used to configure networks today, I propose a 
+My approach to the Wi-Fi network configuration problem is to return to the basic channel measurement-based strategy of selecting configurations for wireless networks. In particular, my hypothesis is that it is possible to use theory to connect the performance of 802.11 devices on real links to measurements of their underlying radio channels in practice. In this thesis, I will demonstrate that channel measurements readily available in 802.11n Wi-Fi devices can be used to predict packet delivery over real 802.11n links, and that these predictions are sufficiently accurate to inform decisions about wireless network device configurations.
 
+\subsection{Better physical layer measurements}
+I noted earlier that the packet-level SNR metric computed from RSSI has never been used as an accurate predictor of packet delivery for 802.11 networks, and I will present experimental data that confirms this effect in a succeeding chapter (\chapref{chap:problem}). If hardware estimates of RSSI are not sufficiently accurate, then what data source can we use instead?
 
- Though this was intractable in the past, there are three reasons for the opportunity to make progress.
-\begin{itemize}
-\item First, 802.11n devices measure the channel at the level of individual OFDM subcarriers and individual spatial paths to support 802.11n MIMO (multi-antenna) operation. They report this information in a standard Channel State Information (CSI) format~\cite[\S7.3.1.27]{80211n}.
+The 802.11n standard released in 2009 adds a new Channel State Information (CSI)~\cite[\S7.3.1.27]{80211n} measurement facility in order to support multi-antenna (Multiple-Input-Multiple-Output, or MIMO) operation. Devices that report the CSI can provide channel measurements at the level of individual OFDM subcarriers and individual spatial paths. These measurements form a much richer set of information about the RF channel than does the RSSI.
 
-To compare the CSI with SNR, consider an 802.11n link with $M$ antennas at the transmitter and $N$ at the receiver. Today's receivers measure $N$ SNR values, each corresponding to the total power measured at one receive antenna. In contrast, the CSI contains $M$$\times$N$\times$$S$ values, where $S$ is the number of subcarriers measured. This results in a factor of $MS$ more channel measurements when measuring CSI as opposed to SNR\@. In 802.11, the CSI can measure from 1 to 4 antennas, and from 16 to 114 subcarriers. The CSI thus includes between 16$\times$ ($M=1$, $S=16$) and $456\times$ ($M=4$, $S=114$) as many measurements as the SNR\@.
-\item Second, the quality of Wi-Fi hardware has improved dramatically. Manufacturers typically calibrate chipsets across a wide range of conditions, including temperature and transmit power level, in order to meet regulatory requirements, to meet standardized tolerances, and to maximize performance. The modern use of OFDM and MIMO techniques additionally enables channel estimates that are less susceptible to interference than spread-spectrum modulation (because of lower correlation), and can be taken more rapidly.
-\item Finally, there is a recent body of theoretical work on measuring and predicting the error performance of wireless channels that are faded, use OFDM, or use MIMO\@. Chief among these is the seminal 1998 paper by Nanda and Rege on the concept of \emph{Effective $E_b/N_0$}~\cite{Nanda_effectiveSNR}, which forms the theoretical basis of my model for 802.11n MIMO-OFDM channels.
-\end{itemize}
-In my thesis, I take advantage of these three points to build a practical system to return to the ``traditional'' algorithm and predict wireless error performance from channel measurements. Rather than the ``try-it-and-see'' adaptation algorithms in use today, my model enables measurement-based selection of operating points for a wide range of transmitter and receiver parameters over a large application space.
+To compare the CSI with SNR, consider an 802.11n link with $M$ antennas at the transmitter and $N$ at the receiver. Today's receivers measure $N$ RSSI values, each corresponding to the total power measured at one receive antenna. In contrast, the CSI contains $M$$\times$N$\times$$S$ values, where $S$ is the number of subcarriers measured. This results in a factor of $MS$ more channel measurements when measuring CSI as opposed to SNR\@. In 802.11, the CSI can measure from 1 to 4 antennas, and from 16 to 114 subcarriers. The CSI thus includes between 16$\times$ and $456\times$ as many measurements as the RSSI\@.
+
+%\item Second, the quality of Wi-Fi hardware has improved dramatically. Manufacturers typically calibrate chipsets across a wide range of conditions, including temperature and transmit power level, in order to meet regulatory requirements, to meet standardized tolerances, and to maximize performance. The modern use of OFDM and MIMO techniques additionally enables channel estimates that are less susceptible to interference than spread-spectrum modulation (because of lower correlation), and can be taken more rapidly.
+
+\subsection{A practical Effective SNR model for 802.11n}
+The CSI gives fine-grained channel measurements that capture the low-level details of the physical RF channel, but this does not on its own give an accurate predictor of packet delivery. However, there is a recent body of theoretical work on measuring and predicting the error performance of wireless channels that are faded, use OFDM, or use MIMO\@. Chief among these is the seminal 1998 paper by Nanda and Rege on the concept of \define{Effective $E_b/N_0$}~\cite{Nanda_effectiveSNR},\footnote{In electrical engineering literature, $E_b$ denotes the energy of a bit and $N_0$ denotes the noise floor, so $E_b/N_0$ is the signal-to-noise ratio of a single bit. In the context of 802.11, in which SNR is derived from RSSI, we use a slightly different definition of SNR that is not normalized by the number of bits.} which forms the theoretical basis of my model for 802.11n MIMO-OFDM channels. In this thesis, I build a practical Effective SNR-based model that uses CSI measurements from commodity 802.11n devices and makes accurate predictions about 802.11n packet delivery.
+
+I give a detailed description of the Effective SNR concept and how I model it in a practical system in a subsequent chapter (\chapref{chap:model}). Briefly, the goal of the Effective SNR is to to give a channel quality metric that reflects the \emph{actual error rate of the link} taking into sub-channel effects like fading. The Effective SNR of a faded channel is defined as the SNR in an equivalent constant-SNR channel that would yield the same error performance. Another way to think about this is that the SNR reports the \emph{total power} received, whereas the Effective SNR reports the amount of \emph{useful power} received. As I will show in this thesis, because Effective SNR accurately reflects packet delivery it can be used to inform a wide variety of configuration decisions about 802.11n systems.
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=2.2in]{figures/selection_esnr}
+	\caption{\label{fig:selection_esnr}An Effective SNR-based approach to making application decisions in 802.11n networks.}
+\end{figure}
+
+\subsection{Approach overview}
+I present the basic outline of my Effective SNR-based approach to informing configuration of 802.11n systems in \figref{fig:selection_esnr}. This approach is closely related to the ``theoretical approach'' presented in \figref{fig:rate_selection_theory}, with a few differences.
+
+As a first step, a client will measure the CSI for an 802.11n wireless link to capture the fine-grained channels details at the level of frequency-selective fading (to understand performance under OFDM) and independent spatial paths (to understand performance when using MIMO). Second, the measured CSI will be used as input to my practical Effective SNR-based model for 802.11n packet delivery. This model incorporates textbook algorithms, ideas from communications theory, as well as some implementation-specific details to handle a wide variety of channels, hardware devices, and applications. Finally, the output of the model is a predicted \emph{set of working physical layer configurations}. For each physical layer configuration in the application space---which can span the choice of modulation, coding scheme, transmit or receive antenna set, and more---the model predicts whether that configuration is likely to deliver packets reliably. The application can then choose among the working configurations in a way that optimizes its objective function.
+
+Throughout this thesis, I describe the components of this approach in detail. The organization of this thesis is presented below in \secref{sec:intro_organization}.
+
+%In my thesis, I take advantage of these three points to build a practical system to return to the ``traditional'' algorithm and predict wireless error performance from channel measurements. Rather than the ``try-it-and-see'' adaptation algorithms in use today, my model enables measurement-based selection of operating points for a wide range of transmitter and receiver parameters over a large application space.
 
 %The opportunity to make progress has arisen for two reasons. First, 802.11n devices measure the channel at the level of individual OFDM subcarriers and individual spatial paths to support 802.11n MIMO (multi-antenna) operation. They report this information in a standard Channel State Information (CSI) format~\cite[\S7.3.1.27]{80211n}. This provides a much richer source of information than SNR\@. Note that this CSI naturally applies to 802.11a/g rates because they are a subset of 802.11n rates. Second, modern NICs use OFDM, which gives channel estimates that are less susceptible to interference than spread spectrum (because of lower correlation), and are calibrated. Both factors lead to more meaningful measurements than in the past.
 
@@ -130,16 +166,21 @@ In my thesis, I take advantage of these three points to build a practical system
 %\subsubsection{Effective SNR}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Contributions}
 \label{sec:intro_contributions}
 
 The contributions of this thesis are threefold:
 \begin{itemize}
-\item First, I develop a model that uses the 802.11n CSI to predict the error performance of different transmitter configurations on the wireless channel. This model is flexible to support a wide variety of transmitter and receiver device capabilities, device implementations, and applications. I also detail how to use this model to solve a large number and variety of configuration problems similar to those in \secref{sec:intro_problem}.
-\item Second, I design and implement a measurement tool that uses commodity 802.11n wireless devices to measure the 802.11n CSI for the wireless channel, and use this tool to apply my model to real measured 802.11n channels. I have also released this tool publicly, and at the time of writing it is in use at 18 universities, research labs, and corporations.
-\item Finally, I conduct detailed experimental evaluations of my Effective SNR-based model for 802.11n that show that it accurately predicts performance for a wide variety of applications, and improves the performance of these applications over versions that use the channel measurements available today.
+\item First, I develop a model that uses the 802.11n CSI to predict the error performance of different transmitter configurations on the wireless channel. This model is flexible to support a wide variety of transmitter and receiver device capabilities, device implementations, and applications. I also detail how to use this model in a system that can solve a large number and variety of configuration problems similar to those described in \secref{sec:intro_problem}.
+\item Second, I present an implementation of this system using a commodity 802.11n wireless device that demonstrates its feasibility in practice and handles the practical considerations of operation over real links using real, non-ideal hardware. This includes a detailed experimental evaluation of my system that shows that this model accurately predicts packet delivery over real 802.11n wireless links in practice.
+\item Third, I evaluate this system in the context of a wide variety of 802.11n applications, and quantify the application performance gains when using my Effective SNR metric over versions that use the RSSI-based SNR channel measurements available today.
+\item Finally, as part of my thesis I have produced an 802.11n research platform based on open-source Linux kernel drivers, open-source application code, and commodity Intel 802.11n devices using closed-source firmware that I customized.
+%that uses commodity 802.11n wireless devices to measure the 802.11n CSI for the wireless channel, and use this tool to apply my model to real measured 802.11n channels.
+I have released this tool publicly, and at the time of writing it is in use at 19 universities, research labs, and corporations.
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Organization of This Thesis}
 \label{sec:intro_organization}
 This thesis is organized as follows. In \chapref{chap:background}, I provide background information on wireless signals and systems in general, and the IEEE 802.11 standards in particular. \chapref{chap:problem} introduces the problem with using channel measurements to predict wireless link performance in today's hardware and using today's techniques, and introduces my Effective SNR-based approach to solving it. In \chapref{chap:model}, I develop my Effective SNR model for 802.11n link performance, and demonstrate its effectiveness at handling a wide range of transmitter and receiver configurations as well as wireless applications. I then describe my measurement tool, experimental apparatus, and basic measurements in \chapref{chap:tool}, and then use these measurements to evaluate the ability of my model to predict error performance over a single link in \chapref{chap:delivery}. Next, I conduct a detailed study of the model in the context of rate selection for 802.11n in \chapref{chap:rate}, and then present brief results for a variety of other applications in \chapref{chap:applications}. Finally, \chapref{chap:conclusion} contains a discussion of future directions for this research my concluding thoughts.
