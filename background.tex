@@ -61,8 +61,8 @@ The binary modulation system I discussed above is a scheme called On-Off Keying~
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\textwidth]{figures/constellations}
-\caption{\label{fig:constellations}Constellation diagrams for the BPSK, QPSK, and 16-QAM modulations.}
+\includegraphics[width=0.8\textwidth]{figures/constellations_radius}
+\caption{\label{fig:constellations}Constellation diagrams for the BPSK, QPSK, and 16-QAM modulations. These constellations are normalized such that each modulation has equal average transmit power, indicated by the red circle.}
 \end{figure}
 
 As mentioned above, electromagnetic signals actually have both an amplitude and a phase. Amplitude modulation varies one of these parameters, and a complementary scheme called Phase-Shift Keying~(PSK) keeps the amplitude constant but varies the phase. A third scheme known as Quadrature Amplitude Modulation~(QAM) varies both parameters simultaneously and results in a more efficient system when sending more than 2 bits per symbol. Noting that the polar coordinates given by amplitude and phase can equivalently be thought of as a complex number, $m$-QAM can be equivalently thought of as $\sqrt{m}$-ASK in both the real and complex dimensions simultaneously. \figref{fig:constellations} shows the two-dimensional \define{constellations} that result from picturing the symbols sent in BPSK (i.e.\ 2-PSK), QPSK (i.e.\ 4-PSK), and 16-QAM modulation schemes.
@@ -90,48 +90,65 @@ Finally, we can now connect these different modulations back to the Shannon-Hart
 \subsection{The wireless channel}
 The previous section explained the basics of digital communications in the context of a wired link. Here, I expand to the significantly more complex case of a wireless channel.
 
-In a wireless link, the electromagnetic signal is emitted from an antenna as a \define{radio wave} that then radiates through the \define{wireless medium}, i.e.\ the environment. The dominant source of attenuation in an wireless link is not absorption by the medium, but instead is the three-dimensional spread of energy throughout the environment, of which a small fraction is captured by a receiver's antenna. This effect, called \define{path loss}, and is captured by the Friis transmission equation:
+In a wireless link, the electromagnetic signal is emitted from an antenna as a \define{radio wave} that then radiates through the \define{wireless medium}, i.e.\ the environment. The dominant source of attenuation in an wireless link is not absorption by the medium, but instead is the three-dimensional spread of energy throughout the environment, of which a small fraction is captured by a receiver's antenna. This effect, called \define{path loss}, and is captured by the Friis transmission equation, which yields the inverse relationship
 \begin{equation}
 \label{eq:friis}
 	S \propto \frac{T}{d^n},
 \end{equation}
 where $d$ is the distance between transmitter and receiver, and $n$ is the path loss exponent. In a vacuum, $n$ would taken on a value of 2, reflecting the fact that the energy transmitted at a particular time is spread out over the surface of a sphere (or a different geometric shape in the case of a directional antenna). The path loss exponent varies in different indoor environments, but empirically tends to take on a value between 2 and 4~\cite{Sklar}.
 
-There are many other important wireless channel effects---such as \define{shadowing}, in which materials such as glass or metal prevent radio waves from passing through---but the most problematic effect for indoor wireless links like those used in Wi-Fi is \define{multi-path fading}. At 2.4\GHz and 5\GHz, RF signals bounce off metal and glass surfaces that are common indoors. This scattering leads to a situation in which many copies of the signal arrive at the receiver having traveled along many different paths. When these copies combine, they may add constructively, giving a good overall signal, or destructively, mostly canceling the overall signal, all depending on the relative phases of the different copies. Measurement studies of fading report signal variations as high as 15--20\dB~\cite{Judd_CHARM}; I will also present experimental evidence confirming these effects in the environments I studied in \chapref{chap:problem}.
+Beyond path loss, the most important channel effect is the inherent \emph{multi-path} nature of indoor wireless environments. At 2.4\GHz and 5\GHz, RF signals bounce off metal and glass surfaces that are common indoors. This scattering leads to a situation in which many copies of the signal arrive at the receiver having traveled along many different paths. Because multi-path effects depend on the phases of signals, when these copies combine they may add constructively, giving a good overall signal, or destructively, mostly canceling the overall signal, all depending on the relative phases of the different copies. Channels that exhibit these effects are called \define{frequency selective}. Measurement studies of frequency-selective fading report signal variations as high as 15--20\dB~\cite{Judd_CHARM}; in \chapref{chap:problem} I will present experimental evidence confirming these effects in the environments I studied.
 
-In the presence of multi-path fading, small changes in path lengths can alter the situation from good to bad because the wavelengths at 2.4\GHz and 5\GHz (the distance over which the RF signals go through a complete phase) are only 12\cm and 6\cm. Statistical models tell us that multi-path fading effects are independent for locations separated by as little as half a wavelength. This means that multi-path causes rapid signal changes or fast fading as the receiver moves, or in the case of a stationary node as the surrounding environment changes. Because multi-path effects depend on the phases of signals, they are strongly \define{frequency selective}. This means that some unlucky frequencies in a wide channel may be wiped out while others are unaffected. I will present an example in the next chapter.
+Additionally, small changes in path lengths can alter a situation from good to bad because the wavelengths at 2.4\GHz and 5\GHz (the distance over which the RF signals go through a complete phase) are only 12\cm and 6\cm. Statistical models tell us that multi-path fading effects are independent for locations separated by as little as half a wavelength. This means that multi-path causes rapid signal changes or fast fading as the receiver moves, or in the case of a stationary node as the surrounding environment changes.  Movement at fast speed also induces \define{Doppler effect}, which aggravates multi-path effects and makes the channel even more variable.
+%This means that some unlucky frequencies in a wide channel may be wiped out while others are unaffected. 
 
 The net effect of multi-path fading is that the received wireless signal can vary significantly over time, frequency and space. This is a problem for good performance because at any given time there is a significant probability of a deep fade that will reduce the SNR of the channel below the level needed for a given communication scheme.
 
-For a variety of practical reasons, but in large part to combat multi-path fading, many modern protocols use Orthogonal Frequency Division Multiplexing (OFDM), in which a wide frequency band is split into many \define{subcarriers} that each carry different modulated bits in parallel.
+However, an alternative way of looking at the effects of multi-path fading is that they provide \define{diversity}. In a sufficiently rich multi-path environment, there are so many combining copies of signals that the channel observed on different, nearby frequencies can be considered to be independently faded. For this reason among others, many systems including 802.11 use a scheme called Orthogonal Frequency Division Multiplexing (OFDM). In OFDM, a wide frequency band is split into many \define{subcarriers} that each carry different modulated bits in parallel, with a higher level error-correcting code across them to take advantage of this \define{frequency diversity}. By turning a single fast channel into many parallel slower channels, OFDM also sends each symbol for a longer period of time, allowing more time for the channel to average out temporal fades and providing \define{time diversity}. 
+
+Similarly, since antennas separated by at least half a wavelength see independently-faded channels, some schemes can use multiple antennas to take advantage of the \define{spatial diversity} these antennas provide. A multi-antenna receiver can realize these gains using clever signal processing algorithms, while a multi-antenna transmitter can use \define{space-time codes} to realize diversity, or---with knowledge of the fading properties of the individual paths between pairs of antennas---can steer its signal such that the multiple copies arriving at the receiver's antenna combine optimally. This process, in which the gain and phase of the signal emitted by each antenna are adjusted---with OFDM, this adjustment may be different for each subcarrier---is called \define{beamforming}.
+
+Finally, suppose that both the transmitter and receiver have multiple antennas. The foundational work by Foschini, Gans~\cite{Foschini_Gans} and Telatar~\cite{Telatar_MIMO} in the mid 1990s, introduced \define{spatial multiplexing}, in which different \define{spatial streams} of data can be sent in parallel on different spatial paths. Spatial multiplexing takes advantage of a new, spatial degree of freedom: if each side of a link has at least $N$ antennas, spatial multiplexing can ideally provide an $N$-fold gain in performance, and results in a modified capacity theorem:
+\begin{equation}
+\label{eq:mimo_capacity}
+R = BN\log(1+\rho).
+\end{equation}
+Together, spatial diversity and spatial multiplexing techniques form a set of what are called MIMO (multiple-input, multiple-output) techniques.
+
+There are many other important wireless channel effects. One such is \define{shadowing}, in which materials such as glass or metal prevent radio waves from passing through. Shadowing is often used to explain how the path loss exponent (\eqref{eq:friis}) can empirically be larger than 2.
+
+Another important effect is \define{inter-symbol interference}, in which some spatial paths are so long that the delayed copies of the signal substantially overlap with the next symbol and make it harder to receive. The delay of the latest copy is called the \define{delay spread} of the channel, and can be substantial. To compensate for this effect, OFDM systems often repeat each symbol for a period of time called a \define{guard interval}. If the guard interval is at least as long as the delay spread, the receiver can ignore the inter-symbol interference and still receive a complete symbol.
+%For a variety of practical reasons, but in large part to combat multi-path fading, many modern protocols use .
 %In 802.11, the 20\MHz-wide channel is broken into 64 \define{subcarriers}, each using 312.5\kHz of bandwidth.
 %The beauty of OFDM is that it divides the channel in a way that is both computationally and spectrally efficient. High aggregate data rates can be achieved, while the encoding and decoding on different subcarriers can use shared hardware components.
-The individual subcarriers yield relatively independently faded channels (because of multi-path fading), and hence provide \define{frequency diversity} that is realized by coding across them.
+%The individual subcarriers yield relatively independently faded channels (because of multi-path fading), and hence provide \define{frequency diversity} that is realized by coding across them.
 
-Dividing the channel also increases the symbol time per channel, since many slow symbols are sent in parallel instead of many fast symbols in sequence. This adds \define{time diversity} because the channel is more likely to average out fades over a longer period of time. Additionally, OFDM links compensate for multi-path by repeating each symbol for a short \define{guard interval} that creates a period of time in which the secondary copies of the prior symbol can arrive, and the \define{inter-symbol} overlap can be ignored by the receiver.
+%Dividing the channel also increases the symbol time per channel, since many slow symbols are sent in parallel instead of many fast symbols in sequence. This adds \define{time diversity} because the channel is more likely to average out fades over a longer period of time. Additionally, OFDM links compensate for multi-path by 
 %In 802.11, which is targeted for roughly 100\m links, a secondary path might travel 200\m before reflecting, delayed by 667\ns from a pure line-of-sight path; 802.11 uses an 800\ns guard interval to compensate.  
 
+The last important effect to mention is when multiple devices send at the same time in the same frequency band; this \define{interference} causes a \define{collision} during which a receiver will measure the sum of both transmissions. There are a number of practical problems for operation during a collision, such as whether the receiver can properly lock onto the desired signal and estimate the effects of the channel on it. In general, however, we can assume these problems are solved and can model the reception probability by replacing the SNR with the \define{signal-to-interference-and-noise ratio (SINR)}, which treats the interfering signal of power $I$ as another source of noise:
+\begin{equation}
+\label{eq:sinr}
+\rho_I = \frac{S}{I+N}.
+\end{equation}
 
-\begin{itemize}
-\item Multi-antenna techniques improve reliability and increase capacity in a number of ways. More transmit/receive antennas means better reliability through spatial diversity. More spatial streams means more capacity via spatial multiplexing. Together these are what we call MIMO techniques.
+%\begin{itemize}
+%\item Fading, multipath, Doppler, etc. All of the above describe how we can get capacity out of the wireless channel. The hard part, and what most of all Wi-Fi research centers around, is how we develop protocols and systems to realize this capacity in the face of these effects.
 
-\item Fading, multipath, Doppler, etc. All of the above describe how we can get capacity out of the wireless channel. The hard part, and what most of all Wi-Fi research centers around, is how we develop protocols and systems to realize this capacity in the face of these effects.
+%\item Collisions and SINR.
 
-\item Collisions and SINR.
+%\end{itemize}
 
-\end{itemize}
-
+\subsection{Summary}
+\label{sec:background_80211n}
+In this section, I have presented the fundamental principles of digital communication of wired and wireless channels, including the limits of noisy RF channels and how data is encoded. I have also described the most relevant channel effects that communicating devices must overcome, and the primary techniques used to do so. In the next section, I make this discussion concrete in the context of Wi-Fi by describing the specifics of the IEEE 802.11n standard. 
 
 \section{The IEEE 802.11n standard}
-\begin{itemize}
-\item IEEE 802.11 standard group offers wireless local area network connectivity. Targeted at low power ($<$1\W), medium range ($\approx$100\m) connections.
-\item Unlicensed spectrum in ISM and other bands. Necessitates decentralized protocols.
-\item Physical layer uses modulations, coding, OFDM, MIMO as described above. Specific base 20\MHz, single-stream configurations and the resulting data rates are shown in \tabref{tab:siso_mcs}. One key aspect is that 802.11 mandates that all data be modulated and coded identically.
-\item The 802.11n enhancements are shown in \tabref{tab:11n_enhancements}. Most of improvement in the maximum data rate comes from the ability to use wider channels and multiple spatial streams. Together, these add $2\cdot2\cdot4=16$ times as many configurations to the space of a single link. Beamforming is effectively an analog parameter and adds nearly unbounded options.\footnote{For transmitter and receiver each using 4 antennas on a 40\MHz channel, representing the beamforming matrices at maximal resolution takes 29,184 bits.}
-\item Hardware/software interface. Packets\footnote{We mostly ignore batching in this thesis.} are sent to the hardware and transmitted over the air. Receiver detects them from energy, estimates channel coefficients from the preamble, and then decodes the packet. Standard behavior is that all bits must be correct in order to receive the packet. Sends correct packet, plus physical layer metrics to the software stack.
+The IEEE 802.11 standard is targeted towards defining a mode of operation for a \define{wireless local area network (WLAN)}, intended to provide medium-range connectivity ($\approx$100\m) using low transmit power (at most 1\W).
 
-\item RSSI was included in the 802.11 standard as ``a measure by the [physical layer hardware] of the energy observed at the antenna used to receive the current [packet].'' There are no specified requirements on its accuracy, instead, it is only required to be ``a monotonically increasing function of the received power''~\cite[\S 17.2.3.2]{80211}, and is generally used by the hardware to tell whether another device is transmitting. According to the standards makers, one of the intended purposes of the RSSI is ``to aid in link optimization algorithms such as roaming decisions''~\cite[\S 19.9.5.10]{80211}.
-\end{itemize}
+These devices use unlicensed spectrum in the 2.4\GHz and 5\GHz bands, and must coexist with consumer electronics such as microwaves, cordless phones, and baby monitors. In addition to this cross-device interference, nearby Wi-Fi networks in separate administrative domains---such as neighboring apartments---may need to share the same channel. As a result, Wi-Fi networks are not planned in a centralized fashion, but rather use decentralized protocols that work towards a good solution in a distributed fashion. For instance, 802.11 includes a \define{carrier-sense multiple access (CSMA)} protocol to manage which devices send: in essence, a transmitter listens to ensure no other devices are transmitting before sending a packet, and reduces its sending probability exponentially (via \define{exponential backoff}) if its transmission is not acknowledged.
+
+At the physical layer, 802.11 uses the modulation schemes and OFDM as I described above, operating over 20\MHz channels. In conjunction with different modulations, 802.11n also uses error-correcting codes with different \define{coding rates} to achieve different operating points in the rate-robustness tradeoff space. I summarize the specific single-stream configurations in 802.11n as well as the resulting link data rates in \tabref{tab:siso_mcs}.
 
 \begin{table}[t]
 \centering
@@ -153,6 +170,8 @@ Dividing the channel also increases the symbol time per channel, since many slow
 \caption[The 802.11n single-stream rates.]{\label{tab:siso_mcs} The single-stream 802.11n modulation and coding schemes. The first seven rates correspond to 802.11a/g rates (excluding 9\Mbps) with four added OFDM subcarriers; the highest data rate uses a new 5/6-rate code. The data rates are given for 20\MHz channels with 4\ms symbols.}
 \end{table}
 
+The 2009 standard amendment to IEEE 802.11n added functionality and protocols for multi-antenna techniques such as spatial diversity, spatial multiplexing, and beamforming as I described them above. The 802.11n enhancements are shown in \tabref{tab:11n_enhancements}. Most of improvement in the maximum data rate---from 54\Mbps in 802.11ag to 600\Mbps in 802.11n---comes from the ability to use wider channels and multiple spatial streams. Together, these add $2\cdot2\cdot4=16$ times as many configurations to the space of a single link. Beamforming is effectively an analog parameter and adds nearly unbounded options.\footnote{For transmitter and receiver each using 4 antennas on a 40\MHz channel, representing the beamforming matrices at maximal resolution takes 29,184 bits.}
+
 \begin{table}[t]
 \centering
 %\footnotesize
@@ -173,6 +192,13 @@ Channels\\
 \end{tabular}
 \caption[The 802.11n physical layer enhancements.]{\label{tab:11n_enhancements} IEEE~802.11n adds a number of enhancements to the base single-stream configurations depicted in \tabref{tab:siso_mcs}.}
 \end{table}
+
+The hardware/software interface in 802.11n operates at the level of individual packets or continuously-transmitted batches of packets.\footnote{I mostly ignore batching in this thesis.} Packets are sent to the hardware and transmitted over the air. The receiver detects a new transmission from the increase in energy, estimates the parameters of the wireless channel from the packet's standard, known preamble, and then decodes the packet. The standard behavior for 802.11 links is that all bits---after error-correcting decoding---must be correct in order for a packet to be received, otherwise the packet is dropped by the hardware. Correctly received packets are delivered to the software layer in conjunction with physical layer configuration information about the transmission (e.g., what MCS in \tabref{tab:siso_mcs} was used) and reception (e.g., which receive antennas were used) of the packet, plus physical layer metrics of link quality.
+
+The standard link metric is the \define{receive signal strength indicator (RSSI)}. The RSSI was included in the 802.11 standard from the beginning as ``a measure by the [physical layer hardware] of the energy observed at the antenna used to receive the current [packet]''~\cite[\S 17.2.3.2]{80211}. There are no specified requirements on its accuracy, instead, it is only required to be ``a monotonically increasing function of the received power''~\cite[\S 17.2.3.2]{80211}, and is generally used by the hardware to tell whether another device is transmitting.
+
+\section{Summary}
+In this chapter, I have presented the background information to provide a basic understanding of wireless channels and the specific IEEE 802.11n technology used to operate in them. As I made clear in \secref{sec:background_80211n}, there are many different techniques that a transmitter and/or receiver can use to achieve robust operation in indoor wireless channels. However, the challenge---and the focus of most Wi-Fi research---is to decide which techniques to use, when to use them, and how to configure them to obtain the best operating point given the actual properties of the wireless channel the link is currently operating in. This is the primary problem I tackle in this thesis; in the next chapter I describe this problem in detail and given an overview of my approach.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined
