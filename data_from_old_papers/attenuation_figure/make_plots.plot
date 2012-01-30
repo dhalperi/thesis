@@ -15,9 +15,9 @@ set style line 9 lt 2 lw 0.5 linecolor rgb "#999999"
 set term pdf color enhanced fsize 10 dashed
 set output 'snr_prr_atten.pdf'
 set size 1,0.7
-set xrange [0:30]
+set xrange [0:35]
 set yrange [0:100]
-set key box vertical bottom right spacing 0.9
+set key box vertical center right spacing 0.974
 set ylabel "Packet Reception Ratio"
 set xlabel "SNR (dB)"
 set mxtics 5
