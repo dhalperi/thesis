@@ -1,0 +1,12 @@
+01-29-2012: I found this data on the mimobox8 backup hosted on slider:m-data9
+
+It looks like Anmol sent 853 packets total per txpower level. The data is
+stored in the tx-ant-a-rx-ant-a.txt data file. The stats were computed by a
+script call print_codes, which basically counted up the iperf data packets (out
+of 853) and printed that out, plus SNR data.
+
+Columns:
+
+filename, # received (up to 853), # with CRC errs (I think--probably bad data),
+PRR, SNR_A, SNR_B, SNR_C. Note that SNR_B/SNR_C are usually -something dB since
+their RSSI values were invalid.
