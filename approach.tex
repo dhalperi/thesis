@@ -9,15 +9,24 @@
 \label{chap:problem}
 \label{chap:approach}
 
-According to the standards makers, one of the intended purposes of the RSSI is ``to aid in link optimization algorithms such as roaming decisions''~\cite[\S 19.9.5.10]{80211}.
+The problem I study in this thesis is how to inform configuration decisions for wireless networks. There are two primary classes of techniques studied today: (1) \emph{SNR-based} schemes which use measurements of the total signal power in a channel to predict packet delivery, and (2) \emph{probe-based} schemes which use packet reception or loss as a high-level indicator of channel performance. In this chapter, I describe each of these schemes and its flaws in turn, and then present my approach.
 
-\section{Motivation: Inadequacy of RSSI}
+%According to the standards makers, one of the intended purposes of the RSSI is ``to aid in link optimization algorithms such as roaming decisions''~\cite[\S 19.9.5.10]{80211}.
+
+\section{SNR-based Configuration Procedure}
+As I described in the last section (\figref{fig:mod_ber_snr}), textbook analyses of modulation schemes give delivery probability for a single signal in terms of the signal-to-noise (SNR) ratio~\cite{Goldsmith}.
+These theoretical models hold for narrowband channels with additive white Gaussian noise. They predict a sharp transition region of 1--2\dB over which a link changes from extremely lossy to highly reliable. This feature in theory makes the SNR a valuable indicator of performance.
+
+\subsection{Packet Delivery versus SNR in Practice}
+To understand how well the performance of real hardware matches theory, I generated performance curves using an Intel Wireless Wi-Fi Link 5300 a/g/n (\program{iwl5300}) wireless network card. I wired two devices together over a simple wired link and configured them to operate in a mode that uses a single antenna to transmit or receive. Using an inline variable attenuator I varied the amount of power received, and for each power level I sent around 2,000 packets using each of the eight 802.11n single-stream rates (\tabref{tab:siso_mcs}) and measured the fraction of delivered packets, the \define{packet reception ratio (PRR)}. With these measurements, I plotted the PRR against the link's SNR (computed from RSSI measurements at the receiver), and present the result in \figref{fig:snr_prr_attenuator}. 
+
 \begin{figure}[t]
 	\centering
-		\subfigure[A wired 802.11n link with variable attenuation has a predictable relationship between SNR and packet reception rate (PRR) and clear separation between rates.]{
-			\label{fig:snr_prr_attenuator}
-			\includegraphics[width=\textwidth,viewport=13 0 364 204,clip]{figures/esnr/embed_attenuator_snr_prr.pdf}
-		}
+%	\includegraphics[width=\textwidth,viewport=13 0 364 204,clip]{figures/esnr/embed_attenuator_snr_prr.pdf}
+	\includegraphics[width=\textwidth]{figures/snr_prr_atten.pdf}
+	\caption{\label{fig:snr_prr_attenuator}A wired 802.11n link with variable attenuation has a predictable relationship between SNR and packet reception rate (PRR) and clear separation between rates.}
+\end{figure}
+\begin{figure}
 
       	\subfigure[Over real wireless channels in our testbeds, the transition region varies up to 10\dB. This loses the clear separation between rates (and so only three rates are shown for legibility).]{
 			\label{fig:snr_prr_26_65}
@@ -25,12 +34,8 @@ According to the standards makers, one of the intended purposes of the RSSI is `
 		}
 	\caption[Packet delivery over wired and real 802.11 channels]{\label{fig:rssi_predictions}Measured (single antenna) 802.11n packet delivery over wired and real channels.}%
 \end{figure}
-\topheading{Packet Delivery versus RSSI/SNR\@.}
-Textbook analyses of modulation schemes give delivery probability for a single signal in terms of the signal-to-noise (SNR) ratio~\cite{Goldsmith}, %The SNR is defined as the ratio of the signal power to the thermal noise power, typically expressed on a logarithmic scale in decibels, i.e., SNR = $10\log_{10}(S/N)$. 
-typically expressed on a log scale in decibels.
-This model holds for narrowband channels with additive white Gaussian noise. It predicts a sharp transition region of 1--2\dB over which a link changes from extremely lossy to highly reliable. This makes the SNR a valuable indicator of performance.
 
-We generated performance curves using SNR for the \program{iwl5300} over a simple wired link with a variable attenuator and for a single transmit and receive antenna. The result is shown for all single antenna 802.11n rates in \figref{fig:snr_prr_attenuator}. 
+
 We observe a characteristic sharp transition region for packet reception rate (PRR) versus SNR\@. This is despite the relatively wide 20\MHz channel, 56 OFDM subcarriers, coding and other bit-level operations. This is the behavior we want from a link metric in order to predict packet delivery.
 
 In contrast, packet delivery over real wireless channels does not exhibit the same picture. \figref{fig:snr_prr_26_65} shows the measured PRR versus SNR for three sample rates (6.5, 26, and 65\Mbps) over all wireless links in our testbeds, using the same 802.11n NICs. The SNR of the transition regions can exceed 10\dB, so that some links easily work for a given SNR and others do not. There is no longer clear separation between rates. This is consistent with other reported measurements that show RSSI does not predict packet delivery for real links~\cite{aguayo_roofnet, Reis_sigcomm06, snr_infocom08, zhao_sensys03}.
@@ -57,6 +62,52 @@ To contrast CSI and RSSI, \figref{fig:example_fsf_shape} shows packet delivery r
 These links harness the received power with different efficiencies.
 The more faded links are more likely to have errors that must be repaired with coding, and require extra transmit power to compensate. Thus, while the performance is roughly the same, the most frequency-selective link needs a much higher overall packet SNR~(30.2\dB) than the frequency-flat link (16.5\dB). This difference of almost 14\dB highlights why RSSI-based SNR does not reliably predict performance. Fading and its effects are well-known. However, it is rare to see data that shows fading for real links and NICs because it has been difficult to measure.
 
+\section{Packet statistics}
+dsffsdsdf
+fsfssfd
+dsffsdfds
+dsffsddsf
+dsfdfs
+dfsdfssdf
+dfsdfs
+dfs
+df
+df
+dfdf
+df
+df
+df
+df
+df
+df
+df
+df
+df
+dfd
+fdf
+df
+df
+df
+sdf
+sdf
+sdf
+sdf
+sdf
+sdfsd
+fsdf
+sdf
+sdf
+s
+sd
+sadf
+as
+sadf
+sa
+asf
+sadfas
+sfad
+
+
 \section{Effective SNR Model for 802.11n}
 The example of \figref{fig:example_fsf_shape} indicated that the extra information in CSI can help explain performance for real wireless links. Here, we develop a model that can accurately predict the packet delivery probability of commodity 802.11 NICs for a given physical layer configuration operating over a given channel. We want our model to be simple and practical, so that it can be readily deployed, and to cover a wide range of physical layer configurations, so that it can be applied in many settings and for many tasks. In particular, the scope of our model is 802.11n including multiple antenna modes, including OFDM and MIMO\@. This scope is sufficient for many current and future networks. In our preliminary work, we have modeled delivery for single packet transmission only.
 
@@ -65,6 +116,8 @@ The structure of our model is simple: given 1) a current CSI measurement of the 
 With this simple decision primitive, we can easily build higher layer optimization protocols. These include selecting the best rate, number of spatial streams, or transmit antenna set; whether to use 20\MHz or the entire 40\MHz channel; or choosing the lowest transmit power at which the link supports a particular rate.
 
 For the model output, we define that the link will work, i.e., will reliably deliver packets, if we predict $\geq$90\% packet reception rate. We do not try to make predictions in the transition region during which a link changes from lossy to reliable. Predictions there are likely to be variable, and simply knowing when the link starts to work is useful information in practice.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined
