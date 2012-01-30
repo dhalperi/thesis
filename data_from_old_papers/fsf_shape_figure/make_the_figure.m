@@ -10,7 +10,8 @@ line4 = fsf_shape(20,3:end);
 
 lines = [line2-2; line3+2; line4-3; line1-18];
 
-real_indices = [-28 -26 -24 -22 -20 -18 -16 -14 -12 -10 -8 -6 -5 -2 -1 ...
+% 802.11n-2009 Table 7-25f on page 50
+real_indices = [-28 -26 -24 -22 -20 -18 -16 -14 -12 -10 -8 -6 -4 -2 -1 ...
                 1 3 5 7 9 11 13 15 17 19 21 23 25 27 28];
 
 plot(real_indices, lines)
