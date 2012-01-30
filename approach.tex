@@ -30,17 +30,17 @@ To understand how well the performance of real hardware matches theory, I genera
 	\centering
 %	\includegraphics[width=\textwidth,viewport=2 0 217 124,clip]{figures/esnr/embed_scatterplot_meas_snr_small.pdf}
 	\includegraphics[width=\textwidth]{figures/snr_prr_scatter.pdf}
-	\caption{\label{fig:snr_prr_26_65} Over real wireless channels in our testbeds, the transition region varies up to 10\dB. This loses the clear separation between rates (and so only three rates are shown for legibility).}%
+	\caption{\label{fig:snr_prr_26_65} Over real wireless channels in our testbeds, the transition region varies by 10\dB or more. The wireless channel loses the clear separation between rates (and so only three rates are shown for legibility).}%
 \end{figure}
 
 This figure shows a characteristic sharp transition region between SNR values at which the link goes from lossy to working, 2\dB at low modulations up to 4\dB for the fastest 65\Mbps rate. There is also a clear separation between rates: at a given SNR value, it is clear which rate should be used. This wired link provides a good approximation of a theoretical narrowband channel despite the relatively wide 20\MHz channel, the use 56 OFDM subcarriers, coding and other bit-level operations. This is the behavior we would want from a link metric in order to predict packet delivery.
 
-In contrast, packet delivery over real wireless channels does not exhibit the same picture. \figref{fig:snr_prr_26_65} shows the measured PRR versus SNR for three sample rates (6.5, 26, and 65\Mbps) over all wireless links in our testbeds, using the same 802.11n NICs. The SNR of the transition regions can exceed 10\dB, so that some links easily work for a given SNR and others do not. There is no longer clear separation between rates. This is consistent with other reported measurements that show RSSI does not predict packet delivery for real links~\cite{aguayo_roofnet, Reis_sigcomm06, snr_infocom08, zhao_sensys03}.
+In contrast, packet delivery over real wireless channels does not exhibit the same picture. \figref{fig:snr_prr_26_65} shows the measured PRR versus SNR for three sample rates (6.5\Mbps, 26\Mbps, and 65\Mbps) over all wireless links in our testbeds, using the same 802.11n NICs. The SNR of the transition regions can exceed 10\dB, so that some links easily work for a given SNR and others do not. There is no longer clear separation between rates. This is consistent with other reported measurements that show that SNR based on RSSI does not predict packet delivery for real links~\cite{aguayo_roofnet, Reis_sigcomm06, snr_infocom08, zhao_sensys03}.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth,viewport=2 9 185 108,clip]{figures/esnr/embed_fsf-shape-two-links.pdf}
-% viewport=2 10 170 108
+%  \includegraphics[width=\columnwidth,viewport=2 9 185 108,clip]{figures/esnr/embed_fsf-shape-two-links.pdf}
+  \includegraphics[width=0.8\textwidth]{figures/fsf_shape.pdf}
   \caption{Channel gains on four links that perform about equally well at 52\Mbps. The more faded links require larger RSSIs (i.e., more transmit power) to achieve similar PRRs.}
   \label{fig:example_fsf_shape}
   % information for the links used to make above plot: 
