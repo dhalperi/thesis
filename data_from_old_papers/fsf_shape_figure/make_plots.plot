@@ -12,15 +12,16 @@ set style line 4 lt 4 lw 8 pt 6 linecolor rgb "#9866FF"
 
 set style line 9 lt 2 lw 0.5 linecolor rgb "#999999"
 
-set term pdf color enhanced fsize 10 dashed
+set term pdf color enhanced fsize 8 dashed
 set output 'fsf_shape.pdf'
 set size 0.8,0.85
 set xrange [-28:28]
 set yrange [0:50]
-set key box top right horizontal
+set key font "Helvetica,7" box top right horizontal
 set xlabel "Subcarrier Index"
 set ylabel "SNR (dB)"
-set xtics 7
+set xtics font "Helvetica,7" 7
+set ytics font "Helvetica,7"
 set mxtics 7
 set grid xtics ytics mytics ls 9
 plot \
