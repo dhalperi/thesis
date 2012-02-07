@@ -10,6 +10,16 @@
 
 In this section, we use our testbeds to experimentally evaluate how well our Effective SNR model predicts packet delivery. This is the fundamental measure of whether the model is useful; good predictions enable applications such as rate adaptation, transmit power control, antenna selection, and channel selection.
 
+\section{Rate Selection using SNR in Practice}
+Here, I analyze the accuracy of the SNR estimate computed from RSSI when used to select rates over wireless links. For 202 indoor, single-antenna wireless links I measured the relationship between SNR and PRR while varying the transmit power level (and hence the received SNR). For each rate on each link, I determined the SNR level at which that rate resulted in more throughput than the next lower rate. For example, I found the SNR value at which the 19.5\Mbps rate has a PRR of at least $66.\overline{6}\%$, because then it can deliver more rate than the 13\Mbps rate.
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\textwidth]{figures/thresh_vs_opt.pdf}
+	\caption{\label{fig:thresh_vs_opt}The accuracy of selecting rate using SNR for thresholds derived from differing percentiles of the transition region. [XXXNote: I think this data is a bit wrong, and need to revisit]}
+\end{figure}
+Using the per-rate SNR thresholds across all links, I can select one threshold value as some percentile of this set. Using low SNR thresholds gives an aggressive rate selection algorithm, that will perform sub-optimally because it sends packets too fast to be received.  Conversely, a conservative algorithm will choose high SNR thresholds, leading to sub-optimal performance as packets are sent slower than necessary. \figref{fig:thresh_vs_opt} shows the relationship between threshold and performance, using the 0th percentile (lowest, most aggressive thresholds) up to the 100th percentile (highest, most conservative thresholds). We see that no threshold---aggressive, conservative, or somewhere in the middle---provides good performance across the range of real wireless links.
+
 \begin{figure*}[ht]
 	\centering
 	\subfigure[Single spatial stream, single receive antenna (1x1)]{
