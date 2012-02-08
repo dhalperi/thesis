@@ -62,7 +62,7 @@ The binary modulation system I discussed above is a scheme called On-Off Keying~
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.8\textwidth]{figures/constellations_radius}
-\caption{\label{fig:constellations}Constellation diagrams for the BPSK, QPSK, and 16-QAM modulations. These constellations are normalized such that each modulation has equal average transmit power, indicated by the red circle.}
+\caption[Constellation diagrams for the BPSK, QPSK, and 16-QAM modulations.]{\label{fig:constellations}Constellation diagrams for the BPSK, QPSK, and 16-QAM modulations. These constellations are normalized such that each modulation has equal average transmit power, indicated by the red circle.}
 \end{figure}
 
 As mentioned above, electromagnetic signals actually have both an amplitude and a phase. Amplitude modulation varies one of these parameters, and a complementary scheme called Phase-Shift Keying~(PSK) keeps the amplitude constant but varies the phase. A third scheme known as Quadrature Amplitude Modulation~(QAM) varies both parameters simultaneously and results in a more efficient system when sending more than 2 bits per symbol. Noting that the polar coordinates given by amplitude and phase can equivalently be thought of as a complex number, $m$-QAM can be equivalently thought of as $\sqrt{m}$-ASK in both the real and complex dimensions simultaneously. \figref{fig:constellations} shows the two-dimensional \define{constellations} that result from picturing the symbols sent in BPSK (i.e.\ 2-PSK), QPSK (i.e.\ 4-PSK), and 16-QAM modulation schemes.

@@ -19,11 +19,11 @@ First, MIMO processing separates the signals of multiple spatial streams that ha
 \caption[An 802.11n link]{Caption goes here}
 \end{figure*}
 
-\begin{figure*}[ht]
-\centering
-\includegraphics[angle=90,height=\textheight]{figures/11n_link_simplified.pdf}
-\caption[An 802.11n link]{Caption goes here}
-\end{figure*}
+%\begin{figure*}[ht]
+%\centering
+%\includegraphics[angle=90,height=\textheight]{figures/11n_link_simplified.pdf}
+%\caption[An 802.11n link]{Caption goes here}
+%\end{figure*}
 
 \begin{figure*}[ht!]
 \centering
@@ -52,7 +52,7 @@ Standard formulas summarized in \tabref{tab:ber_snr} relate SNR (denoted $\rho$)
 
 In OFDM, decoding is applied across the demodulated bits of subcarriers. If we assume frequency-flat fading for the moment, then all the subcarriers have the same SNR\@. The link will behave the same as in our wired experiments in which RSSI reflect real performance and it will be easy to make predictions for a given SNR and modulation combination. We can use \figref{fig:snr_prr_attenuator} to measure the fixed transition points between rates and thus make our choice.
 
-Frequency-selective fading complicates this picture as some weak subcarriers will be much more likely to have errors than others that are stronger. To model a link in this case, we turn to the notion of an \textbf{\em Effective SNR}\@. This is defined as the SNR that would give the \emph{same error performance on a narrowband channel}~\cite{Nanda_effectiveSNR}. For example, the links in \figref{fig:example_fsf_shape} will have Effective SNR values that are nearly equal because they perform similarly, even though their RSSIs are spread over 15\dB.
+Frequency-selective fading complicates this picture as some weak subcarriers will be much more likely to have errors than others that are stronger. To model a link in this case, we turn to the notion of an \textbf{\em Effective SNR}\@. This is defined as the SNR that would give the \emph{same error performance on a narrowband channel}~\cite{Nanda_EffectiveSNR}. For example, the links in \figref{fig:example_fsf_shape} will have Effective SNR values that are nearly equal because they perform similarly, even though their RSSIs are spread over 15\dB.
 
 The Effective SNR is \emph{not} simply the average subcarrier SNR; indeed, assuming a uniform noise floor, that average is indeed equivalent to the packet SNR derived from the RSSI\@. Instead, the Effective SNR is biased towards the weaker subcarrier SNRs because it is these subcarriers that produce most of the errors. If we ignore coding for the moment, then we can compute the Effective SNR by averaging the subcarrier BERs and then finding the corresponding SNR\@. That is:
 \begin{equation}
@@ -95,7 +95,7 @@ Note that this procedure differs from the typical approach of simulation-based a
   \includegraphics[width=0.9\columnwidth,viewport=0 9 180 111,clip]{figures/esnr/embed_fsf-shape-eff-snr-s3d5-txpower-20.pdf}
   % viewport=0 7 173 113
   \vspace{-4pt}
-  \caption{Sample faded link showing the packet SNR and Effective SNRs for different modulations. BPSK has the lowest Effective SNR, but it needs less energy to decode.}
+  \caption[Sample faded link showing the packet SNR and Effective SNRs for different modulations.]{Sample faded link showing the packet SNR and Effective SNRs for different modulations. BPSK has the lowest Effective SNR, but it needs less energy to decode.}
   \label{fig:eff_example}
   \vspace{-3pt}
 \end{figure}

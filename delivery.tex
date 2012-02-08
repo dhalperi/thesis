@@ -16,7 +16,7 @@ Here, I analyze the accuracy of the SNR estimate computed from RSSI when used to
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\textwidth]{figures/thresh_vs_opt.pdf}
-	\caption{\label{fig:thresh_vs_opt}The accuracy of selecting rate using SNR for thresholds derived from differing percentiles of the transition region. [XXXNote: I think this data is a bit wrong, and need to revisit]}
+	\caption[The accuracy of selecting rate using SNR for thresholds derived from differing percentiles of the transition region.]{\label{fig:thresh_vs_opt}The accuracy of selecting rate using SNR for thresholds derived from differing percentiles of the transition region. [XXXNote: I think this data is a bit wrong, and need to revisit]}
 \end{figure}
 Using the per-rate SNR thresholds across all links, I can select one threshold value as some percentile of this set. Using low SNR thresholds gives an aggressive rate selection algorithm, that will perform sub-optimally because it sends packets too fast to be received.  Conversely, a conservative algorithm will choose high SNR thresholds, leading to sub-optimal performance as packets are sent slower than necessary. \figref{fig:thresh_vs_opt} shows the relationship between threshold and performance, using the 0th percentile (lowest, most aggressive thresholds) up to the 100th percentile (highest, most conservative thresholds). We see that no threshold---aggressive, conservative, or somewhere in the middle---provides good performance across the range of real wireless links.
 
@@ -39,7 +39,7 @@ Using the per-rate SNR thresholds across all links, I can select one threshold v
 		\includegraphics[width=0.49\textwidth, clip]{figures/esnr/embed_ratestep_snr_3x3_90.pdf}%
 		\label{fig:snr_rate_step_3x3}%
 	}
-	\caption{\label{fig:snr_rate_steps}The variation of best rate with SNR over links and antenna configurations. Excepting extremely low and high SNRs, one RSSI-based packet SNR value maps to multiple best rates for different links, %. For the same data, 
+	\caption[The variation of best rate with SNR over links and antenna configurations.]{\label{fig:snr_rate_steps}The variation of best rate with SNR over links and antenna configurations. Excepting extremely low and high SNRs, one RSSI-based packet SNR value maps to multiple best rates for different links, %. For the same data, 
 while Effective SNR provides a clear indicator of the best rate for nearly all links.}
 \end{figure*}
 
