@@ -1,0 +1,12 @@
+Wenjun created this figure originally, using the octave script in this
+directory (figure_5_per_link_fsf_shape_eff_plot.m)
+
+Quoth Wenjun:
+
+# figure was generated using expt-8-ofdm, src 3, dest 5, rate idx 6, txpower 20
+# plot the fsf shape for two given links
+
+This figure uses the data from ../fsf_shape_figure
+
+To make it, first run make_the_figure.m to generate all the data. Then run the
+gnuplot script
