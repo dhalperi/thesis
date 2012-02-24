@@ -14,7 +14,7 @@ set style line 9 lt 2 lw 0.5 linecolor rgb "#999999"
 
 set term pdf color enhanced fsize 8 dashed
 set output 'eff_snr_example.pdf'
-set size 0.8,0.85
+set size 1,0.8
 set xrange [-28:28]
 set yrange [5:25]
 #set key font "Helvetica,7" box top right horizontal
@@ -26,11 +26,11 @@ set ytics font "Helvetica,7"
 set mxtics 7
 set grid xtics ytics mytics ls 9
 set label "Subcarrier SNRs" at -18.6,22 #textcolor rgb "#FF6680"
-set label "Packet SNR" at -12.5,18.8 #textcolor rgb "#6680FF"
+set label "Packet SNR" at -12.5,18.9 #textcolor rgb "#6680FF"
 set label "64-QAM" at -11,16.85 #textcolor rgb "#66FF98"
-set label "16-QAM" at -11,14.6 #textcolor rgb "#66FF98"
-set label "QPSK" at 11,11.7 #textcolor rgb "#66FF98"
-set label "BPSK" at 11,8.5 #textcolor rgb "#66FF98"
+set label "16-QAM" at -11,14.65 #textcolor rgb "#66FF98"
+set label "QPSK" at 11,11.65 #textcolor rgb "#66FF98"
+set label "BPSK" at 11,8.75 #textcolor rgb "#66FF98"
 plot \
 'esnr_example_data.txt' using 1:2 ls 1 w l title 'Subcarrier SNRs', \
 'esnr_example_data.txt' using 1:3 ls 2 w l title 'Packet SNR', \
