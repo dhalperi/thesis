@@ -17,7 +17,7 @@ In conjunction with Intel Labs Seattle, I built an experimental 802.11n platform
 \begin{figure}
 	\centering
 	\includegraphics[height=2in]{figures/iwlwifi-5300.png}
-	\caption{\label{fig:iwl5300}The Intel Wireless Wi-Fi Link 5300. This 802.11n NIC has three transmit/receive antennas, operates on both 2.4\GHz and 5\GHz frequency bands, and supports up to three spatial streams for a maximum bitrate of 450\Mbps.}
+	\caption[The Intel Wireless Wi-Fi Link 5300]{\label{fig:iwl5300}The Intel Wireless Wi-Fi Link 5300. This 802.11n NIC has three transmit/receive antennas, operates on both 2.4\GHz and 5\GHz frequency bands, and supports up to three spatial streams for a maximum bitrate of 450\Mbps.}
 \end{figure}
 
 \heading{802.11n CSI Measurement.} The channel sounding mechanism added in 802.11n defines a management frame used to report the CSI from the receiver of a frame back to the transmitter. This mechanism is intended for calibration or to inform transmit beamforming, and I co-opt it for my experiments. In standard operation, the CSI is reported only when the sounding procedure is initiated by the transmitter, though the receiver measures CSI for every frame in order to receive the packet. In my tool, I configure the NIC with a debug mode to compute this feedback packet for every received frame, rather than just during sounding. For correctly received packets, the firmware will send it up to the driver on the receiving node.
@@ -44,7 +44,7 @@ The IWL5300 calculates the quantities RSSI and Noise as the respective sums of a
 \section{Experimental 802.11n Wireless Testbeds}
 I conducted experiments in two 802.11n stationary wireless testbeds. The first testbed, pictured in \figref{fig:intel_testbed}, contains 10 nodes spread over one floor of Intel Labs Seattle covering 8,100 square feet. In the second testbed, I deployed 24 nodes across 3 floors in UW CSE (\figref{fig:uw_testbed}), where each floor measures approximately 20,000 square feet in size. Both testbeds are indoor office buildings, the former mostly a wide open area with cubicles and a few conference rooms, the latter consisting primarily of 5-person offices.
 
-\begin{figure}[h!]
+\begin{figure}[p]
 	\centering
 	\subfigure[The testbed at Intel Labs Seattle contained of 10 nodes spread over 8,100 square feet.\label{fig:intel_testbed}]{
 		\includegraphics[scale=1.054]{figures/intel_floorplan_testbed.pdf}
@@ -52,24 +52,24 @@ I conducted experiments in two 802.11n stationary wireless testbeds. The first t
 	\subfigure[The testbed at the UW Paul Allen Center comprises of 24 nodes spread over 20,000 square feet.\label{fig:uw_testbed}]{
 		\includegraphics[scale=0.62]{figures/floor3_grayscale_noee_testbed.pdf}
 	}
-	\caption{\label{fig:testbeds} My two indoor 802.11n testbeds. In both testbeds, the nodes are placed to ensure a large number of links between them, a variety of distances between nodes, and diverse scattering characteristics.}
+	\caption[My two indoor 802.11n testbeds]{\label{fig:testbeds} My two indoor 802.11n testbeds. In both testbeds, the nodes are placed to ensure a large number of links between them, a variety of distances between nodes, and diverse scattering characteristics.}
 \end{figure}
 
 Each node runs the experimental platform we described in \secref{sec:platform}, as do three laptops we can use for mobile experiments. In both testbeds, I placed the nodes to ensure a large number of links between them, a variety of distances between nodes, and diverse scattering characteristics. Devices are located on in a desktops, under tables, on a carts in the server room, and even mounted on the ceiling; in the UW CSE testbed also includes a more dense concentration of nodes by the Networking Lab (pictured in the upper right corner of \figref{fig:uw_testbed}).
 
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[width=1.5in]{figures/rpsma_dual_632_single_lines.pdf}%
 	\hspace{1in}
 	\includegraphics[height=1.5in,width=1.5in]{figures/antennas.png}
-	\caption{\label{fig:antenna_stand}The antenna stand I use to achieve consistent spatial geometry for desktop machines. It supports circular and linear arrays of two or three antennas with the correct $\lambda/2$ separation at either 2.4\GHz or 5\GHz.}
+	\caption[A custom antenna stand used to achieve consistent spatial geometry]{\label{fig:antenna_stand}The antenna stand I use to achieve consistent spatial geometry for desktop machines. It supports circular and linear arrays of two or three antennas with the correct $\lambda/2$ separation at either 2.4\GHz or 5\GHz.}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[ht]
 	\centering
 	\includegraphics[angle=90,height=1.8in]{figures/laptop_stand_cropped_up.png}%
 	\hspace{0.6in}%
 	\includegraphics[angle=90,height=1.8in]{figures/laptop_stand_cropped.png}
-	\caption{\label{fig:laptop_stands}One of the three laptops, pictured here, includes a custom antenna mount for a 2.4\GHz linear array.}
+	\caption[A custom laptop antenna stand]{\label{fig:laptop_stands}One of the three laptops, pictured here, includes a custom antenna mount for a 2.4\GHz linear array.}
 \end{figure}
 
 \section{Node Configuration}

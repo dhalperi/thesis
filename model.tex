@@ -133,7 +133,7 @@ Note that the MCS $m$ specifies the modulation and hence determines which $k$ to
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\textwidth]{figures/eff_snr_example.pdf}
-  \caption[Sample faded link showing the packet SNR and Effective SNRs for different modulations.]{Sample faded link showing the packet SNR and Effective SNRs for different modulations. BPSK has the lowest Effective SNR, but it needs less energy to decode.}
+  \caption[Packet SNR and Effective SNRs for a sample faded link]{Sample faded link showing the packet SNR and Effective SNRs for different modulations. BPSK has the lowest Effective SNR, but it needs less energy to decode.}
   \label{fig:eff_example}
 \end{figure}
 
@@ -173,7 +173,7 @@ When there is a single stream and more than one receive antenna, there are two d
 \begin{equation}
 	\rho_i = \left| \mathbf{H}'_{i,\hat{a}} \right|^2, \text{where antenna } \hat{a} \text{ has maximal Packet SNR}.
 \end{equation}
-Several older chipsets, such as the Intel PRO/Wireless 3945~\cite[\S3.5]{ipw3945} and Atheros AR5007EG~\cite{madwifi_diversity} used antenna selection by default.
+Some older chipsets, such as the Intel PRO/Wireless 3945~\cite[\S3.5]{ipw3945} and Atheros AR5007~\cite{madwifi_diversity} used antenna selection by default.
 
 The optimal SIMO technique is \define{maximal-ratio combining (MRC)}, which combines the multiple copies of the signal from the different receive antennas. The resulting subcarrier SNR is simply the sum of the SNRs of the individual entries:
 \begin{equation}

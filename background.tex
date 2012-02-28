@@ -74,7 +74,7 @@ There are many more modulation schemes than I have presented here, but PSK and Q
 \begin{figure}[ht]
 \centering
 \includegraphics{calculations/snr_ber-crop}
-\caption{\label{fig:mod_ber_snr}The relationship between bit error rate and SNR for the four 802.11 modulation schemes.}
+\caption[BER vs SNR for the four 802.11n modulation schemes]{\label{fig:mod_ber_snr}The relationship between bit error rate and SNR for the four 802.11 modulation schemes.}
 \end{figure}
 
 I have not yet mentioned the disadvantage of using higher modulation schemes like 64-QAM\@. When a transmitter uses a modulation scheme that carries more bits per symbol, each bit receives a smaller faction of the total transmitted power and hence is more susceptible to noise. This effect is visible intuitively in the constellation diagrams of \figref{fig:constellations}. If the noise is thought of as shifting the received signal along a random vector in the complex space, then it a shorter vector (lower noise power) is required to cause an error by shifting the received signal from near the correct symbol to close to a different constellation point. \figref{fig:mod_ber_snr} illustrates the magnitude of this effect for the modulations used by 802.11 using textbook formulas~\cite{Sklar} that relate the SNR to a bit error rate.
@@ -82,7 +82,7 @@ I have not yet mentioned the disadvantage of using higher modulation schemes lik
 \begin{figure}[t]
 \centering
 \includegraphics{calculations/snr_bits-crop}
-\caption{\label{fig:mod_bits_snr}The relationship between SNR and capacity for standard modulation schemes and idealized codes.}
+\caption[Capacity vs SNR for 802.11n modulation and coding schemes]{\label{fig:mod_bits_snr}The relationship between SNR and capacity for standard modulation schemes and idealized codes.}
 \end{figure}
 
 Finally, we can now connect these different modulations back to the Shannon-Hartley Capacity Theorem by examining the capacity achieved by each scheme as a function of SNR (\figref{fig:mod_bits_snr}). In this graph, I assume an idealized coding scheme that delivers the maximum data rate for a given bit error rate; the practical schemes in widespread use today are somewhat less efficient.\footnote{Though beyond the scope of this thesis, a number of recent proposals for practical \define{rateless codes}~\cite{Gudipati_Strider,Perry_Spinal} nearly achieve the Shannon Capacity bound by using much denser constellations and clever coding schemes.}
