@@ -38,7 +38,7 @@ I separated the link into the blocks shown to reflect the considerations that a 
 \end{figure}
 
 \section{Model Overview}
-\figref{fig:model_overview} gives an overview of my Effective SNR-based model for wireless links, designed to handle the cases described in the previous section. At the left, the primary input to the model is an RF measurement of the ground truth CSI for the wireless link. In the context of MIMO-OFDM technology such as IEEE 802.11n, this is the set of $M\times N$ matrices $\mathbf{H}_i$, where each matrix describes the MIMO channel between the $M$ transmit and $N$ receive antennas for one OFDM subcarrier.
+\figref{fig:model_overview} gives an overview of my Effective SNR-based model for wireless links, designed to handle the cases described in the previous section. At the left, the primary input to the model is an RF measurement of the ground truth CSI for the wireless link. In the context of MIMO-OFDM technology such as IEEE 802.11n, this is the set of $N\times M$ matrices $\mathbf{H}_i$, where each matrix describes the MIMO channel between the $M$ transmit and $N$ receive antennas for one OFDM subcarrier.
 
 The other inputs to the model are the configuration of the transmitter and receiver devices, the rate configuration, and some information about the receiver implementation. The final output of the model is a single bit that indicates whether the link will deliver a packet using the specified rate and device configurations. This model can flexibly handle a wide variety of applications: by varying the input transmitter, receiver, and rate configurations, we can solve all the problems described in \chapref{chap:problem}.
 
@@ -158,7 +158,7 @@ When the Effective SNRs are compared with the pre-determined thresholds for each
 \section{Modeling the Receiver: Computing Subchannel SNRs from Effective CSI}
 In the last section, I showed how the model of Nanda and Rege~\cite{Nanda_EffectiveSNR} can determine the Effective SNR from a list of Subchannel SNRs. In this section, I explain how to compute the Subchannel SNRs given the Effective Channel State Information of the link.
 
-The \define{Effective CSI} is a $S\times N$ channel state matrix $\mathbf{H}'$, where each entry describes the gain and phase of each spatial stream as measured at each receive antenna. The first dimension of the Effective CSI is \emph{spatial streams}, not \emph{transmit antennas} as in the CSI matrix $\mathbf{H}$. From the point of view of receiver processing the number of transmit antennas used is not relevant, just how the transmitted streams are received after sender-side processing and propagation through the RF channel.
+The \define{Effective CSI} is a $N\times S$ channel state matrix $\mathbf{H}'$, where each entry describes the gain and phase of each spatial stream as measured at each receive antenna. The first dimension of the Effective CSI is \emph{spatial streams}, not \emph{transmit antennas} as in the CSI matrix $\mathbf{H}$. From the point of view of receiver processing the number of transmit antennas used is not relevant, just how the transmitted streams are received after sender-side processing and propagation through the RF channel.
 
 The IEEE 802.11 standards do not specify which algorithms the receiver uses to process received signals. However, my contact with Intel engineers and marketing documents from other chipset manufacturers indicate that a small set of techniques are likely chosen in practice.
 
@@ -195,7 +195,7 @@ The SNR of the $j$th stream after MMSE processing for subcarrier $i$ is given by
 \rho_{i,j} = \frac{1}{\mathbf{Y}_{jj}}-1, \text{ where }
 \mathbf{Y} = \left((\mathbf{H}'_i)^\dagger \mathbf{H}'_i+I_S\right)^{-1}
 \end{equation}
-for $j \in [1,S]$ and $S\times S$ identity matrix $I_S$~\cite{Tse}.
+for $j \in [1,S]$ and $S\times S$ identity matrix $I_S$~\cite{Tse}. The operator $(\cdot)^\dagger$ indicates the \define{Hermitian}, or conjugate transpose of the input matrix.
 
 The advantage of MMSE is that it performs well in most cases and has low computational cost, roughly the cost of matrix multiplication and inversion. An alternative is the \emph{Maximum Likelihood (ML)} decoder, but this has added complexity that scales with the size of the constellation, i.e., is exponential in the number of bits per symbol $k$. In the initial 802.11n chipsets, ML decoding was considered too complex to be practical, but this outlook has recently changed. Today, Intel's IWL6300 (successor to the IWL5300 mentioned above) uses ML decoding for the smaller constellations for which it is practical. Atheros uses a ``simplified maximum likelihood detector''~\cite{ar6004,Atheros_11nTechPaper} for all modulations that approximates ML performance but has lower complexity.
 
@@ -204,7 +204,7 @@ The task of estimating the per-stream SNR of the output from a maximum likelihoo
 Instead, I observe that maximum likelihood decoding can be approximated as a $\approx$3\dB gain over MMSE for typical MIMO systems~\cite{Kumar_ml_mmse}. Thus, the practical solution I propose for my model is to always compute Effective SNR estimates using MMSE, and instead adapt the decision thresholds $\tau_m$ to reflect the use of ML decoding. This approximation is imprecise---the gains of ML will vary depending on the particular channel---but allows the model to flexibly handle many device implementations (even hybrid MMSE/ML such as in the IWL6300). The error is likely to be small for most channels.
 
 \section{Applications: Adapting CSI to Compute Effective CSI}
-By adapting the conversion between the CSI and the Effective CSI, my model supports a wide variety of application decisions. In this section I explain how to compute the Effective CSI $\mathbf{H}'$ from the CSI $\mathbf{H}$ for some of these problems.
+By adapting the conversion between the CSI and the Effective CSI, my model supports a wide variety of application decisions. In this section I explain how to compute the Effective CSI $\mathbf{H}'$ from the CSI $\mathbf{H}$ for an illustrative set of these problems.
 
 \heading{Antenna Selection.} There are $M$ rows and $N$ columns in the CSI that each correspond to one transmit or receive antenna. To implement antenna selection, we simply pick the subset of rows and columns that correspond to the desired antennas. Note that this includes both transmit antenna selection (e.g., when $S<M$, pick the best $S$ of the $M$ transmit antennas to send with) or receive antenna selection (e.g., when $N>S$, turn off the least useful of the excess antennas in order to reduce power consumption).
 
@@ -216,7 +216,7 @@ By adapting the conversion between the CSI and the Effective CSI, my model suppo
 
 \heading{Spatial Mapping.} Spatial mapping algorithms determine how the different transmit streams are mapped to transmit antennas. These are implemented by the matrices $\mathbf{V}_i$, such that the Effective SNR is
 \begin{equation}
-	\mathbf{H}'_i = \mathbf{V}_i\mathbf{H}_i.
+	\mathbf{H}'_i = \mathbf{H}_i\mathbf{V}_i.
 \end{equation}
 I discuss the four types of spatial mapping techniques from the simplest to the most general.
 
@@ -261,28 +261,44 @@ I discuss the four types of spatial mapping techniques from the simplest to the 
 	
 	\item Finally, \define{beamforming} is a general technique for mapping streams to antennas. Beamforming can be thought of as a synthesis of indirect mapping, spatial expansion (if applicable) and transmit power control. The distinctive feature of beamforming compared with the above is that it is \emph{channel-aware}; in other words, the beamforming matrix is chosen to improve performance based on the known current channel $\mathbf{H}$. This means that beamforming can use different mapping matrices $\mathbf{V}_i$ for each subcarrier, unlike the prior techniques which are applied uniformly across tones. There are a large variety of techniques that use beamforming to improve the channel, but all can be represented in matrix form.
 \end{itemize}
+
+\heading{Higher-level Applications.} To implement applications that require the composition of multiple measurements, such as channel selection, path selection, or access point selection, we can repeat the steps above. For instance, two devices that wish to find the operating channel on which their link is fastest need only frequency-hop in unison and take CSI measurements for each frequency. They can then use the model to predict the achievable bitrate of each measured operating channel and select the fastest.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Protocol Details}
 
-\section{Higher-level Applications}
-I describe how to use Effective SNR to implement a number of higher-level applications.
+\subsection{CSI Collection}
+As with RSSI, receivers gather channel state information automatically while receiving a packet; the OFDM and MIMO equalizers described above fundamentally rely on CSI to decode the received signal. This \emph{passive collection} of CSI via overheard transmissions suffices for most applications, such as rate selection. When a more comprehensive CSI measurement is needed, the transmitter can send a sounding packet~\cite[\S20.3.13.1]{80211n} at a wider bandwidth or using more streams probe the extra dimensions. For the special case of additional spatial streams, 802.11n includes a mechanism to send a modified packet with \define{extension spatial streams}~\cite[\S20.3.9.4.6]{80211n} such that the receiver can measure the full channel during the preamble but that does not change the rate or number of streams used for the data portion.
 
-\heading{Channel Selection.} When two wireless devices initiate a peer-to-peer connection, they have a choice of many different 802.11 channels that correspond to many different operating frequencies. To optimize channel selection, the devices can frequency-hop in unison and take CSI measurements of each channel.
+\subsection{Transmitter or Receiver Calculations}
+Effective SNR calculations can be performed by either side of the link, and each has advantages. The primary tradeoff is between the amount of data shared (the party performing the calculation needs up-to-date CSI) and hardware complexity.
 
-\heading{Access Point Selection.} XXX.
+\heading{Necessary Information.} To make the calculations and choose an operating point, the following three pieces of information are needed:
+\begin{itemize}
+	\item Up-to-date CSI measurements including all relevant subchannels.
+	\item Receiver's MCS-specific Effective SNR thresholds.
+	\item Transmitter's capabilities including possible spatial mapping matrices, as well as any implementation-specific oddities (such as Intel's reduction of transmit power by up to 5\dB for the highest 64-QAM single-stream encodings).
+\end{itemize}
 
-\color{red}
-Coding interacts with the notion of Effective SNR in a way that is difficult to analyze. One challenge is that the ability to correct bit errors depends on the position of the errors in the data stream. To sidestep this problem, we rely on the interleaving that randomizes the coded bits across subcarriers and spatial streams. Assuming perfect interleaving and robust coding, bit errors in the stream should look no different from bit errors for flat channels (but at a lower SNR). Thus our estimate of the effective BER in \eqref{eq:effective_ber} will accurately reflect the uncoded error performance of the link. Our algorithm now proceeds as in the case of a flat-fading channel described above: we take the computed Effective SNR value and use the measurements from a flat-fading link (\figref{fig:snr_prr_attenuator}) to determine transmission success or failure. As in CHARM~\cite{Judd_CHARM}, we support different packet lengths with different SNR thresholds.
+\heading{Transmitter-side Computation.} The receiver's MCS thresholds are fixed for a particular model of NIC; they can be shared by the receiver once, e.g., during association. The transmitter also needs up-to-date CSI, either obtained via feedback or estimated implicitly from the reverse path. When the receiver feeds CSI back to the transmitter, this process adds latency and reduces airtime efficiency. 802.11n includes mechanisms to limit these effects via rapid feedback protocols~\cite[\S9.19.2]{80211n} and compressed CSI feedback formats~\cite[\S20.3.12.2.5]{80211n}.
 
-Note that this procedure differs from the typical approach of simulation-based analyses~\cite{Kant_fla, Liu_EESM, Nortel_3g}, that instead map the \emph{uncoded} BER estimate such as we compute to a \emph{coded} BER estimate by means of a simple log-linear approximation. They then use the coded BER estimate, and the length of the target transmission, to directly compute the packet delivery rate of the link. We believe our method of thresholding the Effective SNR is better because it directly accommodates variation in the receiver implementation. Different devices may have different \emph{noise figures}, a measure of how much signal strength is lost in the internal RF circuitry of the NIC\@. They may implement soft Viterbi decoders with more or fewer soft bits for their internal state, or indeed might do hard decoding instead. A receiver could use the optimal Maximum Likelihood MIMO decoder that has exponential complexity for small constellations like BPSK, but revert to the imperfect but more efficient MMSE at higher modulations. All of these can be easily expressed, albeit maybe approximately, as (perhaps modulation-dependent) shifts in the Effective SNR thresholds. In contrast, changing these parameters in the simulation approach involves changing the internals of the calculation.
+Alternatively, the transmitter can estimate the CSI implicitly when receiving packets, such as ACKs, sent by the receiver. This in turn mandates that the receiver inform the transmitter of its spatial mapping matrices, and use all its antennas to send these packets. Note that some receivers, such as the Intel IWL5100, have more receive antennas than transmit chains. Some of those devices cannot send on all antennas, and implicit feedback would not work; the other receivers would need to alternate transmit antennas while the transmitter used CSI Sampling and Fusion~\cite{Crepaldi_CSI_SF} to build up a complete CSI. The use of implicit feedback also requires devices to use the the 802.11n calibration process to compensate for hardware differences in the measured transmit and receive chains and those that will be used when the two devices swap roles.
 
-\heading{Protocol Details.} Effective SNR calculations can be performed by either receiver or transmitter, and each has advantages. For it to make decisions, the transmitter must know the receiver's thresholds for the different rates; these are fixed for a particular model of NIC and can be shared once, e.g., during association. The transmitter also needs up-to-date CSI: either from feedback or estimated from the reverse path. Alternately, the receiver can request rates and select antennas directly using the new Link Adaptation Control field of any 802.11n QoS packet~\cite[\S7.1.3.5a]{80211n}. This obviates sending CSI, but the calculation instead requires that the transmitter share its spatial mappings, i.e.\ how it maps spatial streams to transmit antennas. These are likely to change less frequently than the channel, if at all. Finally, when operating in either mode with fewer transmit streams than antennas, the transmitter must occasionally send a short probe packet with all antennas to measure the full CSI\@.
+\heading{Receiver-side Computation.} The other approach is for the receiver to perform the computations and make the application decisions. To do this, the receiver can use the new 802.11n Link Adaptation Control field~\cite[\S7.1.3.5a]{80211n} that can embed feedback in packet headers, including ACKs, to directly request a particular MCS, select antennas, or request a particular beamforming (or other spatial mapping) matrix.
+
+This obviates sending CSI and speeds up the protocols, but instead requires that the receiver understand the full extent of the transmitter's capabilities. The transmitter and receiver share some of these details, such as number of transmit antennas and whether a device supports optional 802.11n features, on association. But the standard does not include a method by which a transmitter can share its spatial mapping matrices, and it's not immediately clear that this would sufficiently capture all implementations. The other drawback is that it complicates receiver hardware; many 802.11 manufacturers have targeted systems with asymmetric capabilities such that the access point shoulders all the computation load, reducing the complexity and hence cost of the client which need only support basic feedback.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Comparison to Other Techniques}
+\tabref{tab:algorithm_comparison} includes a comparison of my Effective SNR model to other techniques that use physical layer or other low-level information to predict the performance of a wireless link. As I presented in the previous section, RSSI is available in today's devices, but does not accurately predict performance for 802.11a/g due to its inability to capture frequency-selective fading; the use of MIMO in 802.11n only exacerbates this deficiency.
 
 \begin{table}
 \begin{tabular}{ccccccc}
 \toprule
-\multirow{2}{*}{Algorithm} & \multirow{2}{*}{802.11a/b/g} & \multirow{2}{*}{MIMO} & Antenna & \multirow{2}{*}{TX Power} & Channel & \multirow{2}{*}{Real NICs} \\
-& & & Selection & & Width \\
+\multirow{2}{*}{Algorithm} & \multirow{2}{*}{802.11a/b/g} & 802.11n & Antenna & \multirow{2}{*}{TX Power} & Channel & \multirow{2}{*}{Real NICs} \\
+& & (MIMO) & Selection & & Width \\
 \midrule
+RSSI & ? & & & & & \checkmark\\
 SoftRate~\cite{Vutukuru_SoftRate} & \checkmark \\
 AccuRate~\cite{Sen_AccuRate} & \checkmark & & & \checkmark & \checkmark \\
 EEC~\cite{Chen_EEC} & \checkmark & & & & & \checkmark \\
@@ -291,6 +307,22 @@ Effective SNR & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &
 \end{tabular}
 \caption[Comparison of link error rate prediction algorithms]{\label{tab:algorithm_comparison}A comparison of Effective SNR to other recent algorithms that purport to predict the performance of a wireless link. Effective SNR can predict packet delivery in the largest space because it looks at the raw channel response, whereas the other techniques mostly apply only to single-stream links with fixed antennas and transmit power.}
 \end{table}
+
+SoftRate~\cite{Vutukuru_SoftRate} and EEC~\cite{Chen_EEC} both use information from the error correction hardware to accurately measure the Effective BER of the \emph{current} configuration and work well for rate selection using adjacent 802.11a/b/g rates, but cannot predict the performance using other configurations.
+
+AccuRate~\cite{Sen_AccuRate} uses the measured receive error vectors as input to a full channel simulator; like my model this procedure can estimate the Effective BER of all modulations in the current configuration. However, these computations are computationally expensive and do not work across other applications. The exception is transmit power control; I believe this can be simulated by scaling the error vectors although this approach was not explored by the authors.
+
+In contrast, Effective SNR extends to a significantly larger class of applications than the other techniques because its computations are aware of the low-level physical-layer effects of the RF channel, including frequency- and spatially-selective fading. My model is broadly compatible with 802.11n and requires no hardware changes. As part of my thesis I built a prototype implementation using a commercial Intel NIC. In the rest of this thesis, I present my prototype implementation of Effective SNR and demonstrate that it works well and supports a wide space of applications.
+
+\begin{comment}
+\color{red}
+\section{Omitted text}
+Coding interacts with the notion of Effective SNR in a way that is difficult to analyze. One challenge is that the ability to correct bit errors depends on the position of the errors in the data stream. To sidestep this problem, we rely on the interleaving that randomizes the coded bits across subcarriers and spatial streams. Assuming perfect interleaving and robust coding, bit errors in the stream should look no different from bit errors for flat channels (but at a lower SNR). Thus our estimate of the effective BER in \eqref{eq:effective_ber} will accurately reflect the uncoded error performance of the link. Our algorithm now proceeds as in the case of a flat-fading channel described above: we take the computed Effective SNR value and use the measurements from a flat-fading link (\figref{fig:snr_prr_attenuator}) to determine transmission success or failure. As in CHARM~\cite{Judd_CHARM}, we support different packet lengths with different SNR thresholds.
+
+Note that this procedure differs from the typical approach of simulation-based analyses~\cite{Kant_fla, Liu_EESM, Nortel_3g}, that instead map the \emph{uncoded} BER estimate such as we compute to a \emph{coded} BER estimate by means of a simple log-linear approximation. They then use the coded BER estimate, and the length of the target transmission, to directly compute the packet delivery rate of the link. We believe our method of thresholding the Effective SNR is better because it directly accommodates variation in the receiver implementation. Different devices may have different \emph{noise figures}, a measure of how much signal strength is lost in the internal RF circuitry of the NIC\@. They may implement soft Viterbi decoders with more or fewer soft bits for their internal state, or indeed might do hard decoding instead. A receiver could use the optimal Maximum Likelihood MIMO decoder that has exponential complexity for small constellations like BPSK, but revert to the imperfect but more efficient MMSE at higher modulations. All of these can be easily expressed, albeit maybe approximately, as (perhaps modulation-dependent) shifts in the Effective SNR thresholds. In contrast, changing these parameters in the simulation approach involves changing the internals of the calculation.
+
+\color{black}
+\end{comment}
 
 %\heading{802.11 Packet Reception.}
 %The model must account for the action of the 802.11 receiver on the received signal. This is a complex process described in many pages of the 802.11n specification~\cite{80211n}. Our challenge is to capture it well enough with a fairly simple model. We begin by describing the main steps involved (\figref{fig:ofdm_decoding}).
