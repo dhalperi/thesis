@@ -585,7 +585,7 @@
 %
 \def\prelimpages{ % sets page numbering for the preliminary pages
    \pagestyle{empty} % will be {plain} at start of toc
-   \pagenumbering{roman}
+   \pagenumbering{alph}
    \setcounter{page}{1}
    \footskip 30\p@ % allowance for the roman page numbers
     \advance\textheight by-\footskip  
