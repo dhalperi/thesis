@@ -1,5 +1,5 @@
 %  ========================================================================
-%  Copyright (c) 1995-2011 The University of Washington
+%  Copyright (c) 1995-2012 The University of Washington
 %
 %  Licensed under the Apache License, Version 2.0 (the "License");
 %  you may not use this file except in compliance with the License.
@@ -21,12 +21,11 @@
 %
 %    For the most recent edition of this class file see:
 %         http://staff.washington.edu/fox/tex/
-%    Or the CTAN archive
-%         macros/latex/contrib/uwthesis
 %
 %
 % Version history
 %
+% 8.00,02/03/12, Revise for electronic submission.  Revised title, no signature nor quoteslip
 % 7.00,06/27/11, Fix output page bug, add copyright page
 % 6.14,07/24/08, Remove large font from abstract title
 % 6.14,04/15/08, Re-Fix first page bottom margin; raise quote slip 
@@ -70,7 +69,7 @@
 % Documentation is in the companion document (uwthesis.tex)
 %
 
-\ProvidesClass{uwthesis}[2011/06/27]
+\ProvidesClass{uwthesis}[2012/02/03]
 \NeedsTeXFormat{LaTeX2e}
  
 %
@@ -610,12 +609,31 @@
     of the requirements for the degree of}
 \def\Programtext#1{\gdef\@Programtext{#1}}  
        \Programtext{Program Authorized to Offer Degree:\ \ }
+
+\def\textofChair#1{\gdef\@textofChair{#1}}  
+       \textofChair{Chair of the Supervisory Committee}
+\def\textofDate#1{\gdef\@textofDate{#1}}  \textofDate{Date}
+
+\newcount\@Chair \@Chair0
+\def\Chair#1#2#3{
+  \global\@namedef{C:\expandafter\the\@Chair}{#1}
+  \global\@namedef{T:\expandafter\the\@Chair}{#2}
+  \global\@namedef{D:\expandafter\the\@Chair}{#3}
+  \ifnum\@Chair>0\textofChair{Co-Chairs of the Supervisory Committee}\fi
+  \global\advance\@Chair by1}
+
+
+\newcount\@Sign\@Sign0
+\def\Signature#1{
+  \global\@namedef{S:\expandafter\the\@Sign}{#1}
+  \global\advance\@Sign by1}
+
  
 \def\copyrightpage{                   % Prints the copyright page
     \vspace{7pc}
     \begin{center}
       \par\vskip\z@ plus4fill\relax
-      \copyright Copyright \@Year
+      \copyright~Copyright \@Year
       \par
       \@Author
       \par\vskip\z@ plus2fill\relax
@@ -641,176 +659,27 @@
       \par\vskip\z@ plus1fill\relax
       \@Year
       \par\vskip\z@ plus4fill\relax
+
+      % signers
+      \count1=0
+      \@whilenum \count1<\@Chair \do
+       {\vskip12\p@ \baselineskip12pt
+        \csname C:\the\count1\endcsname, Chair
+        \advance\count1 by1}
+      \count1=0
+      \@whilenum \count1<\@Sign \do
+       {\vskip12\p@ \baselineskip12pt
+        \csname S:\the\count1\endcsname
+        \advance\count1 by1}
+
+      \par\vskip\z@ plus4fill\relax
        {\def\baselinestretch{1.0}\normalfont
-      \@Programtext \@Program\par}
+      \@Programtext \par \@Program\par}
       \par\vskip\z@ plus1fill\relax
     \end{center}
      \vspace{2pc}\relax
   \let\titlepage\relax}
  
-%
-%  Signature page
-%
-
-\def\textofChair#1{\gdef\@textofChair{#1}}  
-       \textofChair{Chair of the Supervisory Committee}
-\def\textofDate#1{\gdef\@textofDate{#1}}  \textofDate{Date}
-
-\newcount\@Chair \@Chair0
-\def\Chair#1#2#3{
-  \global\@namedef{C:\expandafter\the\@Chair}{#1}
-  \global\@namedef{T:\expandafter\the\@Chair}{#2}
-  \global\@namedef{D:\expandafter\the\@Chair}{#3}
-  \ifnum\@Chair>0\textofChair{Co-Chairs of the Supervisory Committee}\fi
-  \global\advance\@Chair by1}
-
-
-\newcount\@Sign\@Sign0
-\def\Signature#1{
-  \global\@namedef{S:\expandafter\the\@Sign}{#1}
-  \global\advance\@Sign by1}
-
-\def\signaturepage{     % Prints the dissertation signature page
-   \cleardoublepage
-    \begin{center}
-      \def\baselinestretch{1.0}\normalfont
-      \@School
-      \par
-      \@GSchool
-      \vskip24\p@ plus4fill\relax
-      This is to certify that I have examined this copy of a doctoral
-        dissertation by
-      \vskip\z@ plus2fill\relax
-      \@Author
-      \par\vskip\z@ plus2fill\relax
-      and have found that it is complete and satisfactory in all respects,
-       \par
-      and that any and all revisions required by the final \par
-      examining committee have been made.
-      \par\vskip12\p@ plus4fill\relax
-      \makebox[\textwidth]{\@textofChair:\hfill}
-      \par\vskip8\p@ plus1fill\relax
-      \count1=0
-      \@whilenum \count1<\@Chair \do
-       {\vskip12\p@ \baselineskip12pt
-        \makebox[\textwidth]{\hspace{4pc}\hrulefill\hspace{4pc}}
-        \csname C:\the\count1\endcsname
-        \advance\count1 by1}
-      \par\vskip12\p@ plus4fill\relax
-      \makebox[\textwidth]{Reading Committee:\hfill}
-      \par\vskip8\p@ plus1fill\relax
-      \count1=0
-      \@whilenum \count1<\@Sign \do
-       {\vskip12\p@ \baselineskip12pt
-        \makebox[\textwidth]{\hspace{4pc}\hrulefill\hspace{4pc}}
-        \csname S:\the\count1\endcsname
-        \advance\count1 by1}
-      \par\vskip12\p@ plus4fill\relax
-      \makebox[\textwidth]{\hbox to 4pc{\@textofDate:\hfill}%
-                  \hbox to3in{\hrulefill}\hfill}
-     \par
-    \end{center}
-  \let\signaturepage\relax\let\thesissignaturepage\relax}
-
-\def\thesissignaturepage{  % Prints the masters thesis signature page
-   \cleardoublepage
-    \begin{center}
-      \def\baselinestretch{1.0}\normalfont
-      \@School
-      \par
-      \@GSchool
-      \vskip24\p@ plus4fill\relax
-      This is to certify that I have examined this copy of a master's
-        thesis by
-      \vskip\z@ plus2fill\relax
-      \@Author
-      \par\vskip\z@ plus2fill\relax
-      and have found that it is complete and satisfactory in all respects,
-       \par
-      and that any and all revisions required by the final \par
-      examining committee have been made.
-      \par\vskip12\p@ plus4fill\relax
-      \makebox[\textwidth]{Committee Members:\hfill}
-      \par\vskip8\p@ plus1fill\relax
-      \count1=0
-      \@whilenum \count1<\@Sign \do
-       {\vskip12\p@ \baselineskip12pt
-        \makebox[\textwidth]{\hspace{4pc}\hrulefill\hspace{4pc}}
-        \csname S:\the\count1\endcsname
-        \advance\count1 by1}
-      \par\vskip12\p@ plus4fill\relax
-      \makebox[\textwidth]{\hbox to 4pc{\@textofDate:\hfill}%
-                  \hbox to3in{\hrulefill}\hfill}
-     \par
-    \end{center}
-  \let\signaturepage\relax\let\thesissignaturepage\relax}
- 
-%   Quote slip
-%
-\def\textofSignature#1{\gdef\@textofSignature{#1}}  \textofSignature{Signature}
-\long\def\quoteslip#1{
-   \cleardoublepage
-   % \null
-   {\hyphenpenalty1000
-   % \vskip\z@ plus1fill\relax
-     \def\baselinestretch{1.0}\normalfont
-   \noindent #1\par
-   }
-   \vskip3pc
-   \begin{flushright}
-      \makebox[3in]{\@textofSignature\hrulefill}
-      \par\vskip2pc
-      \makebox[3in]{\@textofDate\hrulefill}
-   \end{flushright}
-   \vskip\z@ plus2fill\relax
-   \let\quoteslip\relax
-   \let\thesisquoteslip\relax
-   \let\doctoralquoteslip\relax
-   \let\doctoralabstractquoteslip\relax
-   \let\doctorialquoteslip\relax
-   \let\doctorialabstractquoteslip\relax
-  }
-
-\long\def\thesisquoteslip{%
-   \quoteslip{%
-   In presenting this thesis in partial fulfillment of the requirements
-   for a master's degree at the University of Washington, I agree
-   that the Library shall make its copies freely available for inspection.
-   I further agree that extensive copying of this thesis is allowable
-   only for scholarly purposes, consistent with ``fair use'' as prescribed
-   in the U.S. Copyright Law.  Any other reproduction for any purpose
-   or by any means shall not be allowed without my written permission.
-   }}
-\long\def\doctoralquoteslip{%
-   \quoteslip{%
-   In presenting this dissertation in partial fulfillment of the requirements
-   for the doctoral degree at the University of Washington, I agree
-   that the Library shall make its copies freely available for inspection.
-   I further agree that extensive copying of this dissertation is allowable
-   only for scholarly purposes, consistent with ``fair use'' as prescribed
-   in the U.S. Copyright Law.  Requests for copying or reproduction
-   of this dissertation may be referred to Proquest Information and Learning,
-   300 North Zeeb Road, Ann Arbor, MI 48106-1346, 1-800-521-0600, to whom
-   the author has granted ``the right to reproduce and sell (a) copies
-   of the manuscript in microform and/or (b) printed copies of
-   the manuscript made from microform.''
-   }}
-\long\def\doctoralabstractquoteslip{%
-   \quoteslip{%
-   In presenting this dissertation in partial fulfillment of the requirements
-   for the doctoral degree at the University of Washington, I agree
-   that the Library shall make its copies freely available for inspection.
-   I further agree that extensive copying of this dissertation is allowable
-   only for scholarly purposes, consistent with ``fair use'' as prescribed
-   in the U.S. Copyright Law.  Requests for copying or reproduction
-   of this dissertation may be referred to Proquest Information and Learning,
-   300 North Zeeb Road, Ann Arbor, MI 48106-1346, 1-800-521-0600,
-   or to the author.
-   }}
-
-% keep mispelled names for backward compatibility
-\let\doctorialquoteslip\doctoralquoteslip
-\let\doctorialabstractquoteslip\doctoralabstractquoteslip
 
 %
 %   Abstract
