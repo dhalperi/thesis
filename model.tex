@@ -222,41 +222,41 @@ I discuss the four types of spatial mapping techniques from the simplest to the 
 
 \begin{itemize}
 	\item In \define{direct mapping}, the transmitter maps each spatial stream directly to one of $S$ antennas; excess antennas go unused. After choosing the appropriate rows of $\mathbf{H}$ as described above under transmit antenna selection, the matrix $\mathbf{V}$ is the identity matrix $I_S$. We can combine transmit antenna selection and direct mapping using a $S \times M$ matrix $\mathbf{V}$ consisting of zeros except for the $S$ entries in different rows and columns that indicate which streams are mapped to which antennas. For $S=2$ and $M=3$, a direct mapping matrix using the first and third antennas would be
-	\begin{equation}
+	\begin{equation*}
 		\tag{Combined $2\times3$ TX Antenna Selection and Direct Mapping}
 		\mathbf{V} = \begin{pmatrix}
 		1 & 0 & 0\\
 		0 & 0 & 1
 		\end{pmatrix}.
-	\end{equation}
+	\end{equation*}
 
 	\item In \define{indirect mapping}, the $S$ streams are mapped to $S$ antennas but in such a way as to be spread over multiple antennas. For instance, the IWL5300 uses the following indirect mapping for 3 streams and 20\MHz channels:
-	\begin{equation}
+	\begin{equation*}
 		\tag{IWL5300 $3\times3$}
 		\mathbf{V} = \begin{pmatrix}
 		e^{-i2\pi/16} & e^{-2i\pi/(80/33)} & e^{-2i\pi/(80/3)} \\
 		e^{-i2\pi/(80/23)} & e^{-2i\pi/(48/13)} & e^{-2i\pi/(240/13)} \\
 		e^{-i2\pi/(80/13)} & e^{-2i\pi/(240/37)} & e^{-2i\pi/(48/13)}
 		\end{pmatrix}
-	\end{equation}
+	\end{equation*}
 	Atheros uses Walsh (also called Hadamard) spreading. The $2\times2$ mapping is:
-	\begin{equation}
+	\begin{equation*}
 		\tag{Atheros $2\times2$}
 		\mathbf{V} = \begin{pmatrix}
 		1 & 1\\
 		1 & -1
 		\end{pmatrix}
-	\end{equation}
+	\end{equation*}
 	
 	\item When using \define{spatial expansion}, $S$ spatial streams are mapped to $M > S$ transmit antennas. Here, $\mathbf{V}$ is the product of an expansion matrix and one of the direct or indirect mapping matrices above. I show the case of $S=2$ and $M=3$ using a sample expansion matrix from the 802.11n standard:
-	\begin{equation}
+	\begin{equation*}
 		\tag{$3\times2$ Spatial Expansion}
 		\mathbf{V} = \sqrt{\frac{2}{3}}\begin{pmatrix}
 		1 & 0\\
 		0 & 1\\
 		1 & 0
 		\end{pmatrix}\mathbf{V}',
-	\end{equation}
+	\end{equation*}
 	where $\mathbf{V}'$ is a direct or indirect mapping matrix. The $\sqrt{2/3}$ factor above represents the even spreading of the power from 2 streams across 3 antennas.
 	
 	\item Finally, \define{beamforming} is a general technique for mapping streams to antennas. Beamforming can be thought of as a synthesis of indirect mapping, spatial expansion (if applicable) and transmit power control. The distinctive feature of beamforming compared with the above is that it is \emph{channel-aware}; in other words, the beamforming matrix is chosen to improve performance based on the known current channel $\mathbf{H}$. This means that beamforming can use different mapping matrices $\mathbf{V}_i$ for each subcarrier, unlike the prior techniques which are applied uniformly across tones. There are a large variety of techniques that use beamforming to improve the channel, but all can be represented in matrix form.
