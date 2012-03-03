@@ -85,20 +85,6 @@ I consider three different channel selection algorithms in this section. The fir
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{algorithm}[tp]
-\caption{\label{alg:chan_sel_rss}\fcall{PredictThroughputRSS($s, r$)}}
-\begin{algorithmic}
-\STATE $s$ sends one packet with 0-byte payload at MCS~0
-\STATE $r$ computes the RSS $R$ and returns it along with the ACK
-\IF{$s$ receives an ACK from $r$}
-\RETURN \fcall{RSSToThroughput($R$)}, $R$ \hfill \COMMENT{the RSS $R$ is used to break ties}
-\ELSE
-\RETURN 0
-\ENDIF
-\end{algorithmic}
-\end{algorithm}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{algorithm}[tp]
 \caption{\label{alg:chan_sel_esnr}\fcall{PredictThroughputESNR($s, r$)}}
 \begin{algorithmic}
 \FOR{$m \in \{16, 8, 0\}$}

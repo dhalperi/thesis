@@ -177,6 +177,7 @@ Some older chipsets, such as the Intel PRO/Wireless 3945~\cite[\S3.5]{ipw3945} a
 
 The optimal SIMO technique is \define{maximal-ratio combining (MRC)}, which combines the multiple copies of the signal from the different receive antennas. The resulting subcarrier SNR is simply the sum of the SNRs of the individual entries:
 \begin{equation}
+	\label{eq:mrc}
 	\rho_i = \sum_{a=1}^N \left| \mathbf{H}'_{i,a} \right|^2.
 \end{equation}
 MRC requires more hardware than antenna selection---one receive chain per antenna, instead of one receive chain total. But since spatial multiplexing techniques require multiple receive chains, 802.11n chipsets already have the hardware necessary to perform MRC. The additional computation is minimal, and the resulting gains are large, hence MRC is likely to be used for SIMO links by any 802.11n receiver. Production documentation for Atheros (e.g., the AR6004~\cite{ar6004}) and Realtek (e.g., the RTL8192SU~\cite{rtl8192su}) chipsets and the Intel 802.11n driver source code~\cite{iwlwifi} confirms this assertion.
