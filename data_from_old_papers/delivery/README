@@ -1,0 +1,9 @@
+This is from Wenjun's version of Figure 6 from the SIGCOMM 2010 paper.
+
+I got the data (already processed) from 802.11n/papers/sigcomm2010/figures/scripts/figure_6, and recreated the plot scripts from her Octave scripts
+
+I believe opt2 for RSSI is adding up all the antennas---we had an earlier
+version that took the minimum or did some other tricks because we thought that
+the streams were less-interleaved than they really are.
+
+Opt2 for ESNR is averaging all symbols together, period, not averaging streams individually and taking the min.
