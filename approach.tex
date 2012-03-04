@@ -34,7 +34,7 @@ In contrast, this space expands by a factor of 12 with 802.11n. Adding a second 
 \begin{figure}[t]
       \centering
       \includegraphics[scale=0.44]{figures/approach_figs/search_11a.pdf}
-      \caption[Rate adaptation search pattern for 802.111]{\label{fig:search_11a}A typical rate adaptation search pattern for 802.11a.}
+      \caption[Rate adaptation search pattern for 802.11a]{\label{fig:search_11a}A typical rate adaptation search pattern for 802.11a.}
 \end{figure}
 The majority of rate control algorithms today rely on packet loss statistics to adapt the operating rate. These algorithms use a large number of losses as a signal that the link quality is too poor to support the current rate, and hence fall back to a lower rate that is more easily received. Conversely, when a link experiences a very small number of losses using its current rate, it sends some \emph{packet probes} at a rate, and switches to the faster rate if it also works well. \figref{fig:search_11a} shows a typical 802.11a adaptation search pattern, where each box corresponds to an 802.11a rate and the arrows show the faster (solid) and slower (dashed) rates that might be probed.
 
@@ -53,7 +53,7 @@ But 802.11n rate configurations are \emph{non-monotonic}. That is, it is not nec
 \begin{figure}[t]
       \centering
       \includegraphics[width=\textwidth]{figures/rate_table_2d.pdf}
-      \caption[Three different rate maps for 802.11n links.]{\label{fig:rate_table_2d}Three different rate maps for 802.11n links. On these links, MCS~12 (the black box) is the highest reliable 2-stream rate, and gray boxes indicate other reliable transmit configurations. A (\emph{left}): the worst possible situation in which no 3-stream rates and no higher single-stream configurations work. B (\emph{middle}): the best case in which all single stream rates work and all 3-stream rates work up to 39~Mbps each. C (\emph{right}): an average case in which the set of reliable rates decreases as more spatial streams are used.}
+      \caption[Three different rate maps for 802.11n links]{\label{fig:rate_table_2d}Three different rate maps for 802.11n links. On these links, MCS~12 (the black box) is the highest reliable 2-stream rate, and gray boxes indicate other reliable transmit configurations. A (\emph{left}): the worst possible situation in which no 3-stream rates and no higher single-stream configurations work. B (\emph{middle}): the best case in which all single stream rates work and all 3-stream rates work up to 39~Mbps each. C (\emph{right}): an average case in which the set of reliable rates decreases as more spatial streams are used.}
 \end{figure}
 \begin{figure}[t]
       \centering
@@ -154,7 +154,7 @@ In particular, I develop a practical methodology that uses this information and 
   \centering
 %  \includegraphics[width=\columnwidth,viewport=2 9 185 108,clip]{figures/esnr/embed_fsf-shape-two-links.pdf}
   \includegraphics[width=0.8\textwidth]{figures/fsf_shape.pdf}
-  \caption[Channel gains on four links that perform about equally well at 52\Mbps.]{Channel gains on four links that perform about equally well at 52\Mbps. The more faded links require larger RSSIs (i.e., more transmit power) to achieve similar PRRs.}
+  \caption[Channel gains on four links that perform about equally well at 52\Mbps]{Channel gains on four links that perform about equally well at 52\Mbps. The more faded links require larger RSSIs (i.e., more transmit power) to achieve similar PRRs.}
   \label{fig:example_fsf_shape}
   % information for the links used to make above plot: 
   %srcs = [1 10 3 3];
@@ -181,7 +181,7 @@ This example indicates that fine-grained RF measurements can help explain perfor
 \begin{figure}[t!]
 	\centering
 	\includegraphics[width=\textwidth]{figures/esnr_intuitive.pdf}
-	\caption{\label{fig:esnr_intuitive}Simplified overview of an RF link operating over multiple subchannels.}
+	\caption[Simplified overview of an RF link operating over multiple subchannels]{\label{fig:esnr_intuitive}Simplified overview of an RF link operating over multiple subchannels.}
 \end{figure}
 
 The example of \figref{fig:example_fsf_shape} indicated that the extra information in CSI can help explain performance for real wireless links, though I have not yet established a method to do so. The central component in my thesis is a model for packet delivery that uses CSI to predict packet loss over real wireless channels. To be useful, this model must accurately predict the packet delivery probability for a given physical layer configuration operating over a given channel. It must also simple and practical, so that it can be readily deployed, and cover a wide range of physical layer configurations, so that it can be applied in many settings and for many tasks.

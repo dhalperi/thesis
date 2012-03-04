@@ -52,7 +52,7 @@ R = B\log(1+\rho).
 \begin{figure}[htb]
 \centering
 \includegraphics{calculations/shannon-crop}
-\caption{\label{fig:shannon}The Shannon Capacity of a communications channel with Gaussian noise.}
+\caption[The Shannon Capacity of a communications channel with Gaussian noise]{\label{fig:shannon}The Shannon Capacity of a communications channel with Gaussian noise.}
 \end{figure}
 
 The Shannon-Hartley Theorem determines a bound on the maximum rate achievable as a function of the bandwidth and signal strength. However, it does not give a practical scheme that realizes this bound, and instead systems like 802.11 use a set of many different schemes that achieve different points along the curve, and choose among these in practice depending on the underlying channel conditions.
@@ -62,7 +62,7 @@ The binary modulation system I discussed above is a scheme called On-Off Keying~
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.8\textwidth]{figures/constellations_radius}
-\caption[Constellation diagrams for the BPSK, QPSK, and 16-QAM modulations.]{\label{fig:constellations}Constellation diagrams for the BPSK, QPSK, and 16-QAM modulations. These constellations are normalized such that each modulation has equal average transmit power, indicated by the red circle.}
+\caption[Constellation diagrams for the BPSK, QPSK, and 16-QAM modulations]{\label{fig:constellations}Constellation diagrams for the BPSK, QPSK, and 16-QAM modulations. These constellations are normalized such that each modulation has equal average transmit power, indicated by the red circle.}
 \end{figure}
 
 As mentioned above, electromagnetic signals actually have both an amplitude and a phase. Amplitude modulation varies one of these parameters, and a complementary scheme called Phase-Shift Keying~(PSK) keeps the amplitude constant but varies the phase. A third scheme known as Quadrature Amplitude Modulation~(QAM) varies both parameters simultaneously and results in a more efficient system when sending more than 2 bits per symbol. Noting that the polar coordinates given by amplitude and phase can equivalently be thought of as a complex number, $m$-QAM can be equivalently thought of as $\sqrt{m}$-ASK in both the real and complex dimensions simultaneously. \figref{fig:constellations} shows the two-dimensional \define{constellations} that result from picturing the symbols sent in BPSK (i.e.\ 2-PSK), QPSK (i.e.\ 4-PSK), and 16-QAM modulation schemes.

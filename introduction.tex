@@ -65,20 +65,20 @@ The transmitter need only measure the channel SNR and apply textbook formulas th
 
 \begin{figure}[t]
 	\centering
-		\subfigure[The theoretical approach to rate selection based on measurements.]{
+		\subfigure[The theoretical approach to rate selection based on measurements][The theoretical approach to rate selection based on measurements.]{
 			\label{fig:rate_selection_theory}
 			\hspace{0.1in}
 			\includegraphics[width=2in]{figures/rate_selection_theory}
 			\hspace{0.1in}
 		}
 			\hspace{0.1in}
-		\subfigure[The probe-based approach to rate selection used in practice.]{
+		\subfigure[The probe-based approach to rate selection used in practice][The probe-based approach to rate selection used in practice.]{
 			\hspace{0.1in}
 			\label{fig:rate_selection_practice}
 			\includegraphics[width=2in]{figures/rate_selection_practice}
 			\hspace{0.1in}
 		}
-	\caption[Approaches to rate selection.]{\label{fig:rate_selection_algorithms}Approaches to rate selection.}%
+	\caption[Approaches to rate selection]{\label{fig:rate_selection_algorithms}Approaches to rate selection.}%
 \end{figure}
 
 In practice, this approach has never worked for Wi-Fi links. The 802.11 standard defines a channel metric related to the SNR called the Receive Signal Strength Indicator, or RSSI, that captures the total amount of power in the channel and in most chipsets is indeed a direct measure of the SNR. However, Wi-Fi systems have never used RSSI as more than a coarse indicator of expected performance. There have simply been too many ways in which the observed measurements and actual performance fail to match the predictions of theory. For example, hardware estimates of RSSI can be mis-calibrated, the wireless channel can vary over packet reception, and can be corrupted by interference; all of these are known to be issues in practice~\cite{Camp_rateadapt,Judd_CHARM,Reis_interference}.
@@ -98,7 +98,7 @@ In this section, I will illustrate how a network of devices has a significantly 
 \begin{figure}[tp]
 	\centering
 	\includegraphics[width=\textwidth]{figures/network}
-	\caption[The three key configuration problems in multi-device networks.]{\label{fig:network_examples} The three key configuration problems in multi-device networks. \textit{Left:} access point selection. \textit{Center:} Multi-hop mesh routing. \textit{Right:} Spatial reuse. }
+	\caption[The three key configuration problems in multi-device networks]{\label{fig:network_examples} The three key configuration problems in multi-device networks. \textit{Left:} access point selection. \textit{Center:} Multi-hop mesh routing. \textit{Right:} Spatial reuse. }
 \end{figure}
 
 \subsubsection{Access Point Selection}
