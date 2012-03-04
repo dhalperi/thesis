@@ -29,9 +29,9 @@ As a baseline measurement, I analyze the accuracy of the Packet SNR estimate com
 \caption{\label{alg:get_bitrate_threshold}\fcall{GetBitrateThreshold(MCS $m$, SNR $\rho$, Threshold $\tau$)}}
 \begin{algorithmic}
 \IF{$\rho > \tau$}
-\RETURN {the bit rate of MCS $m$} \hfill \COMMENT{MCS $m$ works}
+\RETURN {the bit rate of \mcs{$m$}} \hfill \COMMENT{\mcs{$m$} works}
 \ELSE
-\RETURN {0} \hfill \COMMENT{MCS $m$ does not work}
+\RETURN {0} \hfill \COMMENT{\mcs{$m$} does not work}
 \ENDIF
 \end{algorithmic}
 \end{algorithm}
@@ -51,11 +51,11 @@ As a baseline measurement, I analyze the accuracy of the Packet SNR estimate com
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Computing SNR Thresholds}
-Note that \algref{alg:rate_select_snr} requires an SNR threshold $\tau_m$ for every MCS $m$ to determine if that rate is supported. If SNR accurately reflected the rate of the channel, we could use the SNR thresholds measured over a wired link, e.g., as shown in \figref{fig:snr_prr_attenuator}. As this does not work in practice, I computed these thresholds empirically by measuring wireless links in my testbeds.
+Note that \algref{alg:rate_select_snr} requires an SNR threshold $\tau_m$ for every \mcs{$m$} to determine if that rate is supported. If SNR accurately reflected the rate of the channel, we could use the SNR thresholds measured over a wired link, e.g., as shown in \figref{fig:snr_prr_attenuator}. As this does not work in practice, I computed these thresholds empirically by measuring wireless links in my testbeds.
 
-I measured the relation between SNR and PRR while varying the transmit power level, and hence the received SNR, for each single-antenna rate (MCS\,0--MCS\,7). These measurements cover 202 indoor, single-antenna wireless links from both 802.11n testbeds.
+I measured the relation between SNR and PRR while varying the transmit power level, and hence the received SNR, for each single-antenna rate (\mcs{0}--\mcs{7}). These measurements cover 202 indoor, single-antenna wireless links from both 802.11n testbeds.
 %Not all pairs in all testbeds successfully deliver any packets at all.
-For each MCS\,$m$ on each link, I determined the SNR level at MCS\,$m$ resulted in more throughput than the next lower rate. For example, MCS\,2 has a bit rate of 19.5\Mbps while MCS\,1 has a bit rate of 13\Mbps, so the SNR threshold for MCS\,2 should be the SNR value at which the link can deliver at least 2/3 of the transmitted packets.
+For each \mcs{$m$} on each link, I determined the SNR level at MCS\,$m$ resulted in more throughput than the next lower rate. For example, MCS\,2 has a bit rate of 19.5\Mbps while \mcs{1} has a bit rate of 13\Mbps, so the SNR threshold for \mcs{2} should be the SNR value at which the link can deliver at least 2/3 of the transmitted packets.
 
 \begin{figure}[ht]
 	\centering
