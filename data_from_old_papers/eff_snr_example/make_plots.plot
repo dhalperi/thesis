@@ -17,6 +17,7 @@ set output 'eff_snr_example.pdf'
 set size 1,0.8
 set xrange [-28:28]
 set yrange [5:25]
+set border lw 4
 #set key font "Helvetica,7" box top right horizontal
 set nokey
 set xlabel "Subcarrier Index"
@@ -24,7 +25,8 @@ set ylabel "SNR (dB)"
 set xtics font "Helvetica,7" 7
 set ytics font "Helvetica,7"
 set mxtics 7
-set grid xtics ytics mytics ls 9
+set mytics 5
+set grid xtics ytics ls 9
 set label "Subcarrier SNRs" at -18.6,22 #textcolor rgb "#FF6680"
 set label "Packet SNR" at -12.5,18.9 #textcolor rgb "#6680FF"
 set label "64-QAM" at -11,16.85 #textcolor rgb "#66FF98"

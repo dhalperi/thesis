@@ -17,13 +17,16 @@ set output 'snr_prr_scatter.pdf'
 set size 1,0.7
 set xrange [0:35]
 set yrange [0:100]
+set border 3 lw 4
 set key font "Helvetica,7" box vertical bottom right samplen 0
 set ylabel "Packet Reception Ratio"
 set xlabel "SNR (dB)"
 set mxtics 5
+set mytics 2
+set tics nomirror
 set xtics font "Helvetica,7" 5
 set ytics font "Helvetica,7"
-set grid xtics mxtics ytics mytics ls 9
+set grid xtics mxtics ytics ls 9
 plot \
 	'expt-11-parsed/data-4100' using 5:4 ls 1 title '6.5', \
 	'expt-11-parsed/data-4103' using 5:4 ls 4 title '26', \

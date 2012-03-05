@@ -16,6 +16,7 @@ set output 'rate_configs.pdf'
 set size 1,0.7
 set xrange [0:500]
 set yrange [0.75:5.75]
+set border lw 4
 set key font "Helvetica,7" box bottom right vertical invert samplen 1
 set xlabel "Data Rate (Mbps)"
 set ytics font "Helvetica,7" ("SIMO" 1.35, "MIMO2/3" 2.125, "SGI" 3, "HT40" 4, "SGI+HT40" 5)

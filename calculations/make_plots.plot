@@ -13,6 +13,7 @@ set output 'shannon.pdf'
 set size 1,0.7
 set xrange [0:1000]
 set yrange [0:12]
+set border lw 4
 set key bottom right
 set ylabel "Capacity (bps/Hz)"
 set xlabel "SNR"
@@ -35,6 +36,7 @@ set size 1,0.7
 set xrange [-1:30]
 set logscale y
 set yrange[1e-10:1]
+set border lw 4
 set key at 8,1e-5
 set ytics ("1" 1, "10^{-2}" 0.01, "10^{-4}" 0.0001, "10^{-6}" 0.000001, "10^{-8}" 0.00000001, "10^{-10}" 0.0000000001)
 set grid ls 9
@@ -59,6 +61,7 @@ set ylabel "Capacity (bps/Hz)"
 set size 1,0.7
 set xrange [-1:30]
 set yrange[0:8]
+set border lw 4
 set key at 11.7,7.5 reverse Left
 set grid ls 9
 plot \

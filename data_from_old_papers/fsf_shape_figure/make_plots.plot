@@ -17,13 +17,15 @@ set output 'fsf_shape.pdf'
 set size 0.8,0.85
 set xrange [-28:28]
 set yrange [0:50]
-set key font "Helvetica,7" box top right horizontal
+set border lw 4
+set key font "Helvetica,7" box top center horizontal
 set xlabel "Subcarrier Index"
 set ylabel "SNR (dB)"
 set xtics font "Helvetica,7" 7
 set ytics font "Helvetica,7"
 set mxtics 7
-set grid xtics ytics mytics ls 9
+set mytics 5
+set grid xtics ytics ls 9
 plot \
 'fsf_shape_plottable.txt' using 1:2 ls 1 w lp title 'PRR 83%, SNR 30.2 dB', \
 'fsf_shape_plottable.txt' using 1:3 ls 2 w lp title 'PRR 78%, SNR 27.1 dB', \

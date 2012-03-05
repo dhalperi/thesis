@@ -19,9 +19,11 @@ set yrange [0:1]
 set key font "Helvetica,7" box center right vertical
 set xlabel "Fraction of Links"
 set ylabel "Fraction of Optimal Rate"
-set grid ls 9
+set grid xtics ytics ls 9
 set xtics font "Helvetica,7" ("0" 0, "0.25" 50, "0.5" 100, "0.75" 150, "1" 200)
 set ytics font "Helvetica,7"
+set tics nomirror
+set border 3 lw 4
 
 plot 'rates-0.000000.dat' w l title '0' ls 1, \
      'rates-0.250000.dat' w l title '25' ls 2, \
