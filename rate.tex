@@ -8,6 +8,12 @@
 \chapter{Application to Rate Selection}
 \label{chap:rate}
 
+In the last chapter, I showed that my Effective SNR model can accurately predict packet delivery for 802.11n. Here, I close the loop, demonstrating how my model can be applied to solve an 802.11n configuration problem. This chapter presents an in-depth study of the application of Effective SNR to the problem of rate selection for 802.11.
+
+I first compare against state-of-the-art schemes for single-antenna 802.11a/g systems. In these measurements, the goal is to show that Effective SNR performs as well as or better than the existing, well-studied probe- and channel metric-based schemes on their home ground, using my method which has the advantages of simplicity, deployability, and generality. To enable comparison with state-of-the-art algorithms that cannot be implemented in commodity hardware today, I use 802.11n physical-layer simulations driven by collected channel state information traces to perform my evaluation.
+
+I then show that this model extends well to 802.11n (MIMO) and so provides ongoing value. In subsequent chapters, I will explain how to apply Effective SNR to other configuration problems.
+
 \section{Rate Selection using SNR in Practice}
 As a baseline measurement, I analyze the accuracy of the Packet SNR estimate computed from RSSI when used to select rates over wireless links. This algorithm gathers the Packet SNR $\rho$ and then returns the fastest working MCS (\algref{alg:rate_select_snr}).
 
@@ -55,7 +61,7 @@ Note that \algref{alg:rate_select_snr} requires an SNR threshold $\tau_m$ for ev
 
 I measured the relation between SNR and PRR while varying the transmit power level, and hence the received SNR, for each single-antenna rate (\mcs{0}--\mcs{7}). These measurements cover 202 indoor, single-antenna wireless links from both 802.11n testbeds.
 %Not all pairs in all testbeds successfully deliver any packets at all.
-For each \mcs{$m$} on each link, I determined the SNR level at MCS\,$m$ resulted in more throughput than the next lower rate. For example, MCS\,2 has a bit rate of 19.5\Mbps while \mcs{1} has a bit rate of 13\Mbps, so the SNR threshold for \mcs{2} should be the SNR value at which the link can deliver at least 2/3 of the transmitted packets.
+For each \mcs{$m$} on each link, I determined the SNR level at \mcs{$m$} resulted in more throughput than the next lower rate. For example, \mcs{2} has a bit rate of 19.5\Mbps while \mcs{1} has a bit rate of 13\Mbps, so the SNR threshold for \mcs{2} should be the SNR value at which the link can deliver at least 2/3 of the transmitted packets.
 
 \begin{figure}[ht]
 	\centering
@@ -128,13 +134,13 @@ We aim to evaluate the ability of these algorithms to respond to changing channe
 
 \begin{figure}[t]
       \centering
-      \includegraphics[angle=-90,viewport=120 68 491 760,clip,width=0.95\columnwidth]{figures/esnr/siso_rate_time_opt_eff.pdf}
+      \includegraphics[width=0.95\columnwidth]{figures/rate/siso_rate_time_opt_eff.pdf}
       \caption{\label{fig:siso_rate_time_opt_eff} OPT and ESNR SISO performance in human-speed mobility.}
 \end{figure}
 
 \begin{figure}[t]
       \centering
-      \includegraphics[angle=-90,viewport=120 68 491 760,clip,width=0.95\columnwidth]{figures/esnr/siso_rate_skip_opt_eff.pdf}
+      \includegraphics[width=0.95\columnwidth]{figures/rate/siso_rate_skip_opt_eff.pdf}
       \caption{\label{fig:siso_rate_skip_opt_eff} OPT and ESNR SISO performance in fast mobile channels.}
 \end{figure}
 
@@ -161,34 +167,27 @@ Finally, while the performance differences between schemes are significant, they
 
 \begin{figure}[t]
       \centering
-      \includegraphics[angle=-90,viewport=120 68 491 760,clip,width=0.95\columnwidth]{figures/esnr/siso_rate_time_opt_eff_sr_so.pdf}
-      \vspace{-2pt}
+      \includegraphics[width=0.95\columnwidth]{figures/rate/siso_rate_time_opt_eff_sr_so.pdf}
       \caption{\label{fig:siso_rate_time_opt_eff_sr_so} ESNR, SampleRate, and SoftRate SISO performance in human-speed mobility.}
-      \vspace{-2pt}
 \end{figure}
 
 \begin{figure}[t]
       \centering
-      \includegraphics[angle=-90,viewport=120 68 491 760,clip,width=0.95\columnwidth]{figures/esnr/siso_rate_skip_opt_eff_sr_so.pdf}
-      \vspace{-2pt}
+      \includegraphics[width=0.95\columnwidth]{figures/rate/siso_rate_skip_opt_eff_sr_so.pdf}
       \caption{\label{fig:siso_rate_skip_opt_eff_sr_so} OPT, ESNR, SampleRate, and SoftRate SISO performance in fast mobile channels.}
-      \vspace{-2pt}
 \end{figure}
 
 
 \begin{figure}[t]
       \centering
-      \includegraphics[angle=-90,viewport=125 68 491 760,clip,width=.95\columnwidth]{figures/esnr/mimo_skip_time.pdf}
-      \vspace{-2pt}
+      \includegraphics[width=.95\columnwidth]{figures/rate/mimo_skip_time.pdf}
       \caption{\label{fig:mimo_eff_snr_time} OPT and ESNR MIMO performance in human-speed mobility.}
 \end{figure}
 
 \begin{figure}[t]
       \centering
-      \includegraphics[angle=-90,viewport=125 68 491 760,clip,width=.95\columnwidth]{figures/esnr/mimo_rate_skip.pdf}
-      \vspace{-2pt}
+      \includegraphics[width=.95\columnwidth]{figures/rate/mimo_rate_skip.pdf}
       \caption{\label{fig:mimo_eff_snr_speedup} OPT and ESNR MIMO performance in faster mobile channels.}
-      \vspace{-2pt}
 \end{figure}
 
 \heading{MIMO Performance.}
