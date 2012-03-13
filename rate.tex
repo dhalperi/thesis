@@ -134,13 +134,13 @@ We aim to evaluate the ability of these algorithms to respond to changing channe
 
 \begin{figure}[t]
       \centering
-      \includegraphics[width=0.95\columnwidth]{figures/rate/siso_rate_time_opt_eff.pdf}
+      \includegraphics[width=\textwidth]{figures/rate/siso_rate_time_opt_eff.pdf}
       \caption{\label{fig:siso_rate_time_opt_eff} OPT and ESNR SISO performance in human-speed mobility.}
 \end{figure}
 
 \begin{figure}[t]
       \centering
-      \includegraphics[width=0.95\columnwidth]{figures/rate/siso_rate_skip_opt_eff.pdf}
+      \includegraphics[width=\textwidth]{figures/rate/siso_rate_skip_opt_eff.pdf}
       \caption{\label{fig:siso_rate_skip_opt_eff} OPT and ESNR SISO performance in fast mobile channels.}
 \end{figure}
 
@@ -157,6 +157,18 @@ Note that packet SNR was observed to fare quite poorly~\cite{Vutukuru_SoftRate} 
 Next, we compare ESNR with SampleRate and SoftRate %. The corresponding rate versus time and rate versus mobility speedup graphs are shown 
 in \figref{fig:siso_rate_time_opt_eff_sr_so} and \figref{fig:siso_rate_skip_opt_eff_sr_so}. While it is hard to separate the lines on the graph, at 1$\times$ speed, ESNR slightly outperforms SampleRate which slightly outperforms SoftRate. These results surprised us: SampleRate performs better than we expected, and SoftRate performs less well. 
 
+\begin{figure}[t]
+      \centering
+      \includegraphics[width=\textwidth]{figures/rate/siso_rate_time_opt_eff_sr_so.pdf}
+      \caption{\label{fig:siso_rate_time_opt_eff_sr_so} ESNR, SampleRate, and SoftRate SISO performance in human-speed mobility.}
+\end{figure}
+\begin{figure}[h]
+      \centering
+      \includegraphics[width=\textwidth]{figures/rate/siso_rate_skip_opt_eff_sr_so.pdf}
+      \caption{\label{fig:siso_rate_skip_opt_eff_sr_so} OPT, ESNR, SampleRate, and SoftRate SISO performance in fast mobile channels.}
+\end{figure}
+
+
 SampleRate's lagging channel estimate makes it degrade fastest with increasing mobility. However, it maintains a 10--25\% margin with ESNR, still performing well even with large speedups. In deeper analysis, we discovered that dropping rate on retry is an important factor that gives it short-term adaptability. Without this rate fallback (the ``SampleRate fixed'' line), it loses 25--50\% of its performance.
 
 SoftRate has among the slowest falloff with mobility speedup because it directly and accurately measures the channel, and performs the best at maximum speed. However, at slow speeds it is slightly slower on average than SampleRate, though it easily beats a SampleRate without fallback that was the basis for earlier comparisons.\footnote{M. Vutukuru, personal communication, and code inspection.}
@@ -165,28 +177,16 @@ We do not believe this gap is fundamental, as SoftRate's post-decoding BER estim
 Finally, while the performance differences between schemes are significant, they are always less than a factor of two (ignoring OPT). To put this in perspective, note that other evaluations have reported throughput based on TCP traffic, which will magnify performance gaps by reacting to packet loss.
 
 
-\begin{figure}[t]
-      \centering
-      \includegraphics[width=0.95\columnwidth]{figures/rate/siso_rate_time_opt_eff_sr_so.pdf}
-      \caption{\label{fig:siso_rate_time_opt_eff_sr_so} ESNR, SampleRate, and SoftRate SISO performance in human-speed mobility.}
-\end{figure}
 
 \begin{figure}[t]
       \centering
-      \includegraphics[width=0.95\columnwidth]{figures/rate/siso_rate_skip_opt_eff_sr_so.pdf}
-      \caption{\label{fig:siso_rate_skip_opt_eff_sr_so} OPT, ESNR, SampleRate, and SoftRate SISO performance in fast mobile channels.}
-\end{figure}
-
-
-\begin{figure}[t]
-      \centering
-      \includegraphics[width=.95\columnwidth]{figures/rate/mimo_skip_time.pdf}
+      \includegraphics[width=\textwidth]{figures/rate/mimo_skip_time.pdf}
       \caption{\label{fig:mimo_eff_snr_time} OPT and ESNR MIMO performance in human-speed mobility.}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[ht]
       \centering
-      \includegraphics[width=.95\columnwidth]{figures/rate/mimo_rate_skip.pdf}
+      \includegraphics[width=\textwidth]{figures/rate/mimo_rate_skip.pdf}
       \caption{\label{fig:mimo_eff_snr_speedup} OPT and ESNR MIMO performance in faster mobile channels.}
 \end{figure}
 
