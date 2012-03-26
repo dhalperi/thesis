@@ -26,7 +26,7 @@ set grid xtics mxtics ytics mytics ls 9
 set xtics font "Helvetica,7" 10
 set ytics font "Helvetica,7" ("    0" 0, "19.5" 1, "39" 2, "58.5" 3, "78" 4, \
 			      "117" 5, "156" 6, "175.5" 7, "195" 8)
-set ylabel "MIMO3 Bitrate"
+set ylabel "MIMO3 Bitrate (Mbps)"
 
 set multiplot
 set xlabel "Effective SNR (dB)"
@@ -41,3 +41,23 @@ plot \
 	'data/rssi_opt2_maxmin_rate_3x3_90.octave' using 1:2 w l ls 1 title 'Best Link', \
 	'' using 1:3 w l ls 2 title 'Worst Link'
 set nomultiplot
+
+set style line 1 lt 1 lw 8 linecolor rgb "#008000"
+set style line 2 lt 2 lw 8 linecolor rgb "#0000FF"
+set term pdf enhanced fsize 8 dashed
+set noxlabel
+set noylabel
+set nokey
+set output "mimo3_snr_for_talk_bestonly.pdf"
+plot \
+	'data/rssi_opt2_maxmin_rate_3x3_90.octave' using 1:2 w l ls 1 title 'Best Link'
+
+set output "mimo3_snr_for_talk.pdf"
+plot \
+	'data/rssi_opt2_maxmin_rate_3x3_90.octave' using 1:2 w l ls 1 title 'Best Link', \
+	'' using 1:3 w l ls 2 title 'Worst Link'
+
+set output "mimo3_esnr_for_talk.pdf"
+plot \
+	'data/eff_opt2_maxmin_rate_3x3_90.octave' using 1:2 w l ls 1 title 'Best Link', \
+	'' using 1:3 w l ls 2 title 'Worst Link'

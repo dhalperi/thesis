@@ -38,3 +38,11 @@ plot 'simo.txt' using 1:(1.35) title 'SIMO' ls 1 pt 9, \
 	'simo_ht40_sgi.txt' using 1:(4.75) notitle ls 5 pt 9, \
 	'mimo2_ht40_sgi.txt' using 1:(5) notitle ls 5 pt 7, \
 	'mimo3_ht40_sgi.txt' using 1:(5.25) notitle ls 5 pt 5
+
+set term pdf color enhanced fsize 16 dashed
+set output 'rate_configs_talk.pdf'
+set size 0.8,1
+set nokey
+set xtics font "Helvetica,12" 100
+set noytics
+replot

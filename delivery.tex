@@ -132,13 +132,63 @@ Interestingly, these results show that Packet SNR predictions are much better fo
 
 Finally, I note that neither Effective SNR nor Packet SNR performs extremely well at the lowest modulation at low SNRs. I believe this artifact arises from errors in the AGC values reported by the NIC, observed by Judd et al.~\cite{Judd_CHARM} and confirmed by my data for Intel's hardware.
 
+\section{Transmit Power Control}
+\label{sec:tx_power_trim}
+The results so far show we can predict delivery over a range of transmit powers (as well as other choices). I now show that CSI measured at one transmit power level is useful to predict delivery at a different power level. This is valuable for power control applications, e.g., pruning excess power to reduce co-channel interference~\cite{symphony09, power_control_study, pcmac}. 
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/eff_vs_snr_qpsk.pdf}
+  \caption{Effective SNR (for QPSK) versus packet SNR for flat (left) to faded (right) links.}
+  \label{fig:eff_vs_rssi}
+\end{figure}
+
+Note that changing transmit power has a different effect (in terms of delivery and highest rate) on real links even if they start at exactly the same rate and SNR. \figref{fig:eff_vs_rssi} plots the Packet SNR versus Effective SNR relationship for six example 1x1 links in T1 and T2.
+I compute this data by scaling the CSI measured at maximum transmit power over a range of power levels.
+The links range from near-flat to deeply-faded. Correspondingly, they have different slopes. On the left, Packet SNR matches Effective SNR for the nearly flat link. 
+However, for the right-most, deeply faded links, the Packet SNR decreases from 25\dB to 15\dB (10$\times$ transmit power reduction) as the Effective SNR only drops by 4\dB (2.5$\times$). This difference in how links harness power makes transmit power control non-trivial.
+
+
+\begin{figure}[t]
+      \centering
+      \subfigure[Predicted and measured power saving]{%
+      \includegraphics[width=0.5\columnwidth,viewport=0 7 195 110,clip]{figures/power_save_1x1.pdf}%
+      \label{fig:power_save_cdf}%
+      }%
+      \subfigure[Measured PRR corresponding to reduced TX power levels]{%
+      \includegraphics[width=0.5\columnwidth,viewport=0 7 195 110,clip]{figures/power_save_final_prr_1x1.pdf}%
+      \label{fig:power_prr_cdf}%
+      }%
+      \caption{\label{fig:power_save_1x1} Power saving and performance impact of pruning excess transmit power. Pruning with Effective SNR is tight (within 0.5\dB) and does not degrade performance. Pruning with packet SNR degrades performance more without much extra savings.} 
+\end{figure}
+
+To test predictions across power levels, I consider the goal of trimming excess transmit power, i.e. power that can be removed without causing the highest rate for the link to drop. These experiments start with 88 SISO links from the Intel Labs Testbed configured to radiate 10\mW of transmit power, and one CSI sample per link. Considering transmit power reductions in increments of 2\dB, the Effective SNR model can predict the best supported rate for each reduced power level, and choose the lower power level with the same best rate. The measurements described earlier include the ground truth packet reception ratio for each power level, and thus these data can be used to check the accuracy of the predictions.
+
+\figref{fig:power_save_1x1} shows the power savings and performance degradation of four different threshold schemes.
+A good result here is power savings without a loss of performance; the absolute amount of power savings is not meaningful as it depends on the testbed.
+The Measured (Optimal) line shows the best that can be done. Measured PRRs at all power levels are used to guide power control decisions. Therefore, the final delivery probabilities are hardly decreased (all links have PRR$>$90\%), yet most links save a little power and some save a lot. %of power.
+
+The graphs show that using Effective SNR to predict how much power to trim has a similarly good tradeoff. Impact on rate remains limited, yet power is saved, more than 10\dB for around 10\% of the links. The gap between the Measured and the Eff SNR lines is due to the fact the Eff SNR thresholds might be slightly conservative for some links. To show that this trimming is tight, consider trimming towards slightly lower thresholds ($\text{Effective SNR}-\text{0.5\dB}$, solid line). This results in little additional power savings, but degrades more links so that they work partially. In comparison, the Pkt SNR line shows the effects of using Packet SNR to save power. The savings are barely increased, but several links are degraded to the point that some stop working altogether.
+
+\section{Interference}
+\label{sec:interference}
+Finally, it is important to investigate how an Effective SNR-based protocol can cope with interference. This is one of the largest potential weaknesses of this technique, because Effective SNR is based on measurements taken only during the packet preamble.% There are three important components of dealing with interference: 1) maintaining an accurate estimate of interference-free link quality, so that transient interference doesn't cause wild rate swings; 2) recognizing collisions when they occur, to avoid unnecessary rate fallback; and 3) providing an estimate of link quality that enables efficient operation during persistent interference.
+
+I studied the variation of CSI measurements during interference. I chose two nodes at UW that do not detect each other with carrier sense and sent large packets designed to collide, while monitoring the CSI recorded by all other receiving nodes. I also varied the transmit power of the node designated as the interferer from low to high to induce a large range of interfering channels. For all but one of 20 links, the rate predicted by the majority of CSI measurements for correct packets was the same with and without interference; the remaining link was off by a single rate. From these measurements, we can conclude that the mere presence of interference does not completely invalidate Effective SNR values, and thus transient interference will not cause wild swings in transmit rate.
+
+However, for continuous interference Effective SNR will provide an aggressive estimate, and will need another way to compensate. This should be reflected in larger noise floor measurements by the NIC,\footnote{Note that OFDM does not turn interference into inflated RSSI as do the spread spectrum modulations used in 802.11b.} however the platform does not provide this information for dropped packets. An alternative, that I have not yet explored, might be an \define{Effective SINR} metric that incorporates CSI measurements from the interfering nodes to predict packet delivery.
+
+%Because it does not use packet loss as a signal, ESNR will not conservatively reduce rate during interference. Thus transient interference will only cause transient interruptions. However, the Effective SNR measured in a single packet preamble simply does not provide an estimate of link quality when the link experiences persistent interference. One solution is to leverage SoftRate in these circumstances; while Effective SNR can guide the overall choice of antennas and number of spatial streams, SoftRate's continuous estimate of BER may be better suited for choosing rates within one mode. An alternative (that we have not yet explored) might be an \emph{effective SINR} metric incorporating CSI measurements from the interfering nodes to predict packet delivery.
+
+To recognize collisions, I propose to leverage a new MAC feature of the 802.11n packet aggregation mechanism. Block ACKs selectively acknowledge frames in a batch of packets transmitted as one continuous burst. Each packet in the burst has a separate checksum, and thus the Block ACK serves as block-based feedback of packet correctness as the block-based checksums analyzed in PPR~\cite{Jamieson_PPR}. We can therefore use the error patterns in the Block ACK to recognize collisions: when the rate is overselected, errors should be randomly distributed throughout the batch, and bursty when a collision clobbers a continuous part of the batch.
+
 \section{Summary}
-From these results, I conclude that Effective SNR consistently and accurately indicates the best rate for nearly all links and all configurations without any per-link calibration. The low degree of rate confusion with Effective SNR in \secref{sec:rate_confusion} implies that it should be possible to define SNR thresholds that clearly define when a rate will work well. I discuss how to choose these thresholds in the next chapter,\footnote{\textcolor{red}{XXX: or, where should this be? It's not really necessary yet, not until we start making algorithmic choices.}} in which I deploy my Effective SNR as part of a system that selects the optimal rate for a wireless link.
+From these results, I conclude that Effective SNR consistently and accurately indicates the best rate for nearly all links and all configurations without any per-link calibration. The low degree of rate confusion with Effective SNR in \secref{sec:rate_confusion} implies that it should be possible to define SNR thresholds that clearly define when a rate will work well. I discuss how to choose these thresholds in the next chapter,\footnote{\textcolor{red}{XXX: or, where should this be? It's not really necessary yet, not until we start making algorithmic choices.}}. The results in \secref{sec:tx_power_trim} demonstrate the flexibility of this approach by demonstrating that CSI measurements are valid not just across different rates, but also across transmit power scaling. Finally, I showed that Effective SNR measurements are generally not corrupted by transient interference, as long as the packet preamble from which CSI is measured is relatively interference-free.
+
+Having gained confidence that Effective SNR can be useful, in the remainder of this thesis I evaluate Effective SNR at the application level. In the next chapter, I deploy my model as part of a system that selects the optimal rate for a wireless link.
 
 \textcolor{red}{XXX Which reminds me: where should I mention quantization error?}
 %From now on, we use the thresholds in these graphs to predict the working rate for any link. They agree with the measured SNRs on a wired link (\figref{fig:snr_prr_attenuator}), which strongly suggests that the Effective SNR captures the fundamental error characteristics of the link. 
-
-\textcolor{red}{XXX include this?: We also demonstrate that the Effective SNR model enables a sender to accurately prune excess transmit power from a strong link while maintaining high packet delivery.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined
