@@ -10,7 +10,9 @@
 
 In this chapter, I experimentally evaluate how well my Effective SNR model predicts packet delivery for 802.11n wireless links. This is the fundamental measure of whether the model can be useful; good predictions are necessary to properly configure links and networks to solve the link and network configuration problems.
 
-To do so, I use my CSI measurement tool to gather a wide range of channel and performance information across 200 wireless links in both testbeds. This captures a wide variety of fading environments, from line-of-sight links in the same room to links between nodes in different rooms with RF barriers and reflectors spread around and between them. I then use this data to evaluate the accuracy of predictions made when using Packet SNR and Effective SNR about whether packets will be delivered.
+To do so, I use my CSI measurement tool to gather a wide range of channel and performance information across 200 wireless links in both testbeds. This captures a wide variety of fading environments, from line-of-sight links in the same room to links between nodes in different rooms with RF barriers and reflectors spread around and between them. I then use this data to evaluate the accuracy of predictions made when using Packet SNR and Effective SNR.
+
+The primary study in this chapter determines how accurately Packet SNR and Effective SNR predict whether packets will be delivered using different modulation and coding schemes. I then consider how well CSI measurements enable predictions about the effects of transmit power control to show its flexibility. I conclude this chapter by evaluating the resilience of my Effective SNR system to interference. These three studies lay the foundation for showing that Effective SNR is accurate, flexible, and practical; in subsequent chapters I deploy my model as part of a system in the context of many application-related configuration problems.
 
 \section{Experimental Data}
 I measured packet delivery over a 20\MHz channel on my two 802.11n testbeds, using links with four different antenna configurations:
