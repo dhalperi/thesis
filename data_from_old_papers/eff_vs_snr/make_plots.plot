@@ -14,7 +14,7 @@ set style line 9 lt 2 lw 0.5 linecolor rgb "#999999"
 
 set term pdf color enhanced fsize 8 dashed
 set output 'eff_vs_snr_qpsk.pdf'
-set size 1,0.8
+set size 1,0.7
 set xrange [0:30]
 set yrange [0:10]
 set border lw 4
