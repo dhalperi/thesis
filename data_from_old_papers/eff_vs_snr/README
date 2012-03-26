@@ -1,0 +1,4 @@
+This is data from the SIGCOMM 2010 paper. I found it on my laptop in
+~/Documents/MATLAB/80211n/.
+
+To generate the graph from MATLAB, run "eff_snr_vs_snr.m".
