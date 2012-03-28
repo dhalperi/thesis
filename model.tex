@@ -125,7 +125,7 @@ To compute the output decision bit that indicates whether the link will deliver 
 \begin{equation}
 \text{works?}_m = (\rho_{\text{eff},k} > \tau_m).
 \end{equation}
-Note that the MCS $m$ specifies the modulation and hence determines which $k$ to use. The thresholds $\tau_m$ are determined by the \emph{receiver implementation}, but are not link- or device-dependent. We can choose $\tau$ in a variety of ways, the most straightforward of which is via measurements over a wired link as in \figref{fig:snr_prr_attenuator}.
+Note that the \mcs{$m$} specifies the modulation and hence determines which $k$ to use. The thresholds $\tau_m$ are determined by the \emph{receiver implementation}, but are not link- or device-dependent. We can choose $\tau$ in a variety of ways, the most straightforward of which is via measurements over a wired link as in \figref{fig:snr_prr_attenuator}.
 
 \subsection{Effective SNR Example}
 \figref{fig:eff_example} presents an example of this core model for a SISO 802.11n link. The subchannels of this single-antenna link are simply the subcarriers, illustrated by the solid line. There is also one line for the packet SNR based on RSSI, and then four lines that each represent the Effective SNR for a different modulation. Note that the simpler modulations have lower Effective SNRs, but also perform much better at low rates. \tabref{tab:example_bers} shows the Effective BERs for this link.
