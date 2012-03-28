@@ -140,15 +140,15 @@ The trends in these graphs are similar to those in the SISO graphs: at human mob
 Finally, note that with 3 antennas there are only four two- and three-stream rates over 117\Mbps (130, 156, 175.5 and 195 Mbps). The visible gap between indices 25--50 in \figref{fig:mimo_eff_snr_time} reflects only the difference between 1 or 2 rates of potentially different antenna modes. Taken together, these results imply that ESNR's MIMO performance is highly competitive.
 
 
-\section{Enhancements}
-One strength of my model is that it can accommodate choices other than rates. This lets us add other functionality to ESNR without increasing complexity.%We demonstrated an example enhancement to trim excess transmit power in \chapref{chap:delivery}.
-% Our example in \secref{sec:delivery} showed that our model has sufficient predictive power to do this. 
+\section{Enhancements: Transmit Antenna Selection}
+One strength of my model is that it can accommodate choices other than rates. This lets us add other functionality to ESNR without increasing complexity. \chapref{chap:delivery} demonstrated an example enhancement to trim excess transmit power.
 
-\subsection{Transmit antenna selection}
-A second enhancement is to select the best transmit antenna when there are spare antennas. %A common scenario is an 802.11n AP sending to an 802.11a/g client. The
-An 802.11n AP can select antennas to use to send packets to a legacy 802.11a/g client (plus use all antennas to receive packets). With three antennas to choose from, the expected gain in SNR is a little over 2.5\dB~\cite{Goldsmith}. This is often enough to advance to a higher rate.
+A second enhancement is to select the best transmit antenna when there are spare antennas. An 802.11n AP can select antennas to use to send packets to a legacy 802.11a/g client (plus use all antennas to receive packets). With three antennas to choose from, the expected gain in SNR is a little over 2.5\dB~\cite{Goldsmith}. This is often enough to advance to a higher rate.
 
 I ran a version of SISO ESNR that chose the antenna with the highest ESNR for the next transmission. This gave a gain in the average rate of 5\%.  For comparison, OPT achieved a 10\% increase by always knowing which antenna was best. No other rate adaptation schemes directly support these enhancements.
+
+\section{Summary}
+In this chapter, I presented a detailed evaluation of Effective SNR in the context of configuring the rate for 802.11a/g and 802.11n links. The results for the single-antenna 802.11a/g systems showed that Effective SNR performs as well as or better than existing state-of-the-art algorithms for rate adaptation, with a much simpler rate \emph{selection} algorithm. I also showed that this good performance extends to 802.11n, and additional enhancements such as antenna selection. In the next chapter, I will flesh out Effective SNR applications by applying my model to a range of other configuration problems.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined
