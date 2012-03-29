@@ -141,7 +141,7 @@ The results so far show we can predict delivery over a range of transmit powers 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\textwidth]{figures/eff_vs_snr_qpsk.pdf}
-  \caption{Effective SNR (for QPSK) versus Packet SNR for flat (left) to faded (right) links.}
+  \caption[Effective SNR vs Packet SNR for four faded links]{Effective SNR (for QPSK) versus Packet SNR for flat (left) to faded (right) links.}
   \label{fig:eff_vs_rssi}
 \end{figure}
 
@@ -161,7 +161,7 @@ However, for the right-most, deeply faded links, the Packet SNR decreases from 2
       \includegraphics[width=0.5\columnwidth,viewport=0 7 195 110,clip]{figures/power_save_final_prr_1x1.pdf}%
       \label{fig:power_prr_cdf}%
       }%
-      \caption{\label{fig:power_save_1x1} Power saving and performance impact of pruning excess transmit power. Pruning with Effective SNR is tight (within 0.5\dB) and does not degrade performance. Pruning with packet SNR degrades performance more without much extra savings.} 
+      \caption[Impact of pruning excess transmit power]{\label{fig:power_save_1x1} Power saving and performance impact of pruning excess transmit power. Pruning with Effective SNR is tight (within 0.5\dB) and does not degrade performance. Pruning with packet SNR degrades performance more without much extra savings.} 
 \end{figure}
 
 To test predictions across power levels, I consider the goal of trimming excess transmit power, i.e. power that can be removed without causing the highest rate for the link to drop. These experiments start with 88 SISO links from the Intel Labs Testbed configured to radiate 10\mW of transmit power, and one CSI sample per link. Considering transmit power reductions in increments of 2\dB, the Effective SNR model can predict the best supported rate for each reduced power level, and choose the lower power level with the same best rate. The measurements described earlier include the ground truth packet reception ratio for each power level, and thus these data can be used to check the accuracy of the predictions.
