@@ -14,17 +14,17 @@ In the previous chapter, I showed that my Effective SNR model provides good perf
 	\centering
 	\begin{tabular}{lc}
 	\toprule
-		\textbf{Application of Effective SNR} & \textbf{Status} \\
+		\textbf{Application of Effective SNR} & \textbf{Described in} \\
 	\midrule
-		Bitrate/MCS selection & \cite{Halperin_ESNR}\\
-		Channel width selection & \cite{Halperin_ESNR}\\
-		Antenna selection & \cite{Halperin_ESNR}\\
-		Power control & \cite{Halperin_ESNR}\\
+		Bitrate/MCS selection & \chapref{chap:rate}, originally in \cite{Halperin_ESNR}\\
+		Channel width selection & \chapref{chap:rate}, originally in \cite{Halperin_ESNR}\\
+		Antenna selection & \chapref{chap:rate}, originally in \cite{Halperin_ESNR}\\
+		Power control & \chapref{chap:rate}, originally in \cite{Halperin_ESNR}\\
 		Channel selection & \secref{sec:esnr_chansel}\\
 		AP selection & \secref{sec:esnr_apsel}\\
 		Path selection/BSS selection in WDS & \secref{sec:esnr_pathsel}\\
 		Interference planning \\
-		Partial packet recovery/FEC & \cite{Bhartia_FreqDiv}\\
+		Partial packet recovery/FEC & Bhartia et al.~\cite{Bhartia_FreqDiv}\\
 		Beamforming \\
 		Multicast rate selection \\
 	\bottomrule
@@ -38,10 +38,10 @@ In the previous chapter, I showed that my Effective SNR model provides good perf
 	\centering
 	\begin{tabular}{lc}
 	\toprule
-		\textbf{Application of CSI} & \textbf{Status} \\
+		\textbf{Application of CSI} & \textbf{Described in} \\
 	\midrule
 		Mobility classification & \secref{sec:esnr_mobility}\\
-		Indoor localization & \cite{Sen_PinLoc,Sen_SpinLoc} \\ 
+		Indoor localization & Sen et al.~\cite{Sen_PinLoc,Sen_SpinLoc} \\ 
 	\bottomrule
 	\end{tabular}
 	\caption[A variety of applications of Channel State Information]{\label{tab:csi_uses}A variety of applications of Channel State Information.}
@@ -49,6 +49,8 @@ In the previous chapter, I showed that my Effective SNR model provides good perf
 
 In this chapter, I explore CSI and Effective SNR approaches to implementing four of the above applications. The first three are are selection algorithms for access points, operating channels, and multi-hop paths through networks that represent the main decisions (beyond rate) that need to be made in flexible topologies such as Wi-Fi Direct networks. The last application is to classify whether a device is mobile, to switch between algorithms designed for static vs mobile links, or trigger a search for a new, better operating point when the device begins to move.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{esnr_eval_dataset}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{esnr_eval_apsel}
 \input{esnr_eval_chansel}

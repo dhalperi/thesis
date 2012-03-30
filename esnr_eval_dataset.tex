@@ -1,0 +1,10 @@
+\section{Dataset}
+To thoroughly evaluate these applications in indoor Wi-Fi networks, I took comprehensive RF measurements in between static 24 devices in my testbed at the University of Washington. 
+The IWL5300 devices in the testbed can operate on 35 channels, each 20\MHz wide, defined by IEEE 802.11 standard. Of these 35 channels, 11 overlap in the 83-MHz wide unlicensed 2.4\GHz band, and the remaining 24 non-overlapping channels are spread across three non-contiguous bands between 5.170\GHz and 5.835\GHz.
+
+For the results presented in this section, I measured the physical RF channel (using both RSS and CSI) and actual packet delivery using each of the 24 IEEE 802.11n modulation and coding schemes (\mcs{0}--\mcs{23}) that use  1-, 2-, or 3-streams. I measured these data for all links between 24 testbed nodes at UW\@. Each sender transmits packets with random payloads, sending a total of 2400 packets by interleaving 100 packets from each of the 1-, 2-, or 3-stream 802.11n rates. Each receiver uses 3 antennas for spatial diversity and/or spatial multiplexing. From these data, we can compute the measured throughput $T$ for a particular link~$\ell$ and \mcs{$m$} as
+\begin{equation}
+	\label{eq:prr_throughput}
+	T(\ell,m) = \frac{P(\ell,m)}{100} \cdot B(m),
+\end{equation}
+where $P(\ell,m)$ is the number of packets delivered on link $\ell$ at \mcs{$m$} and $B(m)$ is the raw bitrate of \mcs{$m$}.
