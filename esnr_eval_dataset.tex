@@ -1,10 +1,19 @@
 \section{Dataset}
-To thoroughly evaluate these applications in indoor Wi-Fi networks, I took comprehensive RF measurements in between static 24 devices in my testbed at the University of Washington. 
-The IWL5300 devices in the testbed can operate on 35 channels, each 20\MHz wide, defined by IEEE 802.11 standard. Of these 35 channels, 11 overlap in the 83-MHz wide unlicensed 2.4\GHz band, and the remaining 24 non-overlapping channels are spread across three non-contiguous bands between 5.170\GHz and 5.835\GHz.
+To thoroughly evaluate these applications in indoor Wi-Fi networks, I took comprehensive RF measurements of the links between 24 static devices in my testbed at the University of Washington. By conducting this experiment after merging the nodes from Intel Labs Seattle into the UW testbed provide measurements of many more links. I also note that the measurements used in \chapref{chap:delivery} and \chapref{chap:rate} were taken three years prior to these experiments. Thus, the results in this chapter will tell us whether NICs in practice experience physical degradation that invalidates their in-factory calibration.
 
-For the results presented in this section, I measured the physical RF channel (using both RSS and CSI) and actual packet delivery using each of the 24 IEEE 802.11n modulation and coding schemes (\mcs{0}--\mcs{23}) that use  1-, 2-, or 3-streams. I measured these data for all links between 24 testbed nodes at UW\@. Each sender transmits packets with random payloads, sending a total of 2400 packets by interleaving 100 packets from each of the 1-, 2-, or 3-stream 802.11n rates. Each receiver uses 3 antennas for spatial diversity and/or spatial multiplexing. From these data, we can compute the measured throughput $T$ for a particular link~$\ell$ and \mcs{$m$} as
+I took measurements on all 35 channels, each 20\MHz wide, that the IWL5300 devices support. Of these 35 channels, 11 overlap in the 83\MHz-wide unlicensed 2.4\GHz band, and the remaining 24 non-overlapping channels are spread across three non-contiguous bands between 5.170\GHz and 5.835\GHz. In an experiment, one sender transmits packets with random payloads to 23 receivers. The transmitter sends a total of 2400 packets by interleaving 100 packets from each of the 24 MCS that correspond to 1-, 2-, or 3-stream 802.11n rates. Each receiver uses 3 antennas for spatial diversity and/or spatial multiplexing. I cycled through all transmitters and all channels over the course of a few hours, and took data at night to attempt to minimize the impact of interference.
+
+For each link $\ell$, I compute the Packet SNR ($\rho$) and Effective SNR ($\rho_\text{eff}$) from the first packet sent. By recording only the first measurement, I emulate the performance that a configuration algorithm would obtain in practice, where it uses only a single probe.
+
+I compare algorithms based on the ground truth Performance ($P$) of each link, calculated from the Packet Reception Ratio ($R$) of the 100 packets sent for each MCS ($m$):
 \begin{equation}
 	\label{eq:prr_throughput}
-	T(\ell,m) = \frac{P(\ell,m)}{100} \cdot B(m),
+	P_{\ell,m} = \frac{R_{\ell,m}}{100} \cdot B(m),
 \end{equation}
-where $P(\ell,m)$ is the number of packets delivered on link $\ell$ at \mcs{$m$} and $B(m)$ is the raw bitrate of \mcs{$m$}.
+where $B(m)$ is the raw bitrate of \mcs{$m$}. Note that while this estimate of performance does not take into account MAC-layer effects, the use of packet aggregation in 802.11n means this is a reasonable proxy. To evaluate application-level configuration independent of rate selection, I assume that the rate selection algorithm correctly chooses the fastest MCS:
+\begin{equation}
+	\label{eq:best_throughput}
+	P_\ell = \max_m P_{\ell,m}.
+\end{equation}
+
+In the rest of this chapter, I use this data to evaluate Packet SNR and Effective SNR-based application configuration algorithms.

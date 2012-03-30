@@ -1,35 +1,60 @@
-\section{AP selection}\label{sec:esnr_apsel}
-In a dense network, a new client may need to select its parent from many available repeaters in addition to the network coordinator. In enterprise AP and Wireless Distribution System networks today, clients typically choose the node whose probe response has the highest SNR\@. (\xxx{though there is heaps of related work doing more complex things.}) In dual-band networks, some devices may prefer a 5\GHz AP with slightly lower SNR, as long as it exceeds a minimum threshold, based on the optimistic assumption that interference is lower in the 5\GHz band. Here, we describe a procedure that uses the Effective SNR to improve this decision process and select a good parent.
+\section{Access point selection}\label{sec:esnr_apsel}
+The first protocol operation a wireless client device performs is to join an existing network. This operation typically consists of scanning for a known access point (AP) by sending broadcast packets called \define{probe requests} on different frequencies until a recognized AP is found. In a typical home today, there will likely be one \define{probe response}: the single home AP. However, in a dense Wi-Fi network, such as an enterprise Wireless Distribution System or a Wi-Fi Direct peer-to-peer network, the client needs to choose from among many available responding devices. This is the \define{access point selection} problem.
 
-Normally, a client scanning for a network cycles through the available channels sends a probe request at the lowest rate (including a single stream and 20\MHz channels), and all APs or repeaters in range respond. We propose that the client instead send multiple probes that use the lowest 6.5\Mbps rate, but vary the number of streams and channel width in decreasing order. In this way, the coordinator and all repeaters that measure CSI from the probes can compute the Effective SNR for the uplink. The probe responses can now include the computed Effective SNR to better inform the client's choice. If the client includes its transmit power level in the probe request (or if the responder makes a conservative estimate), then the responder can combine this information with the CSI measured from the probe to compute the Effective SNR for the downlink. It can then send the probe response at a faster rate than the base rate and reduce the overhead of the probe response.
+The general framework for an access point selection algorithm is to examine the access point's probe responses to predict the link performance, and choose the fastest access point (\algref{alg:ap_sel_basic}). The standard approach used today is for the client to measure the Packet SNR from each probe response and connect to the strongest AP (\algref{alg:snr_link_metric}). Here, SNR measurements are used as a proxy for an estimate of the downlink throughput, and the AP with the highest SNR is likely the best. (Other factors than link quality, such as interference and contention with other clients, can affect throughput as well; some systems can take these factors into account. I discuss these and other related works in \chapref{chap:related}.)
+%In dual-band networks, some devices may prefer a 5\GHz AP with slightly lower SNR, as long as it exceeds a minimum threshold, based on the optimistic assumption that interference is lower in the 5\GHz band.
+In this chapter, I evaluate the ability of Effective SNR to improve this decision process (\algref{alg:eff_snr_link_metric}) in those cases for which the Packet SNR is a poor indicator of performance.
+
+%Normally, a client scanning for a network cycles through the available channels sends a probe request at the lowest rate (including a single stream and 20\MHz channels), and all APs or repeaters in range respond. We propose that the client instead send multiple probes that use the lowest 6.5\Mbps rate, but vary the number of streams and channel width in decreasing order. In this way, the coordinator and all repeaters that measure CSI from the probes can compute the Effective SNR for the uplink. The probe responses can now include the computed Effective SNR to better inform the client's choice. If the client includes its transmit power level in the probe request (or if the responder makes a conservative estimate), then the responder can combine this information with the CSI measured from the probe to compute the Effective SNR for the downlink. It can then send the probe response at a faster rate than the base rate and reduce the overhead of the probe response.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{algorithm}[htp]
-\caption{\label{alg:ap_sel_basic}\fcall{APSelection($A, s$)}}
-\begin{algorithmic}
-\STATE $t_{\max}\gets 0\Mbps$
-\STATE $a_{\best} \gets \emptyset$
-\FORALL{$a \in A$}
-\STATE $t \gets \fcall{PredictThroughput($s, a$)}$
-\IF{$t > t_{\max}$}
-	\STATE $t_{\max} \gets t$
-	\STATE $a_{\best} \gets a$
-\ENDIF
-\RETURN $a_{\best}$
-\ENDFOR
+\begin{algorithm}[tp]
+\caption{\label{alg:ap_sel_basic}\fcall{AccessPointSelection(AP Set $A$, Sender $s$)}}
+\begin{algorithmic}[1]
+\RETURN $\argmax_{a\in A} \fcall{GetMetric}(a, s)$ \hfill \COMMENT{choose the AP with the best downlink metric}
+\end{algorithmic}
+\end{algorithm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}[tp]
+\caption{\label{alg:snr_link_metric}\fcall{GetMetric-PacketSNR(Sender $s$, Receiver $r$)}}
+\begin{algorithmic}[1]
+\STATE Measure the Packet SNR $\rho$ at $r$ from $s$
+\RETURN $\rho$
+\end{algorithmic}
+\end{algorithm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}[tp]
+\caption{\label{alg:eff_snr_link_metric}\fcall{GetMetric-EffectiveSNR(Sender $s$, Receiver $r$)}}
+\begin{algorithmic}[1]
+\STATE Measure the CSI at $r$ from $s$ \hfill \COMMENT{a full CSI including all TX and RX antennas}
+\STATE Compute the Effective SNR estimates $\rho_{\text{eff},m}$ for each MCS $m$
+\STATE Determine whether each MCS works by comparing $\rho_{\text{eff},m} \geq \tau_m$
+\RETURN the bitrate $B(m)$ for the fastest working \mcs{$m$}
 \end{algorithmic}
 \end{algorithm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsection{Characterization of access points}
+I begin by characterizing whether access point selection matters in my testbed. How much does a good or bad choice of access point impact performance?
 
+To generate data for this evaluation, I first filtered the data set to the 11 channels in the 5\GHz band for which there is no overlapping UW Wi-Fi network. Then I considered the access point selection problem by considering each client and channel in turn. In particular, for node $c$ playing the role of a client, I defined $A$ to be the the set of access points that responded to a probe from that client on a particular channel, using the Packet SNRs measured from potential AP $a \in A$. By considering each channel independently each client generates 11 data points, for a total of $11*24=264$ simulated client association attempts. To ensure that AP choice can matter, I eliminated 17 clients that had fewer than 3 responding APs on a particular channel, leaving 247 total.
 
-\subsection{Evaluation methodology}
-Compare the following strategies:
-\begin{figure}[p]
+\figref{fig:ap_sel_rel_diff} and \figref{fig:ap_sel_tpt_diff} show the results, framed as the difference in throughput (relative or absolute) from the best choice AP for the worst, median, and average choices. These graphs show that for these clients, a bad choice of AP can be really bad: the worst responding AP offers less than half of the best AP's throughput in 95\% of cases, and in most cases the random (average) and median APs aren't much better. In absolute terms, the downlink from the median AP is 50\Mbps to 100\Mbps worse than from the best AP in most cases. A bad choice of access point can dramatically hurt performance in practice.
+
+\begin{figure}[t]
 	\centering
-	\includegraphics[width=\textwidth]{figures/applications/ap_sel_ratio.pdf}
-	\caption{\label{fig:ap_sel_ratio}The relative throughput selecting APs by Packet SNR or by Effective SNR\@.}
+	\includegraphics[width=\textwidth]{figures/applications/ap_sel_rel_diff.pdf}
+	\caption{\label{fig:ap_sel_rel_diff}For each client, the relative difference in throughput over access points.}
 \end{figure}
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=\textwidth]{figures/applications/ap_sel_tpt_diff.pdf}
+	\caption{\label{fig:ap_sel_tpt_diff}For each client, the absolute difference throughput loss over access points.}
+\end{figure}
+
+\subsection{Access point selection performance}
+As presented above, \algref{alg:ap_sel_basic} shows the framework for selecting access points typically used today, with Packet SNR (\algref{alg:snr_link_metric}) usually used as the metric of comparison between access points. I calculate the Effective SNR link metric as in \algref{alg:eff_snr_link_metric}---a simple instantiation of the procedure described in \chapref{chap:model}. 
 
 \begin{figure}[p]
 	\centering
@@ -42,9 +67,31 @@ Compare the following strategies:
 	\includegraphics[width=\textwidth]{figures/applications/ap_sel_diff_opt.pdf}
 	\caption{\label{fig:ap_sel_delta_opt}The difference in throughput using APs selected by Packet SNR or Effective SNR compared to Optimal.}
 \end{figure}
-\begin{itemize}
-\item first AP seen
-\item max RSSI
-\item max CSI predicted rate
-\item max measured rate
-\end{itemize}
+
+\begin{figure}[p]
+	\centering
+	\includegraphics[width=\textwidth]{figures/applications/ap_sel_ratio.pdf}
+	\caption{\label{fig:ap_sel_ratio}The relative throughput selecting APs by Packet SNR or by Effective SNR\@.}
+\end{figure}
+
+\figref{fig:ap_sel_ratio_opt} shows the performance of Packet SNR and Effective SNR-based access point selection algorithms relative to the access point with the best downlink throughput, and \figref{ap_sel_delta_opt} shows the absolute performance loss of the suboptimal choices. We see that both algorithms perform well, choosing an optimal access point in most cases. I attribute this overall good performance to the fact that the potential access points are spread across a large testbed, exhibiting a wide range of SNRs. This large geographic spread means that there may be one or a few nearby access points that offer a clear best choice, and Packet SNR---which is correlated with distance---can correctly identify good choices.
+
+Although both algorithms perform well, Effective SNR works better. The Effective SNR algorithm finds the best access point for 82\% of clients, versus 60\% for Packet SNR. Put another way, Effective SNR makes a suboptimal choice half as often as Packet SNR, a strong advantage. And considering only the suboptimal choices, those made by Effective SNR are better: 3/4 of incorrect choices are within 80\% of optimal, versus only half when using Packet SNR. These benefits translate to raw bitrate as well: access points selected by Effective SNR links are within 10\Mbps of optimal for 90\% of cases, but only 70\% of selections meet this criterion when using Packet SNR. For Packet SNR, the 90th percentile performance loss is 43\Mbps, versus 9\Mbps with Effective SNR. These results show that the Effective SNR-based access point selection algorithm works well and makes better choices than one based on Packet SNR.
+
+Of course, though Effective SNR is statistically better than Packet SNR over the testbed does not mean it works better in all cases. \figref{fig:ap_sel_ratio} shows the ratio of the downlink throughput for the access points chosen by each algorithm for the same client. They choose the same access point (or access points that perform equivalently well) for 57\% of the clients, Effective SNR makes a better choice in 33\% of cases, and Packet SNR is better for the remaining 10\%. Effective SNR is not always better, but is better by a ratio of 3:1 for cases when the algorithms differ. The graph also that when Packet SNR makes a better choice, Effective SNR comes close---within 2/3 for 9 in 10 of these cases---and often improves on the choice from Packet SNR by a larger margin.
+
+\xxx{do I talk about why Packet SNR can be better here? (1) Single CSI probe isn't as accurate as multiple probes, whereas single RSSI probe averages noise out across carriers and is generally fine. (2) Model's assumptions broken, i.e., bad subchannels coded nearby. (3) other reasons?}
+
+\heading{Summary.} When selecting access points, both Packet SNR and Effective SNR make good choices; each algorithm selects the fastest access point in most cases. However, the ability of Effective SNR to capture channel effects leads to better choices more often, and generally closer-to-optimal performance when it makes a choice incorrectly.
+
+\xxx{Another interesting experiment would be to randomly assign APs to have 1, 2, or 3 transmit antennas. RSSI would see roughly the same SNR, but ESNR can capture the effects of heterogeneity. (Is this unfair? One could design RSSI-based algs that take streams into account; just don't think there are any yet.)}
+
+%\subsection{Evaluation methodology}
+%Compare the following strategies:
+%\begin{itemize}
+%\item first AP seen
+%\item max RSSI
+%\item max CSI predicted rate
+%\item max measured rate
+%\end{itemize}
+
