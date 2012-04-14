@@ -51,11 +51,21 @@ In this chapter, I explore CSI and Effective SNR approaches to implementing four
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{esnr_eval_dataset}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{esnr_eval_apsel}
 \input{esnr_eval_chansel}
 \input{esnr_eval_pathsel}
 \input{esnr_eval_mobility}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+In the previous two chapters, I showed that my Effective SNR model can predict packet delivery for MIMO and OFDM networks, and that these predications can be used to accurately select rates for 802.11a/g and 802.11n links. In this chapter, I focused on problems that go beyond simple rate selection for a link. In particular, I evaluated three algorithms using Effective SNR and one algorithm using Channel State Information that both illustrate the flexibility of my model and also flesh out the application space of Wi-Fi network configurations.
+
+I showed that Effective SNR can be used by a client to choose between different access points when connecting to the network, by a pair of devices initiating a peer-to-peer link to choose the best operating channel, and by a client in conjunction with a set of relays to choose a good path to a destination. These three applications are key components of network-level configuration algorithms that are increasingly relevant in the evolving Wi-Fi space; my Effective SNR-based algorithms make them practical. Effective SNR provides strong performance improvements over the Packet SNR for the former two applications. Interestingly, I found that although Effective SNR works to inform multi-hop path selection in the network, it does not perform significantly better than Packet SNR because of the 802.11n spatial diversity techniques that improve the accuracy of Packet SNR.
+
+Finally, inspired by recent work that uses information from onboard sensors about whether a device is mobile to improve link- and network-level performance, I designed and evaluated a pure CSI-based mobility classifier. This classifier can be used to complement the prior applications in a variety of ways, such as informing the nodes in the network when it might be worth looking for a new operating point.
+
+This chapter concludes the evaluation of my Effective SNR model for future wireless networks and my exploration of its power. The applications I have presented here capture the inherent flexibility of this model, and it can be used in many more applications. In the next chapter, I discuss where my work fits in the space of related research on wireless networks.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined
