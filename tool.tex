@@ -38,7 +38,7 @@ The IWL5300 calculates the quantities RSSI and Noise as the respective sums of a
 
 \heading{Userspace Connector.} I used the Linux kernel \program{connector} framework to implement a low-latency socket-based communication channel between the kernel driver and userspace utilities. This enables userspace utilities to log CSI and other output from the driver, and send messages that adapt behavior online, e.g., by changing the currently selected rate or antennas or adjusting the transmit power level.
 
-\heading{Publicly Released Tool.} I have publicly released the experimental platform and CSI collection tool in the form of open source drivers, userspace utilities, MATLAB data processing code, and binary firmware image~\cite{Halperin_csitool}. At the time of writing, I am aware of 17 universities in 7 countries, multiple research and product groups within Intel, one industrial research labs and one startup using my tool. The users of my tool have published at least 5 papers~\cite{Bhartia_FreqDiv,Crepaldi_CSI_SF,Perahia_Doppler,Sen_SpinLoc,Sen_PinLoc}.
+\heading{Publicly Released Tool.} I have publicly released the experimental platform and CSI collection tool in the form of open source drivers, userspace utilities, MATLAB data processing code, and binary firmware image~\cite{Halperin_csitool}. At the time of writing, I am aware of 20 universities in 7 countries, multiple research and product groups within Intel, one industrial research labs and one startup using my tool. The users of my tool have published at least 5 papers~\cite{Bhartia_FreqDiv,Crepaldi_CSI_SF,Perahia_Doppler,Sen_SpinLoc,Sen_PinLoc}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experimental 802.11n Wireless Testbeds}
@@ -55,7 +55,7 @@ I conducted experiments in two 802.11n stationary wireless testbeds. The first t
 	\caption[My two indoor 802.11n testbeds]{\label{fig:testbeds} My two indoor 802.11n testbeds. In both testbeds, the nodes are placed to ensure a large number of links between them, a variety of distances between nodes, and diverse scattering characteristics.}
 \end{figure}
 
-Each node runs the experimental platform we described in \secref{sec:platform}, as do three laptops we can use for mobile experiments. In both testbeds, I placed the nodes to ensure a large number of links between them, a variety of distances between nodes, and diverse scattering characteristics. Devices are located on in a desktops, under tables, on a carts in the server room, and even mounted on the ceiling; in the UW CSE testbed also includes a more dense concentration of nodes by the Networking Lab (pictured in the upper right corner of \figref{fig:uw_testbed}).
+Each node runs the experimental platform described in \secref{sec:platform}, as do three laptops used for mobile experiments. In both testbeds, I placed the nodes to ensure a large number of links between them, a variety of distances between nodes, and diverse scattering characteristics. Devices are located on in a desktops, under tables, on a carts in the server room, and even mounted on the ceiling; in the UW CSE testbed also includes a more dense concentration of nodes by the Networking Lab (pictured in the upper right corner of \figref{fig:uw_testbed}).
 
 \begin{figure}[ht]
 	\centering
