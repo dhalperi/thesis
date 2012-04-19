@@ -5,7 +5,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \cleardoublepage
-\chapter{Related and Future Work}
+\chapter{Related Work}
 \label{chap:related}
 
 In this chapter, I place my thesis in the context of existing work on wireless technology and wireless systems. I view my research as lying at the intersection of three bodies of work: (1) understanding real 802.11 wireless channels, (2) theoretical analysis of wireless link performance, and (3) practical algorithms for configuring wireless systems. I use this framework to guide the discussion of related work. I conclude the chapter by discussing the next steps for deploying wireless systems with Effective SNR.
@@ -83,10 +83,23 @@ Like AP selection, most channel selection work focuses on load balancing between
 
 Again, Effective SNR complements this work by providing a simple, accurate, quickly measurable link performance estimator that can be plugged as a subroutine into algorithms of this type. My model will also be used in the new emerging scenarios as the peer-to-peer wireless networks go forward as envisioned by Chandra et al. in MultiNet~\cite{Chandra_MultiNet} and in SampleWidth~\cite{Chandra_SampleWidth}, and instantiated today in Wi-Fi Direct~\cite{wifi_direct} and future networks.
 
-\subsection{Multihop routing}
-\subsection{Extensions}
+\subsection{Multihop networks}
+Research on routing in multihop routing is typically  framed in the context of mesh networks, focuses on maintaining an efficient distributed routing infrastructure~(e.g., \cite{Athanasiou_Mesh,RFC_AODV,Draves_ETT,Rozner_SOAR}). The IEEE standardized the 802.11s amendment in 2011~\cite{80211s} to support mesh networking, which uses a protocol called hybrid wireless mesh protocol (HWMP) to select paths. The default link metric in HWMP is close to the idealized ETT~\cite{Draves_ETT} metric I used but includes more accounting for overhead. As with ETT, computing this metric requires knowing both the wireless bitrate and the packet receive ratio, which the Effective SNR can predict accurately and quickly.
 
-\section{Future work}
+Other research on multihop networks focuses on pipelining transfers along long mesh paths~\cite{Li_BlockSwitched,Li_Mesh,Rodrig_thesis}, using network coding to improve performance of crossing flows~\cite{Katti_ANC,Katti_XORs,Ni_CodingRates}, or propagating data more effectively across the network by making use of many unreliable links~\cite{Biswas_ExOR}.
+
+As a result of the complex nature of these solutions, work on mesh networks tends to simplify other aspects of network design, for instance by using homogenous single-antenna nodes and fixing the entire network to a single bitrate and uniform transmit power, so that they only have to probe packet delivery at a single rate. For the example case of network coding, recent extensions added the ability to chosen between two 802.11b rates~\cite{Ni_CodingRates} or proposed a distributed probing framework to handle concurrent rate adaptation but evaluated it in simulation only~\cite{Kim_NetworkCoding}. Incorporation of my Effective SNR model would both simply the channel estimation components of these schemes and enable them to handle the broad configuration space posed in heterogenous MIMO and OFDM networks.
+
+\subsection{Extensions}
+Other authors have used my CSI measurement tool and Effective SNR models for applications that go beyond the ones I've described in this thesis. I include these here because they are related to the work in my thesis and often were potential future projects, and importantly to highlight the value to the community of refining and releasing my research prototype~\cite{Halperin_csitool}.
+
+Researchers at Duke University have built two systems~\cite{Sen_PinLoc,Sen_SpinLoc} that use CSI information for indoor localization. Researchers at Intel Corporation and at Carnegie Mellon University have incorporated measurements taken with my prototype into their work on building accurate models of wireless channels~\cite{Perahia_Doppler} and better emulating them (in the emulator by Judd et al.~\cite{CMU_Emulator,Judd_Emulator}). In the context of improving rates, a group at the University of Texas at Austin used CSI measurements to design techniques that better take advantage of frequency diversity~\cite{Bhartia_FreqDiv}.
+
+Finally, in the area of better handling the block-oriented nature of 802.11e/802.11n protocols with packet batching~\cite{Tie_BlockRate}, researchers have used my Effective SNR model to forecast better predictions of future bitrates in highly mobile wireless channels~\cite{Sen_PhyRate}.
+
+%My proposed Effective SNR model has become the de facto rate selection algorithm used in recent 802.11n software radio experiments~\cite{Lin_80211n+} where it is possible. 
+
+%\section{Future work}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
