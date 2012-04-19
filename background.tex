@@ -169,7 +169,7 @@ At the physical layer, 802.11 uses the modulation schemes and OFDM as I describe
 7 & 64-QAM & 5/6 & 65.0\\
 \bottomrule
 \end{tabular}
-\caption[The 802.11n single-stream rates.]{\label{tab:siso_mcs} The single-stream 802.11n modulation and coding schemes. The first seven rates correspond to 802.11a/g rates (excluding 9\Mbps) with four added OFDM subcarriers; the highest data rate uses a new 5/6-rate code. The data rates are given for 20\MHz channels with 4\ms symbols.}
+\caption[The 802.11n single-stream rates]{\label{tab:siso_mcs} The single-stream 802.11n modulation and coding schemes. The first seven rates correspond to 802.11a/g rates (excluding 9\Mbps) with four added OFDM subcarriers; the highest data rate uses a new 5/6-rate code. The data rates are given for 20\MHz channels with 4\ms symbols.}
 \end{table}
 
 The 2009 standard amendment to IEEE 802.11n~\cite{80211n} added functionality and protocols for multi-antenna techniques such as spatial diversity, spatial multiplexing, and beamforming as I described them above. The 802.11n enhancements are shown in \tabref{tab:11n_enhancements}. Most of improvement in the maximum data rate---from 54\Mbps in 802.11ag to 600\Mbps in 802.11n---comes from the ability to use wider channels and multiple spatial streams. Together, these add $2\cdot2\cdot4=16$ times as many configurations to the space of a single link. Beamforming is effectively an analog parameter and adds nearly unbounded options.\footnote{For transmitter and receiver each using 4 antennas on a 40\MHz channel, representing the beamforming matrices at maximal resolution takes 29,184 bits.}
@@ -192,7 +192,7 @@ Channels\\
 & & improving both performance and reliability. \\
 \bottomrule
 \end{tabular}
-\caption[The 802.11n physical layer enhancements.]{\label{tab:11n_enhancements} IEEE~802.11n adds a number of enhancements to the base single-stream configurations depicted in \tabref{tab:siso_mcs}.}
+\caption[The 802.11n physical layer enhancements]{\label{tab:11n_enhancements} IEEE~802.11n adds a number of enhancements to the base single-stream configurations depicted in \tabref{tab:siso_mcs}.}
 \end{table}
 
 The hardware/software interface in 802.11n operates at the level of individual packets or continuously-transmitted batches of packets.\footnote{I mostly ignore batching in this thesis.} Packets are sent to the hardware and transmitted over the air. The receiver detects a new transmission from the increase in energy, estimates the parameters of the wireless channel from the packet's standard, known preamble, and then decodes the packet. The standard behavior for 802.11 links is that all bits---after error-correcting decoding---must be correct in order for a packet to be received, otherwise the packet is dropped by the hardware. Correctly received packets are delivered to the software layer in conjunction with physical layer configuration information about the transmission (e.g., what MCS in \tabref{tab:siso_mcs} was used) and reception (e.g., which receive antennas were used) of the packet, plus physical layer metrics of link quality.

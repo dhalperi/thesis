@@ -1,4 +1,4 @@
-\section{Access point selection}\label{sec:esnr_apsel}
+\section{Access Point Selection}\label{sec:esnr_apsel}
 The first protocol operation a wireless client device performs is to join an existing network. This operation typically consists of scanning for a known access point (AP) by sending broadcast packets called \define{probe requests} on different frequencies until a recognized AP is found. In a typical home today, there will likely be one \define{probe response}: the single home AP. However, in a dense Wi-Fi network, such as an enterprise Wireless Distribution System or a Wi-Fi Direct peer-to-peer network, the client needs to choose from among many available responding devices. This is the \define{access point selection} problem.
 
 The general framework for an access point selection algorithm is to examine the access point's probe responses to predict the link performance, and choose the fastest access point (\algref{alg:ap_sel_basic}). The standard approach used today is for the client to measure the Packet SNR from each probe response and connect to the strongest AP (\algref{alg:snr_link_metric}). Here, SNR measurements are used as a proxy for an estimate of the downlink throughput, and the AP with the highest SNR is likely the best. (Other factors than link quality, such as interference and contention with other clients, can affect throughput as well; some systems can take these factors into account. I discuss these and other related works in \chapref{chap:related}.)
@@ -59,19 +59,19 @@ As presented above, \algref{alg:ap_sel_basic} shows the framework for selecting 
 \begin{figure}[p]
 	\centering
 	\includegraphics[width=\textwidth]{figures/applications/ap_sel_ratio_opt.pdf}
-	\caption{\label{fig:ap_sel_ratio_opt}AP selection using Packet SNR or Effective SNR compared to Optimal.}
+	\caption[AP selection using Packet SNR or Effective SNR compared to Optimal]{\label{fig:ap_sel_ratio_opt}AP selection using Packet SNR or Effective SNR compared to Optimal.}
 \end{figure}
 
 \begin{figure}[p]
 	\centering
 	\includegraphics[width=\textwidth]{figures/applications/ap_sel_diff_opt.pdf}
-	\caption{\label{fig:ap_sel_delta_opt}The difference in throughput using APs selected by Packet SNR or Effective SNR compared to Optimal.}
+	\caption[Throughput difference using APs selected by Packet SNR or Effective SNR]{\label{fig:ap_sel_delta_opt}The difference in throughput using APs selected by Packet SNR or Effective SNR compared to Optimal.}
 \end{figure}
 
 \begin{figure}[p]
 	\centering
 	\includegraphics[width=\textwidth]{figures/applications/ap_sel_ratio.pdf}
-	\caption{\label{fig:ap_sel_ratio}The relative throughput selecting APs by Packet SNR or by Effective SNR\@.}
+	\caption[The relative throughput selecting APs by Packet SNR or by Effective SNR]{\label{fig:ap_sel_ratio}The relative throughput selecting APs by Packet SNR or by Effective SNR.}
 \end{figure}
 
 \figref{fig:ap_sel_ratio_opt} shows the performance of Packet SNR and Effective SNR-based access point selection algorithms relative to the optimal algorithm. I plot the complementary CDF of the results, so that each $(x,y)$ point in the graph shows the fraction of clients $y$ that achieved performance at least a fraction $x$ of the optimal algorithm. The line for an accurate algorithm would be located in the upper right corner of the graph: most clients would achieve most of the best possible throughput.  This graph shows that both algorithms perform well, choosing an optimal access point in most cases. I attribute this overall good performance to the fact that the potential access points are spread across a large testbed, exhibiting a wide range of SNRs. This large geographic spread means that there may be one or a few nearby access points that offer a clear best choice, and Packet SNR---which is correlated with distance---can correctly identify good choices.

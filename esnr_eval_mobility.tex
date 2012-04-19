@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Mobility classification}\label{sec:esnr_mobility}
+\section{Mobility Classification}\label{sec:esnr_mobility}
 The previous three applications in this chapter used the Effective SNR in algorithms that configure various network parameters. In this section, I use the Channel State Information (CSI) underlying the Effective SNR model to determine whether a wireless device is moving. Though this application does not directly use the Effective SNR, this primitive provides an important complement to the network-level configuration problems.
 
 In wireless systems, simply knowing whether a device is mobile can improve performance and reliability. For example, recent work of Ravindranath et al.\ \cite{Ravindranath_SensorHints} demonstrated a system that improved 802.11a performance on a mobile phone by selecting between different bitrate adaptation algorithms based on whether the device was moving. When the device is static, they use algorithms that can conduct a fine-grained search of the rate space to choose the optimum bitrate. When the device is moving, they use an algorithm that performs a coarser search, but does a better job of tracking a moving optimum. In their experiments, the fine-grained algorithms performed 10\%--30\% better in static scenarios, while the coarse-grained algorithm performed 25\%--75\% better in mobile scenarios.
@@ -22,20 +22,20 @@ I begin by analyzing RSSI variation over time to confirm that it is indeed diffi
 
 \begin{figure}[htb]
 	\centering
-	\subfigure[Static Environment]{
+	\subfigure[Static environment]{
 		\includegraphics[width=0.43\textwidth]{figures/applications/time_vs_rss_static.pdf}%
 	}\hspace{0.06\textwidth}%
-	\subfigure[Static Environment, trial 2]{
+	\subfigure[Static environment, trial 2]{
 		\includegraphics[width=0.43\textwidth]{figures/applications/time_vs_rss_static2.pdf}%
 	}
 	
-	\subfigure[Environmental Mobility]{
+	\subfigure[Environmental mobility]{
 		\includegraphics[width=0.43\textwidth]{figures/applications/time_vs_rss_enviro.pdf}%
 	}\hspace{0.06\textwidth}%
-	\subfigure[Mobile Device]{
+	\subfigure[Mobile device]{
 		\includegraphics[width=0.43\textwidth]{figures/applications/time_vs_rss_mobile.pdf}%
 	}
-	\caption{\label{fig:mobility_rssi}RSSI variation in different mobility scenarios.}
+	\caption[RSSI variation in different mobility scenarios]{\label{fig:mobility_rssi}RSSI variation in different mobility scenarios.}
 \end{figure}
 
 I note several interesting effects visible in these measurements. First, the RSSI is actually extremely stable in static scenarios, varying roughly 2\dB across 20 seconds. This stability deviates from the observations by Ravindranath et al., likely because the newer 802.11n hardware I used is well-calibrated, compared with older 802.11g hardware they used to run experiments with the MadWiFi driver.
@@ -62,20 +62,20 @@ To apply this to CSI, let $\vec{r}_{p,t}$ represent the magnitudes of the CSI co
 
 \begin{figure}[htb]
 	\centering
-	\subfigure[Static Environment]{
+	\subfigure[Static environment]{
 		\includegraphics[width=0.43\textwidth]{figures/applications/time_vs_csi_static.pdf}%
 	}\hspace{0.06\textwidth}%
-	\subfigure[Static Environment, trial 2]{
+	\subfigure[Static environment, trial 2]{
 		\includegraphics[width=0.43\textwidth]{figures/applications/time_vs_csi_static2.pdf}%
 	}
 	
-	\subfigure[Environmental Mobility]{
+	\subfigure[Environmental mobility]{
 		\includegraphics[width=0.43\textwidth]{figures/applications/time_vs_csi_enviro.pdf}%
 	}\hspace{0.06\textwidth}%
-	\subfigure[Mobile Device]{
+	\subfigure[Mobile device]{
 		\includegraphics[width=0.43\textwidth]{figures/applications/time_vs_csi_mobile.pdf}%
 	}
-	\caption{\label{fig:mobility_csi}CSI variation as measured by correlation in different mobility scenarios.}
+	\caption[CSI variation as measured by correlation in different mobility scenarios]{\label{fig:mobility_csi}CSI variation as measured by correlation in different mobility scenarios.}
 \end{figure}
 
 \subsubsection{CSI variation results}
@@ -91,7 +91,7 @@ That the environmental and device mobility scenarios exhibit dramatically differ
 	\subfigure[Pearson correlation over time]{
 		\includegraphics[width=0.45\textwidth]{figures/applications/time_vs_csi_static2_12.pdf}%
 	}
-	\caption{\label{fig:mobility_example_weak}RSSI and CSI variation for a weak link in a static environment.}
+	\caption[RSSI and CSI variation for a weak link in a static environment]{\label{fig:mobility_example_weak}RSSI and CSI variation for a weak link in a static environment.}
 \end{figure}
 
 \heading{CSI correlation for weak links.} 
@@ -109,7 +109,7 @@ To fix this, I introduced a \define{windowed correlation} scheme. Before computi
 	\subfigure[Windowed CSI correlation for a weak link ($\approx5\dB$ SNR)]{
 		\includegraphics[width=0.45\textwidth]{figures/applications/csi_cdf_link12_10_log.pdf}%
 	}
-	\caption{\label{fig:mobility_csi_cdf}Windowed CSI variation for a strong and a weak link.}
+	\caption[Windowed CSI variation for a strong and a weak link]{\label{fig:mobility_csi_cdf}Windowed CSI variation for a strong and a weak link.}
 \end{figure}
 
 \figref{fig:mobility_csi_cdf} shows the CDF of the windowed correlation values (denoted $\mathit{corr}$, and combined across antennas) over time for these same two links. To better illustrate the difference across experiments, I capture the deviation from a perfect correlation of 1.0 by plotting $1-\mathit{corr}$ on a logarithmic scale. Thus a value of 0.001 on the $x$-axis means a correlation of 0.999, while a value of 0.1 means a correlation of 0.9. Recall that lower correlations (right on the graph) imply that the channels are changing faster.
@@ -127,7 +127,7 @@ For both the weak and the strong link, the mobile trace stands out. Its line to 
 	\subfigure[Both static traces]{
 		\includegraphics[width=0.3\textwidth]{figures/applications/csi_cdf_static_log.pdf}%
 	}
-	\caption{\label{fig:mobility_csi_alllinks_cdf}Windowed CSI variation for all eight receivers.}
+	\caption[Windowed CSI variation for all eight receivers]{\label{fig:mobility_csi_alllinks_cdf}Windowed CSI variation for all eight receivers.}
 \end{figure}
 
 \heading{Windowed CSI for all links.} Thus far, I have presented CSI correlation results for one strong and one weak link. Here, I analyze the windowed CSI correlation for each of the three mobility scenarios over all eight of the links. In \figref{fig:mobility_csi_alllinks_cdf}, I present the CDFs of windowed CSI over all eight links, separated into the three mobility conditions scenarios. Note that the mobility and environmental mobility conditions have 8 lines, one for each receiver, while I have combined both static traces into 16 lines on a single graph.

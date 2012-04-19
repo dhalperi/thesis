@@ -67,7 +67,7 @@ The second evaluation metric is \define{rate confusion}, i.e., how many rates mi
 \multicolumn{2}{c}{Average} & 5.68  & 2.59  & 2.51  & 1.03 \\         
 \bottomrule
 \end{tabular}
-\caption{\label{tab:transitions} Width of SISO transition windows.}
+\caption[Width of SISO transition windows]{\label{tab:transitions} Width of SISO transition windows.}
 \end{table}
 
 I analyzed the SISO measurements to find the transition window for each of the measured links. I define the window to be the SNR values between which packet delivery rises from 10\% (lossy) to 90\% (reliable) for any link.
@@ -87,12 +87,12 @@ The larger significance of narrow transition windows is that, by reducing them e
 \begin{figure}[p]
 	\begin{leftfullpage}
 	\centering
-	\subfigure[SISO Configurations]{
+	\subfigure[SISO configurations]{
 		\includegraphics[width=0.8\textwidth]{figures/delivery_figures/siso_rate_confusion.pdf}%
 		\label{fig:snr_rate_step_1x1}%
 	}%
 	
-	\subfigure[SIMO Configurations]{
+	\subfigure[SIMO configurations]{
 		\includegraphics[width=0.8\textwidth]{figures/delivery_figures/simo_rate_confusion.pdf}%
 		\label{fig:snr_rate_step_1x3}%
 	}
@@ -106,12 +106,12 @@ Effective SNR provides a clear indicator of the best rate for nearly all links.}
 \begin{xtrafullpage}
 	\centering	
 	\setcounter{subfigure}{2}
-	\subfigure[MIMO2 Configurations]{
+	\subfigure[MIMO2 configurations]{
 		\includegraphics[width=0.8\textwidth]{figures/delivery_figures/mimo2_rate_confusion.pdf}%
 		\label{fig:snr_rate_step_2x3}%
 	}%
 
-	\subfigure[MIMO3 Configurations]{
+	\subfigure[MIMO3 configurations]{
 		\includegraphics[width=0.8\textwidth]{figures/delivery_figures/mimo3_rate_confusion.pdf}%
 		\label{fig:snr_rate_step_3x3}%
 	}

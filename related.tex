@@ -8,10 +8,11 @@
 \chapter{Related Work}
 \label{chap:related}
 
-In this chapter, I place my thesis in the context of existing work on wireless technology and wireless systems. I view my research as lying at the intersection of three bodies of work: (1) understanding real 802.11 wireless channels, (2) theoretical analysis of wireless link performance, and (3) practical algorithms for configuring wireless systems. I use this framework to guide the discussion of related work. I conclude the chapter by discussing the next steps for deploying wireless systems with Effective SNR.
+In this chapter, I place my thesis in the context of existing work on wireless technology and wireless systems. I view my research as lying at the intersection of three bodies of work: (1) understanding real 802.11 wireless channels, (2) theoretical analysis of wireless link performance, and (3) practical algorithms for configuring wireless systems. I use this framework to guide the discussion of related work.
+%I conclude the chapter by discussing the next steps for deploying wireless systems with Effective SNR.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Understanding real 802.11 wireless channels}
+\section{Understanding Real 802.11 Wireless Channels}
 Since the advent of Wi-Fi technology in the late 1990s, a number of studies have investigated the performance characteristics of 802.11, and uncovered several issues.
 
 Initial studies of 802.11b in Roofnet~\cite{Aguayo_Roofnet} and at the University of Washington~\cite{Reis_interference} found Packet SNR calculated from RSSI to be a weak predictor of packet delivery, and similar results were observed for sensor networks~\cite{Zhao_sensys03}. One reason for this was poor calibration of NICs, which has since improved. Today's NICs have intense calibration procedures that include in-factory measurements of the raw silicon manufacturing variability and on-line measurements conducted when in active use (e.g.\ as described in Chen and Hsieh~\cite{Chen_IQcalib}) to compensate for thermal conditions and power supply effects. As an example, Intel's open-source drivers~\cite{iwlwifi} perform seven calibration steps whenever the device powers on, changes transmit power level, or switches channels to ensure accurate operation of components such as baseband and RF oscillators, and linear transmit amplifiers. Broadcom advertises that its Wi-Fi solutions ``are capable of self-calibrating based on usage temperature and other environmental conditions''~\cite{Broadcom_calib}. These modern calibration solutions have largely eliminated these effects.
@@ -25,7 +26,7 @@ An early 802.11n study by Shrivastava et al.~\cite{Shrivastava_80211n} found tha
 Finally, understanding and developing models for real 802.11 channels is a large part of the 802.11 standards working group. Its members have studied raw channel performance in a variety of environments and mobility conditions and developed models that capture these results, now included as part of the IEEE 802.11-2007~\cite{80211} and IEEE 802.11n-2009 standards~\cite{80211n}. My channel state information measurement tool has been used by 802.11 working group members to inform these models, as well as to provide corrective amendments~\cite{Perahia_Doppler}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Theoretical analysis of channel metrics}
+\section{Theoretical Analysis of Channel Metrics}
 In the face of fading effects that affect real wireless channels, there has been a large body of theoretical work on the performance of systems in these environments.
 
 The 2008 study by Vlavianos et al.~\cite{Vlavianos_metrics} of metrics for devices that operate in real wireless channels uncovered problems with all metrics accessible in Wi-Fi cards at the time. My work fills this gap by both building a practical tool that exposes better physical layer information and developing a practical methodology to compute an accurate channel metric.
