@@ -5,10 +5,46 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \cleardoublepage
-\chapter{Conclusion}
+\chapter{Conclusions and Future Work}
 \label{chap:conclusion}
 
-Conclusion.
+Modern wireless devices can provide flexible, portable, high-performance connectivity at low cost. This unprecedented functionality is poised to enable a new class of rich applications built by combining functionality from many devices. The key missing component is a network connectivity layer that ``just works'', providing good performance overall and quickly adapting to changing application demands and mobile wireless environments.
+
+There are two components to such a network layer. The first is a protocol to connect the devices logically. For the example context of 802.11n, this is readily available in the form of Wi-Fi Direct~\cite{wifi_direct}, a recently standardized specification for building wireless peer-to-peer networks targeted at these applications. Support for Wi-Fi Direct is actively being developed in major consumer operating systems including Linux, Mac OS X, Windows, and Android.
+
+The focus of my thesis is on the the second key component: a way to configure the physical layer parameters and network topology to best meet application needs. The nature of modern wireless technology and heterogeneity of wireless devices combined with the inherent multi-device coordination problems that applications necessitate leads to large configuration state spaces from which the network must find a good operating point. In this thesis, I have demonstrated that my Effective SNR model provides a practical mechanism to cut through these large spaces and efficiently configure the physical layer. I have also shown that it can flexibly handle a wide variety of applications and parameters that no prior approaches considered in tandem.
+
+In this chapter I summarize my thesis and its contributions and present next steps for this work.
+
+\section{Thesis and Contributions}
+My thesis is that \emph{it is possible to unify the decision-making component of wireless network configuration applications into a single framework that is accurate, simple, while maintaining low overhead}. My Effective SNR model has a simple interface, taking as input a MIMO and OFDM channel measurement and transmitter and receiver device configurations, and producing a single output bit that predicts whether that combination will deliver packets. This flexible API can express a wide class of applications, as illustrated by the algorithms I presented in \chapref{chap:delivery}, \chapref{chap:rate}, and \chapref{chap:applications}.  For low overhead, my model uses measurements already taken by devices in order to receive packets, and can compute its output in much less time than it takes to transmit a packet. In most cases, only a few bytes that represent application decisions need to be exchanged, such as a receiver feeding back a particular requested rate to a transmitter. And my detailed prototype evaluation of the model in a wide variety of applications provides experimental proof that this model is practical and accurate for real devices operating in real wireless channels.
+
+My specific contributions are as follows.
+
+\begin{itemize}
+\item First, I developed a model to predict the error performance of different transmitter and receiver configurations on real MIMO-OFDM wireless channels. This model is flexible to support a wide variety of transmitter and receiver device capabilities and applications, and includes considerations of practical factors such as measurement errors, different device implementations, and practical protocols. I also detailed how to use this model in a system that can solve a large number and variety of configuration problems.
+\item Second, I presented an implementation of this system in the context of 802.11n using a commodity commercial wireless device. This prototype demonstrated my model's feasibility in practice and handles the practical considerations of operation over real links using real, non-ideal hardware. This includes a detailed experimental evaluation of my system that shows that this model accurately predicts packet delivery over real 802.11n wireless links in practice.
+\item Third, I evaluated this system in the context of a wide variety of 802.11n applications, and quantified the application performance gains when using my Effective SNR metric over versions that use the Packet SNR based on RSSI measurements available today.
+\item Finally, as part of my thesis I have produced an 802.11n research platform based on open-source Linux kernel drivers, open-source application code, and commodity Intel 802.11n devices using closed-source firmware that I customized.
+%that uses commodity 802.11n wireless devices to measure the 802.11n CSI for the wireless channel, and use this tool to apply my model to real measured 802.11n channels.
+I have released this tool publicly, and at the time of writing it is in use at 23 universities, research labs, and corporations.
+\end{itemize}
+
+\section{Future Work}
+In this section, I consider paths for future research.
+
+\subsection{Practical benefits of beamforming}
+Transmit beamforming is a well-studied area of research in communications theory. Most theoretical systems aim to optimize Shannon capacity using ideal hardware, in which case the well known waterfilling approach~\cite[p. 183]{Tse} optimizes performance by allocating power across subchannels proportional to SNR, using the singular value decomposition. This approach may be inefficient in practice for two reasons. First, real transmit hardware can only support signals with a particular dynamic range, and so cannot perfectly support waterfilling. Secondly, in practical systems like 802.11, different subchannels are modulated identically and thus cannot make good use of the asymmetric power across subchannels. Instead, the Effective SNR model can be used to evaluate allocations of power with the goal of minimizing bit errors and finding the best working modulation and coding scheme across all subchannels.
+
+\subsection{Spatial reuse}
+
+
+\subsection{Saving energy with Effective SNR}
+Effective SNR could be highly integrated into the development of better methods to manage the power consumption of battery-operated devices. In particular, clients could select access points or relays with the express aim of minimizing wake time. By choosing a close relay that uses fast rates, a client can spend less time awake. By disabling receive antennas on the mobile device and using advanced mechanisms such as beamforming on the transmitter, the client can make further power savings. I highlighted the importance of these 802.11n parameters in an earlier measurement study~\cite{Halperin_Power}, but have not performed follow-up research.
+
+\subsection{Integration into Wi-Fi Direct}
+
+\section{Summary}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined
