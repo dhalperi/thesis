@@ -390,18 +390,18 @@
 %
 \renewcommand\section{%
   \@startsection {section}{1}{\z@}%
-       {-3.5ex \@plus -1ex \@minus -.2ex}%
-       {2.3ex \@plus.2ex}%
+       {-2.25ex \@plus -1ex \@minus -.2ex}%
+       {0.3ex \@plus.2ex}%
        {\def\baselinestretch{1.0}\reset@font\normalsize\bfseries\slshape}}
 \renewcommand\subsection{%
   \@startsection{subsection}{2}{\z@}%
-       {-3.25ex\@plus -1ex \@minus -.2ex}%
-       {1.5ex \@plus .2ex}%
+       {-1.25ex\@plus -1ex \@minus -.2ex}%
+       {0.2ex \@plus .2ex}%
        {\reset@font\normalsize\mdseries\itshape}}
 \renewcommand\subsubsection{%
   \@startsection{subsubsection}{3}{\z@}%
-       {-3.25ex\@plus -1ex \@minus -.2ex}%
-       {1.5ex \@plus .2ex}%
+       {-1.25ex\@plus -1ex \@minus -.2ex}%
+       {0.2ex \@plus .2ex}%
        {\reset@font\normalsize\mdseries\itshape}}
 
 % part
