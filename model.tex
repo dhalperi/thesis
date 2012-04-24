@@ -360,7 +360,7 @@ In certain situations, such as when selecting beamforming matrices, the decision
 \section{Comparison to Other Techniques}
 I conclude this chapter by comparing my Effective SNR to other techniques that use physical layer or other low-level information to predict the performance of a wireless link. I compare algorithms along two axes: (1) their accuracy and ability to flexible handle many configuration problems, and (2) their fundamental properties in terms of overheads and responsiveness.
 
-\begin{table}[htp]
+\begin{table}[ht]
 \centering
 \begin{tabular}{ccccccc}
 \toprule
@@ -376,8 +376,20 @@ Effective SNR & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark &
 \end{tabular}
 \caption[Comparison of link error rate prediction algorithm accuracy]{\label{tab:algorithm_comparison}A comparison of Effective SNR to other recent algorithms that purport to predict the performance of a wireless link. Effective SNR can predict packet delivery in the largest space because it looks at the raw channel response, whereas the other techniques mostly apply only to single-stream links with fixed antennas and transmit power.}
 \end{table}
-%
-\begin{table}[htp]
+
+
+\subsection{Accuracy}
+\tabref{tab:algorithm_comparison} summarizes the comparison between Effective SNR and other recent algorithms that aim to predict the performance of a wireless link. The results show that Effective SNR can handle a much broader problem space because it looks at the raw channel details, while other algorithms primarily apply only to single-stream links with fixed antennas and transmit power.
+
+As I presented in the previous section, Packet SNR based on RSSI is available in today's devices, but does not accurately predict performance for 802.11a/g due to its inability to capture frequency-selective fading; the use of MIMO in 802.11n only exacerbates this deficiency.
+
+SoftRate~\cite{Vutukuru_SoftRate} and EEC~\cite{Chen_EEC} both use information from the error correction hardware to accurately measure the Effective BER of the \emph{current} configuration and work well for rate selection using adjacent 802.11a/b/g rates, but cannot predict the performance using other configurations.
+
+AccuRate~\cite{Sen_AccuRate} uses the measured receive error vectors as input to a full channel simulator; like my model this procedure can estimate the Effective BER of all modulations in the current configuration. However, these computations are computationally expensive and do not work across other applications. The exception is transmit power control; I believe this can be simulated by scaling the error vectors although this approach was not explored by the authors.
+
+In contrast, Effective SNR extends to a significantly larger class of applications than the other techniques because its computations are aware of the low-level physical-layer effects of the RF channel, including frequency- and spatially-selective fading. My model is broadly compatible with 802.11n and requires no hardware changes.
+
+\begin{table}[ht]
 \centering
 \begin{tabular}{ccccc}
 \toprule
@@ -395,17 +407,6 @@ EEC~\cite{Chen_EEC} & Full packet & Low & Medium & Low \\
 \end{tabular}
 \caption[Comparison of prediction algorithm overheads and response times]{\label{tab:algorithm_properties}Comparing overheads and response times of Effective SNR and other algorithms. In addition to being more flexible and accurate than the other algorithms (\tabref{tab:algorithm_comparison}), Effective SNR has low measurement and communication overheads, low computational cost, and low response time that match the best aspects of the other algorithms.}
 \end{table}
-
-\subsection{Accuracy}
-\tabref{tab:algorithm_comparison} summarizes the comparison between Effective SNR and other recent algorithms that aim to predict the performance of a wireless link. The results show that Effective SNR can handle a much broader problem space because it looks at the raw channel details, while other algorithms primarily apply only to single-stream links with fixed antennas and transmit power.
-
-As I presented in the previous section, Packet SNR based on RSSI is available in today's devices, but does not accurately predict performance for 802.11a/g due to its inability to capture frequency-selective fading; the use of MIMO in 802.11n only exacerbates this deficiency.
-
-SoftRate~\cite{Vutukuru_SoftRate} and EEC~\cite{Chen_EEC} both use information from the error correction hardware to accurately measure the Effective BER of the \emph{current} configuration and work well for rate selection using adjacent 802.11a/b/g rates, but cannot predict the performance using other configurations.
-
-AccuRate~\cite{Sen_AccuRate} uses the measured receive error vectors as input to a full channel simulator; like my model this procedure can estimate the Effective BER of all modulations in the current configuration. However, these computations are computationally expensive and do not work across other applications. The exception is transmit power control; I believe this can be simulated by scaling the error vectors although this approach was not explored by the authors.
-
-In contrast, Effective SNR extends to a significantly larger class of applications than the other techniques because its computations are aware of the low-level physical-layer effects of the RF channel, including frequency- and spatially-selective fading. My model is broadly compatible with 802.11n and requires no hardware changes.
 
 \subsection{Overheads and Response Time}
 \tabref{tab:algorithm_properties} summarizes my qualitative comparison of these algorithms in terms of their practical overheads and the achievable response times.
