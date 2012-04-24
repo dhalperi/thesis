@@ -181,7 +181,7 @@ Throughout this thesis, I describe the components of this approach in detail. Th
 \label{sec:intro_contributions}
 
 The contributions of this thesis are threefold:
-\begin{itemize}
+\begin{itemize}[leftmargin=0.5cm,parsep=1ex,itemsep=1ex,topsep=1ex]
 \item First, I develop a model that uses the 802.11n CSI to predict the error performance of different transmitter configurations on the wireless channel. This model is flexible to support a wide variety of transmitter and receiver device capabilities, device implementations, and applications. I also detail how to use this model in a system that can solve a large number and variety of configuration problems similar to those described in \secref{sec:intro_problem}.
 \item Second, I present an implementation of this system using a commodity 802.11n wireless device that demonstrates its feasibility in practice and handles the practical considerations of operation over real links using real, non-ideal hardware. This includes a detailed experimental evaluation of my system that shows that this model accurately predicts packet delivery over real 802.11n wireless links in practice.
 \item Third, I evaluate this system in the context of a wide variety of 802.11n applications, and quantify the application performance gains when using my Effective SNR metric over versions that use the RSSI-based SNR channel measurements available today.
