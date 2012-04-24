@@ -8,17 +8,24 @@
 \chapter{Effective SNR Model}
 \label{chap:model}
 
-As described in the previous chapter, the basic use of an Effective $E_b/N_0$ model for a faded multi-subchannel wireless link is to determine the average bit error rate of the link by aggregating across all subchannels. Conceptually, this is a simple process: simply determine the SNRs of the individual subcarriers, compute the individual BERs, average these BERs to calculate the Effective BER, and then determine the Effective SNR. However, each step of this operation is complex, because the model must be able to handle a wide range of transmitter and receiver techniques and their implementations. The challenge is to capture these complexities in a relatively simple model.
+In this chapter, I detail my Effective SNR-based model for wireless networks. I set the stage for the discussion with a detailed description of the operation of a MIMO-OFDM link.
+
+I then present the core Effective SNR model, showing how the input channel state is processed to determine whether a particular transmitter/receiver configuration set will successfully deliver packets. %Conceptually, this is a simple process: simply determine the SNRs of the individual subchannels, compute the individual BERs, average these BERs to calculate the Effective BER, and then determine the Effective SNR.
+This process is conceptually simple, but each step is complex, because the model must be able to handle a wide range of transmitter and receiver techniques and their implementations. The challenge is to capture these complexities in a relatively simple model. (\secref{sec:model_overview}--\secref{sec:model_receiver})
+
+Having described my model and how it meets this goal, I then describe how to make application-level configuration decisions, and what the wireless on-air protocols for using my model actually look like. I conclude this chapter by comparing my Effective SNR approach to other state-of-the-art techniques for understanding and predicting the performance of wireless channels.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[ht]
+\begin{figure}[b]
 \centering
 \includegraphics[width=\textwidth]{figures/11n_link_simplified_bigger_fonts.pdf}
 \caption[An 802.11n link]{\label{fig:11n_link_simplified}A detailed view of a MIMO-OFDM link in the context of 802.11n.}
 \end{figure}
 
 \section{Overview of a MIMO-OFDM Link}
-\figref{fig:11n_link_simplified} shows a detailed view of a MIMO-OFDM link in the context of 802.11n. The first block shows standard transmitter processing that generates $S$ spatial streams of modulated symbols from the packet. The internals of this block scramble the original packet to randomize the bits, add error correction, then split the coded bits across the $S$ spatial streams and interleave them between the OFDM subcarriers. These steps spread bits that are coded together across frequency- and spatially-diverse subchannels, after which the transmitter modulates the spread bits into the $S$ streams.
+\label{sec:11n_overview}
+
+I begin with a detailed description of a MIMO-OFDM link in the context of 802.11n in order to explain the configuration space and implementation-specific choices that my model my model must support (\figref{fig:11n_link_simplified}). The first block shows standard transmitter processing that generates $S$ spatial streams of modulated symbols from the packet. The internals of this block scramble the original packet to randomize the bits, add error correction, then split the coded bits across the $S$ spatial streams and interleave them between the OFDM subcarriers. These steps spread bits that are coded together across frequency- and spatially-diverse subchannels, after which the transmitter modulates the spread bits into the $S$ streams.
 
 The second block is the \define{spatial mapper} $\mathbf{V}$, which maps the $S$ spatial streams to the $M$ transmit antennas. Different spatial mapping algorithms might map each stream to a single antenna, send a linear combination of each stream to each antenna, or (when $S<M$) use \define{Space-Time Block Codes (STBC)} to take advantage of the extra spatial diversity.
 
@@ -37,8 +44,9 @@ I separated the link into the blocks shown to reflect the considerations that a 
 \caption[Model overview]{\label{fig:model_overview}Overview of my Effective SNR-based model for wireless links. The model takes as input a CSI measurement (the ``true CSI'') along with a transmitter configuration, receiver configuration, rate configuration, and some information on the receiver implementation. The output is a single bit that determines whether the link will deliver a packet using the specified rate and device configurations.}
 \end{figure}
 
-\section{Model Overview}
-\figref{fig:model_overview} gives an overview of my Effective SNR-based model for wireless links, designed to handle the cases described in the previous section. At the left, the primary input to the model is an RF measurement of the ground truth CSI for the wireless link. In the context of MIMO-OFDM technology such as IEEE 802.11n, this is the set of $N\times M$ matrices $\mathbf{H}_i$, where each matrix describes the MIMO channel between the $M$ transmit and $N$ receive antennas for one OFDM subcarrier.
+\section{Effective SNR Model Overview}
+\label{sec:model_overview}
+\figref{fig:model_overview} gives an overview of my Effective SNR-based model for wireless links, designed to handle the cases described in the previous section. At the left, the primary input to the model is an RF measurement of the ground truth CSI for the wireless link. In the context of MIMO-OFDM technology such as IEEE 802.11n, this is the set of $N$x$M$ matrices $\mathbf{H}_i$, where each matrix describes the MIMO channel between the $M$ transmit and $N$ receive antennas for one OFDM subcarrier.
 
 The other inputs to the model are the configuration of the transmitter and receiver devices, the rate configuration, and some information about the receiver implementation. The final output of the model is a single bit that indicates whether the link will deliver a packet using the specified rate and device configurations. This model can flexibly handle a wide variety of applications: by varying the input transmitter, receiver, and rate configurations, we can solve all the problems described in \chapref{chap:problem}.
 
@@ -125,19 +133,19 @@ To compute the output decision bit that indicates whether the link will deliver 
 \begin{equation}
 \text{works?}_m = (\rho_{\text{eff},k} > \tau_m).
 \end{equation}
-Note that the \mcs{$m$} specifies the modulation and hence determines which $k$ to use. The thresholds $\tau_m$ are determined by the \emph{receiver implementation}, but are not link- or device-dependent. We can choose $\tau$ in a variety of ways, the most straightforward of which is via measurements over a wired link as in \figref{fig:snr_prr_attenuator}.
+Note that the \mcs{$m$} specifies the modulation and hence determines which $k$ to use. The thresholds $\tau_m$ are determined by the \emph{receiver implementation}, but are not link- or device-dependent. We can choose $\tau$ in a variety of ways, the most straightforward of which is via measurements over a wired link as in \figref{fig:snr_prr_attenuator}. As in CHARM~\cite{Judd_CHARM}, this model can support different packet lengths with different SNR thresholds.
 
 \subsection{Effective SNR Example}
-\figref{fig:eff_example} presents an example of this core model for a SISO 802.11n link. The subchannels of this single-antenna link are simply the subcarriers, illustrated by the solid line. There is also one line for the packet SNR based on RSSI, and then four lines that each represent the Effective SNR for a different modulation. Note that the simpler modulations have lower Effective SNRs, but also perform much better at low rates. \tabref{tab:example_bers} shows the Effective BERs for this link.
+To make this description concrete, I present an Effective SNR calculation using this core model for an example SISO 802.11n link in \figref{fig:eff_example}.  The subchannels of this single-antenna link are simply the subcarriers, illustrated by the solid line. There is also one line for the Packet SNR, and then four lines that each represent the Effective SNR for a different modulation. Note that the simpler modulations have lower Effective SNRs, but also perform much better at low rates. \tabref{tab:example_bers} shows the Effective BERs for this link.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\textwidth]{figures/eff_snr_example.pdf}
-  \caption[Packet SNR and Effective SNRs for a sample faded link]{Sample faded link showing the packet SNR and Effective SNRs for different modulations. BPSK has the lowest Effective SNR, but it needs less energy to decode.}
+  \caption[Packet SNR and Effective SNRs for a sample faded link]{Sample faded link showing the Packet SNR and Effective SNRs for different modulations. BPSK has the lowest Effective SNR, but it needs less energy to decode.}
   \label{fig:eff_example}
 \end{figure}
 
-When the Effective SNRs are compared with the pre-determined thresholds for each rate, the model will correctly predict that the best working rate will be 39\Mbps. Note that these Effective SNRs are well below the packet SNR which is biased towards the stronger subcarriers (note the logarithmic $y$-axis scale). This link does a poor job of harnessing the received power because it is badly faded, so its SNR is a poor predictor of its rate.
+When the Effective SNRs are compared with the pre-determined thresholds for each rate, the model will correctly predict that the best working rate will be 39\Mbps. Note that these Effective SNRs are well below the Packet SNR which is biased towards the stronger subcarriers (note the logarithmic $y$-axis scale). This link does a poor job of harnessing the received power because it is badly faded, so its SNR is a poor predictor of its rate.
 
 \begin{table}[t]
 	\centering
@@ -154,16 +162,28 @@ When the Effective SNRs are compared with the pre-determined thresholds for each
 	\caption[Effective SNRs and Effective BERs for the example link in \figref{fig:eff_example}]{\label{tab:example_bers}Effective SNRs and Effective BERs for the example link in \figref{fig:eff_example}.}
 \end{table}
 
+\subsection{A Note About Coding}
+The astute reader will notice that I did not mention error-correction in the calculations I laid out above. One key decision that makes my model practical is that it is coding-agnostic.
+
+I made this choice because coding interacts with the notion of Effective SNR in a way that is difficult to analyze. One challenge is that the ability to correct bit errors depends on the position of the errors in the data stream. To sidestep this problem, I rely on the interleaving that randomizes the coded bits across subcarriers and spatial streams. Assuming perfect interleaving and robust coding, bit errors in the stream should look no different from bit errors for flat channels (but at a lower SNR). Thus the estimate of the Effective BER in \eqref{eq:effective_ber} will accurately reflect the uncoded error performance of the link. In other words, my model assumes that coding works---but does not care about the details.
+
+Note that this procedure differs from the typical approach of simulation-based analyses~\cite{Kant_FLA, Liu_EESM, Nortel_3g}, which instead map the \emph{uncoded} BER estimate such as I compute to a \emph{coded} BER estimate by means of a log-linear approximation parameterized by the receiver implementation. They then use this coded BER estimate and packet length to directly compute the packet delivery rate of the link. But changing the coding parameters involves changing the internals of the calculation, and with some implementations these parameters can be different for different configurations. (I describe why in the next subsection.) In contrast, all of these effects can be easily expressed, albeit maybe approximately, as (perhaps modulation-dependent) shifts in the Effective SNR thresholds. Thus I believe my method of thresholding the Effective SNR is a better fit because it naturally accommodates these variations.
+
+%Different devices may have different \emph{noise figures}, a measure of how much signal strength is lost in the internal RF circuitry of the NIC\@. They may implement soft Viterbi decoders with more or fewer soft bits for their internal state, or indeed might do hard decoding instead. A receiver could use the optimal Maximum Likelihood MIMO decoder that has exponential complexity for small constellations like BPSK, but revert to the imperfect but more efficient MMSE at higher modulations. All of these can be easily expressed, albeit maybe approximately, as (perhaps modulation-dependent) shifts in the Effective SNR thresholds.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Modeling the Receiver: Computing Subchannel SNRs from Effective CSI}
+\label{sec:model_receiver}
 In the last section, I showed how the model of Nanda and Rege~\cite{Nanda_EffectiveSNR} can determine the Effective SNR from a list of Subchannel SNRs. In this section, I explain how to compute the Subchannel SNRs given the Effective Channel State Information of the link.
 
-The \define{Effective CSI} is a $N\times S$ channel state matrix $\mathbf{H}'$, where each entry describes the gain and phase of each spatial stream as measured at each receive antenna. The first dimension of the Effective CSI is \emph{spatial streams}, not \emph{transmit antennas} as in the CSI matrix $\mathbf{H}$. From the point of view of receiver processing the number of transmit antennas used is not relevant, just how the transmitted streams are received after sender-side processing and propagation through the RF channel.
+The \define{Effective CSI} is a $N$x$S$ channel state matrix $\mathbf{H}'$, where each entry describes the gain and phase of each spatial stream as measured at each receive antenna. The columns of the Effective CSI represent \emph{spatial streams}, not \emph{transmit antennas} as in the CSI matrix $\mathbf{H}$. From the point of view of receiver processing the number of transmit antennas used is not relevant, just how the transmitted streams are received after sender-side processing and propagation through the RF channel. I discuss how to compute the Effective CSI in the next section.
 
-The IEEE 802.11 standards do not specify which algorithms the receiver uses to process received signals. However, my contact with Intel engineers and marketing documents from other chipset manufacturers indicate that a small set of techniques are likely chosen in practice.
+Note that the IEEE 802.11 standards do not specify which algorithms the receiver uses to process received signals. However, a small set of techniques are likely chosen in practice: optimal algorithms or near-optimal techniques that have known, good complexity/optimality tradeoffs. My contact with Intel engineers and marketing documents from other chipset manufacturers confirm that the techniques I present here are the ones used in practice.
+
+Of course, which techniques the receiver might use to process the Effective CSI depends on the dimensionality of the effective channel. In a SISO system, there is little processing to be done, while MIMO systems that use spatial multiplexing and spatial diversity offer lots of options. Hence, I frame my presentation of these techniques around the number of streams and antennas available.
 
 \subsection{SISO links: $S=1,N=1$}
-As in the example of \figref{fig:eff_example}, the SNR of a $1\times1$ channel matrix is simply the power of the single entry in the CSI matrix. There is one Subchannel SNR for each OFDM subcarrier:
+As in the example of \figref{fig:eff_example}, the SNR of a $1$x$1$ channel matrix is simply the power of the single entry in the CSI matrix. There is one Subchannel SNR for each OFDM subcarrier:
 \begin{equation}
 	\rho_i = \left| \mathbf{H}'_i \right|^2.
 \end{equation}
@@ -196,7 +216,7 @@ The SNR of the $j$th stream after MMSE processing for subcarrier $i$ is given by
 \rho_{i,j} = \frac{1}{\mathbf{Y}_{jj}}-1, \text{ where }
 \mathbf{Y} = \left((\mathbf{H}'_i)^\dagger \mathbf{H}'_i+I_S\right)^{-1}
 \end{equation}
-for $j \in [1,S]$ and $S\times S$ identity matrix $I_S$~\cite{Tse}. The operator $(\cdot)^\dagger$ indicates the \define{Hermitian}, or conjugate transpose of the input matrix.
+for $j \in [1,S]$ and $S$x$S$ identity matrix $I_S$~\cite{Tse}. The operator $(\cdot)^\dagger$ indicates the \define{Hermitian}, or conjugate transpose of the input matrix.
 
 The advantage of MMSE is that it performs well in most cases and has low computational cost, roughly the cost of matrix multiplication and inversion. An alternative is the \emph{Maximum Likelihood (ML)} decoder, but this has added complexity that scales with the size of the constellation, i.e., is exponential in the number of bits per symbol $k$. In the initial 802.11n chipsets, ML decoding was considered too complex to be practical, but this outlook has recently changed. Today, Intel's IWL6300 (successor to the IWL5300 mentioned above) uses ML decoding for the smaller constellations for which it is practical. Atheros uses a ``simplified maximum likelihood detector''~\cite{ar6004,Atheros_11nTechPaper} for all modulations that approximates ML performance but has lower complexity.
 
@@ -204,54 +224,60 @@ The task of estimating the per-stream SNR of the output from a maximum likelihoo
 
 Instead, I observe that maximum likelihood decoding can be approximated as a $\approx$3\dB gain over MMSE for typical MIMO systems~\cite{Kumar_ml_mmse}. Thus, the practical solution I propose for my model is to always compute Effective SNR estimates using MMSE, and instead adapt the decision thresholds $\tau_m$ to reflect the use of ML decoding. This approximation is imprecise---the gains of ML will vary depending on the particular channel---but allows the model to flexibly handle many device implementations (even hybrid MMSE/ML such as in the IWL6300). The error is likely to be small for most channels.
 
+\subsection{Summary}
+In this section, I explained how to determine the Subchannel SNRs given Effective CSI matrices for Wi-Fi links. The SISO matrices give the Subchannel SNRs directly, and I assume the use of MRC when modeling SIMO processing; these choices are certain to be accurate because the algorithms are optimal and computationally simple. For MIMO links, the model will always use the MMSE formula given by \eqref{eq:mmse_snr} to compute the Subchannel SNRs, though some receivers may use ML instead. But since the difference between ML and MMSE is often just a few dB, the model will assume MMSE and instead represent the gains from using ML by having lower Effective SNR thresholds. I describe how the sender and receiver might communicate these thresholds later in this chapter. Before doing so, I will next describe the last component of my model needed to make application decisions over a space of configurations.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Applications: Adapting CSI to Compute Effective CSI}
-By adapting the conversion between the CSI and the Effective CSI, my model supports a wide variety of application decisions. In this section I explain how to compute the Effective CSI $\mathbf{H}'$ from the CSI $\mathbf{H}$ for an illustrative set of these problems.
+\label{sec:model_applications}
+The last few sections have described how my model can take an Effective CSI and compute the Subchannel SNRs. The final piece is to adapt the CSI $\mathbf{H}$ to determine the Effective CSI $\mathbf{H}'$ that would be measured using a particular configuration, and hence support application decisions. Here, I explain how to perform this step for an illustrative set of these problems.
 
-\heading{Antenna Selection.} There are $M$ rows and $N$ columns in the CSI that each correspond to one transmit or receive antenna. To implement antenna selection, we simply pick the subset of rows and columns that correspond to the desired antennas. Note that this includes both transmit antenna selection (e.g., when $S<M$, pick the best $S$ of the $M$ transmit antennas to send with) or receive antenna selection (e.g., when $N>S$, turn off the least useful of the excess antennas in order to reduce power consumption).
+\heading{Antenna Selection.} There are $N$ rows and $M$ columns in the CSI that each correspond to one transmit or receive antenna. To implement antenna selection, we simply pick the subset of rows and columns that correspond to the desired antennas. Note that this includes both transmit antenna selection (e.g., when $S<M$, pick the best $S$ of the $M$ transmit antennas to send with) or receive antenna selection (e.g., when $N>S$, turn off the least useful of the excess antennas in order to reduce power consumption).
 
-\heading{Channel Width Selection.} In 802.11n, a full 40\MHz CSI measurement would comprise 114 matrices $\mathbf{H}_i$. To implement channel width selection, we use only the $\mathbf{H}_i$ covered by the potential channel. For the lower 20\MHz channel, we would use the matrices corresponding to $i \in [1,56]$; for the upper 20\MHz channel we would use the matrices for $i \in [59,114]$. (Subcarriers 57 and 58 are not part of either 20\MHz channel because the 40\MHz channel does not need the same guard band.) This method can also predict performance using 5\MHz or 10\MHz channels as in 802.11j or SampleWidth~\cite{Chandra_SampleWidth}, and could support a potential future version of 802.11 that allows the devices to use non-contiguous tones as in SWIFT~\cite{Rahul_SWIFT}.
+\heading{Channel Width Selection.} In 802.11n, a full 40\MHz CSI measurement comprises 114 matrices $\mathbf{H}_i$. To implement channel width selection, we use only the $\mathbf{H}_i$ covered by the potential channel. For the lower 20\MHz channel, we would use the matrices corresponding to $i \in [1,56]$; for the upper 20\MHz channel we would use the matrices for $i \in [59,114]$. (Subcarriers 57 and 58 are not part of either 20\MHz channel because the 40\MHz channel does not need the same guard band.) This method can also predict performance using 5\MHz or 10\MHz channels as in 802.11j or SampleWidth~\cite{Chandra_SampleWidth}, and could support a potential future version of 802.11 that allows the devices to use non-contiguous tones as in SWIFT~\cite{Rahul_SWIFT}.
 
 \heading{Transmit Power Control.} To emulate the effects of transmit power control, we can simply scale the entries in the matrices $\mathbf{H}_i$. When the transmitter reduces the transmit power uniformly across subcarriers, say by 3\dB, we multiple each matrix by the square root of the power change, in this example by $\sqrt{2}$. To model the effects of asymmetric power control across subchannels, e.g., water filling across streams or subcarriers, we can apply scaling differently to different parts of the channel matrix.
 
 \heading{MCS (Rate) Selection.} For any of the above transmitter and receiver configurations, this process in conjunction with the core algorithms described in the last two sections can predict whether a particular MCS will reliably deliver packets. The CSI matrix may need to be slightly modified depending on the MCS, however. For instance, when using multiple streams the total amount of power is generally kept constant, so the Effective CSI must include a division of the transmit power across antennas. Similarly, some chipsets (e.g., IWL5300 and the Atheros-based Ubiquiti SR71-A~\cite{sr71a}) are unable to send at full power when using the highest modulations, because the peak-to-average power ratio (PAPR) is higher than the transmit amplifier(s) can support. For these chipsets, the Effective CSI must be scaled to compensate for the reduced transmit power when predicting the performance of the relevant modulations.
 
-\heading{Spatial Mapping.} Spatial mapping algorithms determine how the different transmit streams are mapped to transmit antennas. These are implemented by the matrices $\mathbf{V}_i$, such that the Effective SNR is
+\heading{Spatial Mapping.} Spatial mapping algorithms determine how the different transmit streams are mapped to transmit antennas. These are implemented by the $N$x$S$ matrices $\mathbf{V}_i$, such that the Effective SNR is
 \begin{equation}
 	\mathbf{H}'_i = \mathbf{H}_i\mathbf{V}_i.
 \end{equation}
 I discuss the four types of spatial mapping techniques from the simplest to the most general.
 
-\begin{itemize}
-	\item In \define{direct mapping}, the transmitter maps each spatial stream directly to one of $S$ antennas; excess antennas go unused. After choosing the appropriate rows of $\mathbf{H}$ as described above under transmit antenna selection, the matrix $\mathbf{V}$ is the identity matrix $I_S$. We can combine transmit antenna selection and direct mapping using a $S \times M$ matrix $\mathbf{V}$ consisting of zeros except for the $S$ entries in different rows and columns that indicate which streams are mapped to which antennas. For $S=2$ and $M=3$, a direct mapping matrix using the first and third antennas would be
+\begin{itemize}[leftmargin=0.5cm,parsep=1ex,itemsep=1ex,topsep=1ex]
+	\item In \define{direct mapping}, the transmitter maps each spatial stream directly to one of $S$ antennas; excess antennas go unused. After choosing the appropriate rows of $\mathbf{H}$ as described above under transmit antenna selection, the matrix $\mathbf{V}$ is the identity matrix $I_S$. We can combine transmit antenna selection and direct mapping using a $M$x$S$ matrix $\mathbf{V}$ consisting of zeros except for the $S$ entries in different rows and columns that indicate which streams are mapped to which antennas. For $S=2$ and $M=3$, a direct mapping matrix using the first and third antennas would be
 	\begin{equation*}
-		\tag{Combined $2\times3$ TX Antenna Selection and Direct Mapping}
+		\tag{Combined $3$x$2$ TX Antenna Selection and Direct Mapping}
 		\mathbf{V} = \begin{pmatrix}
-		1 & 0 & 0\\
-		0 & 0 & 1
+		1 & 0\\
+		0 & 0\\
+		0 & 1
 		\end{pmatrix}.
 	\end{equation*}
-
+%
 	\item In \define{indirect mapping}, the $S$ streams are mapped to $S$ antennas but in such a way as to be spread over multiple antennas. For instance, the IWL5300 uses the following indirect mapping for 3 streams and 20\MHz channels:
 	\begin{equation*}
-		\tag{IWL5300 $3\times3$}
+		\tag{IWL5300 $3$x$3$}
 		\mathbf{V} = \begin{pmatrix}
 		e^{-i2\pi/16} & e^{-2i\pi/(80/33)} & e^{-2i\pi/(80/3)} \\
 		e^{-i2\pi/(80/23)} & e^{-2i\pi/(48/13)} & e^{-2i\pi/(240/13)} \\
 		e^{-i2\pi/(80/13)} & e^{-2i\pi/(240/37)} & e^{-2i\pi/(48/13)}
-		\end{pmatrix}
+		\end{pmatrix}.
 	\end{equation*}
-	Atheros uses Walsh (also called Hadamard) spreading. The $2\times2$ mapping is:
+	Atheros uses Walsh (also called Hadamard) spreading. The $2$x$2$ mapping is:
 	\begin{equation*}
-		\tag{Atheros $2\times2$}
+		\tag{Atheros $2$x$2$}
 		\mathbf{V} = \begin{pmatrix}
 		1 & 1\\
 		1 & -1
-		\end{pmatrix}
+		\end{pmatrix}.
 	\end{equation*}
-	
+%
 	\item When using \define{spatial expansion}, $S$ spatial streams are mapped to $M > S$ transmit antennas. Here, $\mathbf{V}$ is the product of an expansion matrix and one of the direct or indirect mapping matrices above. I show the case of $S=2$ and $M=3$ using a sample expansion matrix from the 802.11n standard:
 	\begin{equation*}
-		\tag{$3\times2$ Spatial Expansion}
+		\tag{$3$x$2$ Spatial Expansion}
 		\mathbf{V} = \sqrt{\frac{2}{3}}\begin{pmatrix}
 		1 & 0\\
 		0 & 1\\
@@ -259,7 +285,7 @@ I discuss the four types of spatial mapping techniques from the simplest to the 
 		\end{pmatrix}\mathbf{V}',
 	\end{equation*}
 	where $\mathbf{V}'$ is a direct or indirect mapping matrix. The $\sqrt{2/3}$ factor above represents the even spreading of the power from 2 streams across 3 antennas.
-	
+%
 	\item Finally, \define{beamforming} is a general technique for mapping streams to antennas. Beamforming can be thought of as a synthesis of indirect mapping, spatial expansion (if applicable) and transmit power control. The distinctive feature of beamforming compared with the above is that it is \emph{channel-aware}; in other words, the beamforming matrix is chosen to improve performance based on the known current channel $\mathbf{H}$. This means that beamforming can use different mapping matrices $\mathbf{V}_i$ for each subcarrier, unlike the prior techniques which are applied uniformly across tones. There are a large variety of techniques that use beamforming to improve the channel, but all can be represented in matrix form.
 \end{itemize}
 
@@ -267,6 +293,7 @@ I discuss the four types of spatial mapping techniques from the simplest to the 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Protocol Details}
+\label{sec:model_protocol}
 
 \subsection{CSI Collection}
 As with RSSI, receivers gather channel state information automatically while receiving a packet; the OFDM and MIMO equalizers described above fundamentally rely on CSI to decode the received signal. This \emph{passive collection} of CSI via overheard transmissions suffices for most applications, such as rate selection. When a more comprehensive CSI measurement is needed, the transmitter can send a sounding packet~\cite[\S20.3.13.1]{80211n} at a wider bandwidth or using more streams probe the extra dimensions. For the special case of additional spatial streams, 802.11n includes a mechanism to send a modified packet with \define{extension spatial streams}~\cite[\S20.3.9.4.6]{80211n} such that the receiver can measure the full channel during the preamble but that does not change the rate or number of streams used for the data portion.
@@ -275,7 +302,7 @@ As with RSSI, receivers gather channel state information automatically while rec
 Effective SNR calculations can be performed by either side of the link, and each has advantages. The primary tradeoff is between the amount of data shared (the party performing the calculation needs up-to-date CSI) and hardware complexity.
 
 \heading{Necessary Information.} To make the calculations and choose an operating point, the following three pieces of information are needed:
-\begin{itemize}
+\begin{itemize}[leftmargin=0.5cm,parsep=1ex,itemsep=1ex,topsep=1ex]
 	\item Up-to-date CSI measurements including all relevant subchannels.
 	\item Receiver's MCS-specific Effective SNR thresholds.
 	\item Transmitter's capabilities including possible spatial mapping matrices, as well as any implementation-specific oddities (such as Intel's reduction of transmit power by up to 5\dB for the highest 64-QAM single-stream encodings).
@@ -314,16 +341,6 @@ SoftRate~\cite{Vutukuru_SoftRate} and EEC~\cite{Chen_EEC} both use information f
 AccuRate~\cite{Sen_AccuRate} uses the measured receive error vectors as input to a full channel simulator; like my model this procedure can estimate the Effective BER of all modulations in the current configuration. However, these computations are computationally expensive and do not work across other applications. The exception is transmit power control; I believe this can be simulated by scaling the error vectors although this approach was not explored by the authors.
 
 In contrast, Effective SNR extends to a significantly larger class of applications than the other techniques because its computations are aware of the low-level physical-layer effects of the RF channel, including frequency- and spatially-selective fading. My model is broadly compatible with 802.11n and requires no hardware changes. As part of my thesis I built a prototype implementation using a commercial Intel NIC. In the rest of this thesis, I present my prototype implementation of Effective SNR and demonstrate that it works well and supports a wide space of applications.
-
-\begin{comment}
-\color{red}
-\section{Omitted text}
-Coding interacts with the notion of Effective SNR in a way that is difficult to analyze. One challenge is that the ability to correct bit errors depends on the position of the errors in the data stream. To sidestep this problem, we rely on the interleaving that randomizes the coded bits across subcarriers and spatial streams. Assuming perfect interleaving and robust coding, bit errors in the stream should look no different from bit errors for flat channels (but at a lower SNR). Thus our estimate of the Effective BER in \eqref{eq:effective_ber} will accurately reflect the uncoded error performance of the link. Our algorithm now proceeds as in the case of a flat-fading channel described above: we take the computed Effective SNR value and use the measurements from a flat-fading link (\figref{fig:snr_prr_attenuator}) to determine transmission success or failure. As in CHARM~\cite{Judd_CHARM}, we support different packet lengths with different SNR thresholds.
-
-Note that this procedure differs from the typical approach of simulation-based analyses~\cite{Kant_fla, Liu_EESM, Nortel_3g}, that instead map the \emph{uncoded} BER estimate such as we compute to a \emph{coded} BER estimate by means of a simple log-linear approximation. They then use the coded BER estimate, and the length of the target transmission, to directly compute the packet delivery rate of the link. We believe our method of thresholding the Effective SNR is better because it directly accommodates variation in the receiver implementation. Different devices may have different \emph{noise figures}, a measure of how much signal strength is lost in the internal RF circuitry of the NIC\@. They may implement soft Viterbi decoders with more or fewer soft bits for their internal state, or indeed might do hard decoding instead. A receiver could use the optimal Maximum Likelihood MIMO decoder that has exponential complexity for small constellations like BPSK, but revert to the imperfect but more efficient MMSE at higher modulations. All of these can be easily expressed, albeit maybe approximately, as (perhaps modulation-dependent) shifts in the Effective SNR thresholds. In contrast, changing these parameters in the simulation approach involves changing the internals of the calculation.
-
-\color{black}
-\end{comment}
 
 %\heading{802.11 Packet Reception.}
 %The model must account for the action of the 802.11 receiver on the received signal. This is a complex process described in many pages of the 802.11n specification~\cite{80211n}. Our challenge is to capture it well enough with a fairly simple model. We begin by describing the main steps involved (\figref{fig:ofdm_decoding}).
