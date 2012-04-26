@@ -5,40 +5,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \cleardoublepage
-\chapter{Experimental Setup}
+\chapter{Experimental Platform}
 \label{chap:tool}
 
 In this chapter, I describe my experimental 802.11n platform, which comprises a prototype implementation of a CSI measurement tool based on commodity Intel Wi-Fi NICs and experimental 802.11n wireless testbeds in two indoor office environments. I also describe the comprehensive datasets on which I base my experiments. This experimental setup is the foundation of the experimental results in the remainder of my thesis.
-
-\section{802.11n CSI Tool and Experimental Platform}
-\label{sec:platform}
-In conjunction with Intel Labs Seattle, I built an experimental 802.11n platform that uses the Intel Wi-Fi Wireless Link 5300 (IWL5300) 802.11a/b/g/n network cards (\figref{fig:iwl5300}). These 802.11n MIMO NICs have three antennas and support many new features of 802.11n. I modified the closed-source firmware and open-source \program{iwlwifi} driver for Linux to add a number of experimental features and, crucially, to measure the 802.11n CSI.
-
-\begin{figure}
-	\centering
-	\includegraphics[height=2in]{figures/iwlwifi-5300.jpg}
-	\caption[The Intel Wireless Wi-Fi Link 5300]{\label{fig:iwl5300}The Intel Wireless Wi-Fi Link 5300. This 802.11n NIC has three transmit/receive antennas, operates on both 2.4\GHz and 5\GHz frequency bands, and supports up to three spatial streams for a maximum bitrate of 450\Mbps.}
-\end{figure}
-
-\heading{802.11n CSI Measurement.} The channel sounding mechanism added in 802.11n defines a management frame used to report the CSI from the receiver of a frame back to the transmitter. This mechanism is intended for calibration or to inform transmit beamforming, and I co-opt it for my experiments. In standard operation, the CSI is reported only when the sounding procedure is initiated by the transmitter, though the receiver measures CSI for every frame in order to receive the packet. In my tool, I configure the NIC with a debug mode to compute this feedback packet for every received frame, rather than just during sounding. For correctly received packets, the firmware will send it up to the driver on the receiving node.
-
-The IWL5300 provides CSI in a format that reports the channel matrices for 30 subcarrier groups, which is about one group for every 2 subcarriers at 20\MHz or every 4 subcarriers at 40\MHz. Each channel matrix entry is a complex number, with signed 8-bit resolution each for the real and imaginary parts. It specifies the gain and phase of the spatial path between a single transmit-receive antenna pair. Intel's implementation of the 802.11n CSI does not include per-subcarrier noise measurements, so I assume the noise floor is uniform across all subcarriers to compute SNRs. This is consistent with white noise observed on other OFDM platforms~\cite{Rahul_FARA}.
-
-\heading{RSSI Measurement.} 
-For each received packet the NIC reports the traditional metrics of RSSI per receive antenna, noise floor and the setting on the automatic gain controlled (AGC) amplifier. These combine to define the per-receive-chain Packet SNR ($\rho_{\text{packet}}$):
-\begin{equation}
-\label{eq:per_chain_snr}
-	\rho_{\text{packet}} = \text{RSSI (dBm)} - \text{Noise (dBm)} - \text{AGC (dB)}
-\end{equation}
-The IWL5300 calculates the quantities RSSI and Noise as the respective sums of average signal strength and average error vector magnitude in each OFDM subcarrier~\cite{iwlwifi}. This is exactly the traditional definition of SNR applied to OFDM.
-
-\heading{Transmit Power Control.} I modified the driver and firmware to enable transmit power variation. With these changes, I can vary the transmit power level from $-$10\dBm~(100\uW) to $+$16\dBm~(40\mW) in steps of 0.5\dB. For all modulations, the IWL5300 divides power equally across transmit antennas. Additionally, the IWL5300 reduces the transmit power slightly when using the highest single-stream rates to avoid distortions caused by passing 64-QAM symbols with high peak-to-average power ratio through the transmit amplifier.
-
-\heading{Rapid Rate Variation.} In normal operation, the IWL5300 decouples queuing packets for transmission from selecting rates for these packets, since queues must be kept large to take advantage of 802.11n block transmissions. This makes it difficult to control the rate at which individual packets are transmitted. I modified the firmware and driver to support the transmission of individual packets at predetermined rates, and added driver-level code to rapidly iterate through a user-configurable set of available rates.
-
-\heading{Userspace Connector.} I used the Linux kernel \program{connector} framework to implement a low-latency socket-based communication channel between the kernel driver and userspace utilities. This enables userspace utilities to log CSI and other output from the driver, and send messages that adapt behavior online, e.g., by changing the currently selected rate or antennas or adjusting the transmit power level.
-
-\heading{Publicly Released Tool.} I have publicly released the experimental platform and CSI collection tool in the form of open source drivers, userspace utilities, MATLAB data processing code, and binary firmware image~\cite{Halperin_csitool}. At the time of writing, I am aware of 20 universities in 7 countries, multiple research and product groups within Intel, one industrial research labs and one startup using my tool. The users of my tool have published at least 8 papers~\cite{Bhartia_FreqDiv,Crepaldi_CSI_SF,Gong_MuMIMO,Perahia_Doppler,Sen_SpinLoc,Sen_PinLoc,Wu_FILA}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experimental 802.11n Wireless Testbeds}
@@ -55,7 +25,9 @@ I conducted experiments in two 802.11n stationary wireless testbeds. The first t
 	\caption[My two indoor 802.11n testbeds]{\label{fig:testbeds} My two indoor 802.11n testbeds. In both testbeds, the nodes are placed to ensure a large number of links between them, a variety of distances between nodes, and diverse scattering characteristics.}
 \end{figure}
 
-Each node runs the experimental platform described in \secref{sec:platform}, as do three laptops used for mobile experiments. In both testbeds, I placed the nodes to ensure a large number of links between them, a variety of distances between nodes, and diverse scattering characteristics. Devices are located on in a desktops, under tables, on a carts in the server room, and even mounted on the ceiling; in the UW CSE testbed also includes a more dense concentration of nodes by the Networking Lab (pictured in the upper right corner of \figref{fig:uw_testbed}).
+Each node runs the experimental platform described below in \secref{sec:platform}. In both testbeds, I placed the nodes to ensure a large number of links between them, a variety of distances between nodes, and diverse scattering characteristics. Devices are located on in a desktops, under tables, on a carts in the server room, and even mounted on the ceiling; in the UW CSE testbed also includes a more dense concentration of nodes by the Networking Lab (pictured in the upper right corner of \figref{fig:uw_testbed}).
+
+In addition to these two stationary testbeds, I use three laptops for mobile experiments. I describe their configuration below.
 
 \begin{figure}[ht]
 	\centering
@@ -73,14 +45,80 @@ Each node runs the experimental platform described in \secref{sec:platform}, as 
 \end{figure}
 
 \section{Node Configuration}
-Each node is a stationary desktop (\figref{fig:antenna_stand}) or portable laptop (\figref{fig:laptop_stands}) equipped with an IWL5300. As the antenna geometry is important for spatial diversity, I mount the three antennas per node on custom stands. Each antenna achieves 5\dBi gain for the 2.4\GHz band, and 3\dBi for the 5\GHz band.
+Each node is a stationary desktop (\figref{fig:antenna_stand}) or portable laptop (\figref{fig:laptop_stands}) equipped with an Intel 802.11n wireless NIC that supports three antennas. As the antenna geometry of a multi-antenna device is important for spatial diversity, I mount the three antennas per node on custom stands. Each antenna achieves 5\dBi gain for the 2.4\GHz band, and 3\dBi for the 5\GHz band.
 
 The desktop stands (\figref{fig:antenna_stand}) allow for a circular array (using ports ABC) or a linear array of two or three (AB$_2$ and optionally center) antennas, with antenna separations of half the wavelength for either 2.4\GHz Channel 6 ($\lambda/2 = 6.15\cm$) or 5\GHz Channel 48 ($\lambda/2=2.86\cm$). In desktop experiments in this paper, I use the circular three-antenna configuration for the 2.4\GHz band. It is robust and suited to dual-band NICs that need the wider 2.4\GHz antenna separation. 
 
 The three laptops use three different antenna configurations. One laptop has all three antennas embedded internally like in a commercial laptop deployment; one laptop uses the same antenna stand as the desktop machines to mimic their behavior in portable experiments. The third laptop, pictured in \figref{fig:laptop_stands}, includes a custom antenna mount for a 2.4\GHz linear array.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Datasets}
-\textcolor{red}{add text here as I pass through the next few sections}
+\section{Node Software: 802.11n CSI Tool and Research Platform}
+\label{sec:platform}
+In conjunction with Intel Labs Seattle, I built an experimental 802.11n platform that uses the Intel Wi-Fi Wireless Link 5300 (IWL5300) 802.11a/b/g/n network cards (\figref{fig:iwl5300}). These 802.11n MIMO NICs have three antennas and support many new features of 802.11n. I modified the closed-source firmware and open-source \program{iwlwifi} driver for Linux to add a number of experimental features and, crucially, to measure the 802.11n CSI.
+
+\begin{figure}
+	\centering
+	\includegraphics[height=2in]{figures/iwlwifi-5300.jpg}
+	\caption[The Intel Wireless Wi-Fi Link 5300]{\label{fig:iwl5300}The Intel Wireless Wi-Fi Link 5300. This 802.11n NIC has three transmit/receive antennas, operates on both 2.4\GHz and 5\GHz frequency bands, and supports up to three spatial streams for a maximum bitrate of 450\Mbps.}
+\end{figure}
+
+\heading{802.11n CSI Measurement.} The channel sounding mechanism added in 802.11n defines a management frame used to report the CSI from the receiver of a frame back to the transmitter. This mechanism is intended for calibration or to inform transmit beamforming, and I co-opt it for my experiments. In standard operation, the CSI is reported only when the sounding procedure is initiated by the transmitter, though the receiver measures CSI for every frame in order to receive the packet. In my tool, I configure the NIC with a debug mode to compute this feedback packet for every received frame, rather than just during sounding. For correctly received packets, the firmware will send the measured CSI up to the driver on the receiving node.
+
+The IWL5300 provides CSI in a format that reports the channel matrices for 30 subcarrier groups, which is about one group for every 2 subcarriers at 20\MHz or every 4 subcarriers at 40\MHz. Each channel matrix entry is a complex number, with signed 8-bit resolution each for the real and imaginary parts. It specifies the gain and phase of the spatial path between a single transmit-receive antenna pair. Intel's implementation of the 802.11n CSI does not include per-subcarrier noise measurements, so I assume the noise floor is uniform across all subcarriers to compute SNRs. This is consistent with white noise observed on other OFDM platforms~\cite{Rahul_FARA}.
+
+\heading{RSSI Measurement.} 
+For each received packet the NIC reports the traditional metrics of RSSI per receive antenna, noise floor and the setting on the automatic gain controlled (AGC) amplifier. These combine to define the per-receive-chain Packet SNR ($\rho_{\text{packet}}$):
+\begin{equation}
+\label{eq:per_chain_snr}
+	\rho_{\text{packet}} = \text{RSSI (dBm)} - \text{Noise (dBm)} - \text{AGC (dB)}
+\end{equation}
+The IWL5300 calculates the quantities RSSI and Noise as the respective sums of average signal strength and average error vector magnitude in each OFDM subcarrier~\cite{iwlwifi}. This is exactly the traditional definition of SNR applied to OFDM.
+
+\heading{Transmit Power Control.} I modified the driver and firmware to enable transmit power variation. With these changes, I can vary the transmit power level from $-$10\dBm~(100\uW) to $+$16\dBm~(40\mW) in steps of 0.5\dB. For all modulations, the IWL5300 divides power equally across transmit antennas. Additionally, the IWL5300 reduces the transmit power slightly when using the highest single-stream rates to avoid distortions caused by passing 64-QAM symbols with high peak-to-average power ratio through the transmit amplifier.
+
+\heading{Rapid Rate Variation.} In normal operation, the IWL5300 decouples queuing packets for transmission from selecting rates for these packets, since queues must be kept large to take advantage of 802.11n block transmissions. This makes it difficult to control the rate at which individual packets are transmitted. I modified the firmware and driver to support the transmission of individual packets at predetermined rates, and added driver-level code to rapidly iterate through a user-configurable set of available rates.
+
+\heading{Userspace Connector.} I used the Linux kernel \program{connector} framework to implement a low-latency socket-based communication channel between the kernel driver and userspace utilities. This enables userspace utilities to log CSI and other output from the driver, and send messages that adapt behavior online, e.g., by changing the currently selected rate or antennas or adjusting the transmit power level.
+
+\heading{Publicly Released Tool.} I have publicly released the experimental platform and CSI collection tool in the form of open source drivers, userspace utilities, MATLAB data processing code, and binary firmware image~\cite{Halperin_csitool}. At the time of writing, I am aware of 20 universities in 7 countries, multiple research and product groups within Intel, one industrial research labs and one startup using my tool. The users of my tool have published at least 7 papers~\cite{Bhartia_FreqDiv,Crepaldi_CSI_SF,Gong_MuMIMO,Perahia_Doppler,Sen_SpinLoc,Sen_PinLoc,Wu_FILA}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Computing 802.11n SNR and Effective SNR using IWL5300 Measurements}
+In the rest of this thesis, I use measurements from my experimental platform to evaluate how well Effective SNR (and other algorithms) work for real 802.11n wireless channels. In most experiments, I computed the packet reception rate (PRR), Packet SNR, and Effective SNRs for all the measured configurations. The packet reception ratio is easy to compute by simply counting the number of correctly received frames compared to the number sent; the rest of this section described practical considerations when computing Packet SNR and Effective SNR values.
+
+\subsection{Processing Multiple RSSIs to Compute Packet SNR}
+When receiving a transmission with multiple antennas, there is one RSSI value per antenna; how should these measurements be combined into a single SNR value for the link? As described above, I first convert the per-antenna RSSI and noise measurements to SNRs (\eqref{eq:per_chain_snr}) and then sum the SNRs. This is a straightforward choice for a single spatial stream as it corresponds to receiver processing using maximal-ratio combining (\eqref{eq:mrc}). It is also reasonable for 2- and 3-stream MIMO because the symbols carried on different spatial streams are interleaved coded bits~\cite{80211n}.
+
+\subsection{Processing CSIs to Compute Effective SNRs}
+The 802.11n standard mandates that CSI measurements, which are stored as matrices of 8-bit complex numbers indicating gain and phase of each subchannel, include a per-subcarrier SNR reference that enables the grounding of each per-subcarrier channel matrix, such that each entry in the CSI can be treated as a magnitude relative to the noise floor. It is under this model that the equations I presented in \chapref{chap:model} hold.
+
+In attempting to use the measured CSI from the Intel NICs, I discovered two practical issues that needed to be taken into account.
+
+\subsubsection{Quantization Error}
+The first issue is a fundamental problem that applies to all uses of CSI in the 802.11n standard. Consider a very strong link, say with a signal-to-noise ratio of 50\dB. Most actual receiver processing occurs after this signal has been digitized by the \define{analog-to-digital converter (ADC)} at each receive chain; this conversion from analog to digital naturally cannot be perfect, and thus induces \define{quantization error} in the digital signal. For instance, a 12-bit ADC can represent signal levels from $-2048$ to $2047$, with an error up to $\pm0.5$. Note that the \define{analog gain control (AGC)} hardware on the chip aims to amplify the received analog signal to fully utilize the ADC range.
+
+An error of $\pm0.5$ in a measured magnitude of up to $2048$ corresponds to a quantization error of about $-72$\dB. Roughly, each bit that the ADC outputs gives a 6\dB reduction in quantization error, because it halves the relative error in magnitude, dividing the power of that error by a factor of 4, i.e., 6\dB.
+
+How does quantization error compare to the noise floor? The answer is that it depends on the strength of the link and the ADC output. For the link above with an SNR of 50\dB, a 12-bit ADC corresponds to a quantization error 72\dB below the signal strength, hence 22\dB below the noise floor. This is essentially no additional error at all. In contrast, a 6-bit ADC would cause quantization error 36\dB below the signal strength, which is 25$\times$ larger than noise power for this very strong link! So, in some cases it can be important to take quantization error into account when using CSI measurements.
+
+My results later in the thesis show that this operation indeed improves the accuracy of Effective SNR predictions considerably. I achieved the best results when I assumed that the IWL5300 NIC in my testbed used a 6-bit ADC.
+
+%In linear scale, 50\dB SNR corresponds to a signal that is 100,000 times stronger than noise, and has a signal amplitude that is $\approx$316 times stronger than noise.
+%
+%But note that an amplitude of 316 is larger than 128, the maximum absolute value that can be represented in a CSI matrix coefficient stored as a signed 8-bit integer. Instead, receiver will use the SNR reference value to reduce the coefficients it needs to encode. In this case, if the receiver chose an SNR reference of 8\dB, it would only need to encode a further signal strength of 42\dB, which translates to a CSI coefficient of amplitude $\approx$126. The value $\approx$126 now fits in 8 bits, but must be quantized, with quantization error expected to be $\pm$0.5 per entry.
+%
+%How does quantization error compare to the noise floor? Originally, the noise had a value of 1 using the same scale as the entries, but now that the matrix has been scaled down by 8\dB it has an amplitude of about 0.4. The result of this scaling is that quantization error now dominates the noise floor. We need to take this error into account when using CSI to predict the Effective SNR. My results later in the thesis show that this operation indeed improves the accuracy of Effective SNR predictions considerably.
+
+\subsubsection{Intel's Missing SNR Reference}
+\xxx{@David: does this go here, or is it irrelevant and okay if left to the tool website's FAQ/etc.?}
+The second issue is a broken implementation artifact of the way that Intel reports channel state information. The SNR reference is missing from each subcarrier's CSI matrix, and instead all matrices are normalized to an unknown reference. I determined via trial-and-error that this reference value is the total RSSI and developed a procedure to normalize it~\cite[\texttt{matlab/get\_scaled\_csi.m}]{csitool_code}.
+
+\subsection{Computing Effective SNR}
+Taking into account the two effects mentioned above, I used the processed and corrected CSI to compute Effective SNR values for links in my testbed according to the model described in \chapref{chap:model}. I parameterized the model with known properties of the Intel IWL5300 devices: they use minimum mean square error (MMSE) MIMO equalizers, and have known, fixed spatial mapping matrices that I detail in the tool source code.~\cite[\texttt{matlab/sm\_matrices.m}]{csitool_code}. These are the CSI measurements I use in the remainder of this thesis.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Summary}
+This chapter described my 802.11n experimental platform and CSI measurement tool, and detailed a number of practical considerations that are important when computing Packet SNR and Effective SNR values in practice. In the rest of this thesis, I use these measurements to evaluate how well my Effective SNR model (and other algorithms) works.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined

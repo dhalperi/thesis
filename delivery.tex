@@ -30,16 +30,6 @@ For each of these configurations, I measured the packet delivery for each link u
 
 The above testing gives ground truth data to probe variation across 200 links, 26\dB of transmit power, four antenna configurations ranging from SISO to MIMO3, and 8 MCS values per configuration. This covers all of the key variables needed to implement and evaluate my Effective SNR model. 
 
-\section{Computing SNR}
-Using these measurements, I computed the packet reception rate (PRR), Packet SNR, and Effective SNRs for all the measured configurations.
-
-\subsection{Computing Packet SNR}
-The natural 
-When receiving a transmission with multiple antennas, there is one RSSI value per antenna; how should these measurements be combined into a single SNR value for the link? I first convert the per-antenna RSSI and noise measurements to SNRs (\eqref{eq:per_chain_snr}) and then sum the SNRs. This is a straightforward choice for a single spatial stream as it corresponds to receiver processing using maximal-ratio combining (\eqref{eq:mrc}). It is also reasonable for 2- and 3-stream MIMO because the symbols carried on different spatial streams are interleaved coded bits~\cite{80211n}.
-
-\subsection{Computing Effective SNRs}
-From these data, I compute Effective SNR values using the model described in \chapref{chap:model}. I parameterized the model using known properties of the Intel IWL5300 devices: they use minimum mean square error (MMSE) MIMO equalizers, and have known, fixed spatial mapping matrices.
-
 \section{Results}
 The goal of this chapter is to understand whether Effective SNR is a good metric, whether it is an accurate predictor of packet delivery. In this section, I evaluate this in two ways. The first is via the \define{transition window}, i.e., the SNR regime in which packet delivery for all links goes from near-zero to near-perfect. We saw in \chapref{chap:problem} that this transition occurs rapidly for a wired link (\figref{fig:snr_prr_attenuator}), but occurs over a wide range for wireless links (\figref{fig:snr_prr_26_65}) when using the Packet SNR. A narrow transition window would be one indicator that Effective SNR works well.
 
