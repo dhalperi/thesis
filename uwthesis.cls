@@ -597,6 +597,7 @@
 %  (Defaults are for dissertation.  See \MasterThesis below.)
 %
 \def\Title#1{\gdef\@Title{#1}}
+\def\TitleA#1{\gdef\@TitleA{#1}}
 \def\Author#1{\gdef\@Author{#1}}
 \def\Year#1{\gdef\@Year{#1}}  \Year{\year}
 \def\Degree#1{\gdef\@Degree{#1}} \Degree{Doctor of Philosophy}
@@ -695,7 +696,7 @@
       \par\vskip1pc
       {\bf\@textofAbstract}%
       \par\vskip1pc
-      {\def\baselinestretch{1.0}\normalfont \@Title \par}
+      {\def\baselinestretch{1.0}\normalfont \@TitleA \par}
       \par\vskip1pc
       \@Author
       \par\vskip1pc
