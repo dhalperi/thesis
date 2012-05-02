@@ -197,7 +197,7 @@ In practice, I imagine that this grounding would be done by probing the link per
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{My Approach: an Effective SNR-based model for Wi-Fi}
-My hypothesis is that it is possible to unify wireless configuration decisions into a single framework that is simple and incurs little overhead, but still accurate. I envision a framework that is flexible enough to handle all the problems discussed in this section. To demonstrate this hypothesis, I develop a comprehensive system that uses low-level RF channel measurements in conjunction with a simple but powerful model that can predict the performance of every operating point in the entire configuration space. 
+My hypothesis is that \emph{it is possible to unify the decision-making components of wireless network configuration algorithms into a single comprehensive framework that is practical and provides good performance}. I envision a framework that is flexible enough to handle all the problems discussed in this section. To demonstrate this hypothesis, I develop a comprehensive system that uses low-level RF channel measurements in conjunction with a simple but powerful model that can predict the performance of every operating point in the entire configuration space. 
 
 In particular, I develop a practical methodology that uses low-level measurements of the RF channel and the concept of an Effective SNR~\cite{Nanda_EffectiveSNR} to predict performance for wireless channels that use modern physical layer technologies such as OFDM, multiple antennas, variable channel widths, and spatial diversity and multiplexing. I also explain how to apply this prediction engine to a wide variety of link and network configuration problems such as those described in this chapter. To demonstrate that this methodology is practical, I prototype a working system in the context of IEEE 802.11n, which is the dominant consumer wireless networking technology today and includes these state-of-the-art RF techniques. Finally, to show that it works, I use my prototype to evaluate the accuracy of the choices made using my techniques. I find that my model accurately predicts packet delivery over hundreds of indoor wireless links in two environments, and that this level of accuracy is sufficient to lead to good configurations for many link and network problems.
 
@@ -222,7 +222,6 @@ As described above, the input to my Effective SNR-based system is a set of low-l
 
 A single comprehensive CSI measurement captures the low-level channel details that enable my model to calculate the Effective SNR for a wide configuration space. I next summarize how these measurements are used.
 
-
 \subsection{Model Output, and how to Apply it}
 I describe the model and how it's used in in complete detail in the next chapter, but the basic structure of the model is simple: given (1) a current CSI measurement of the RF channel between transmitter and receiver, and (2) a target physical layer configuration of the transmit and receive NICs, it predicts whether that link will reliably deliver packets in that configuration.
 
@@ -233,8 +232,48 @@ Note that I do not try to make predictions in the transition region during which
 
 %steps are (1) comprehensively measuring CSI for the RF channel including all subchannels, (2) adapting that CSI measurement to model the transmit configuration problem under investigation, (3) modeling receiver behavior to come up with the post-processing SNRs of the individual subchannels, and (4) computing the bit error rates of the individual subchannels from their SNRs and then calculating the Effective BER and finally the Effective SNR.
 
+\subsection{Problems Solved}
+\begin{table}[htp]
+	\centering
+	\begin{tabular}{lc}
+	\toprule
+		\textbf{Application of Effective SNR} & \textbf{Described in} \\
+	\midrule
+		Bitrate/MCS selection & \chapref{chap:delivery}, \chapref{chap:rate}\\
+		Channel width selection & \chapref{chap:delivery}, \chapref{chap:rate}\\
+		Antenna selection & \chapref{chap:delivery}, \chapref{chap:rate}\\
+		Transmit power control & \chapref{chap:delivery}\\
+		Channel selection & \chapref{chap:applications}\\
+		AP selection & \chapref{chap:applications}\\
+		Path selection/BSS selection in WDS & \chapref{chap:applications}\\
+		Interference planning/Spatial reuse \\
+		Partial packet recovery/FEC & Bhartia et al.~\cite{Bhartia_FreqDiv}\\
+		Beamforming \\
+		Multicast rate selection \\
+	\bottomrule
+	\end{tabular}
+	\caption[A variety of applications of Effective SNR]{\label{tab:esnr_uses}A variety of applications of Effective SNR\@.}
+\end{table}
+
+\tabref{tab:esnr_uses} shows a list of several potential applications of Effective SNR. These cover all the problems described above and range from optimizing various parameters of a single Wi-Fi link, such as the MCS or antenna set used, to coordinating many nodes in a dense wireless network. Additionally, I identify applications that can be implemented by looking at other aspects of the Channel State Information in \tabref{tab:csi_uses}. These provide useful primitives that can enable systems to adapt behavior based on the location and movement of the user.
+
+Combined, I believe these form the critical building blocks for configuring dense future wireless networks like Wi-Fi Direct. In particular, my Effective SNR model provides the information needed to select rates or configure the network topology, among other things. The CSI can be used to supplement these schemes, particularly by using mobility classification to determine when a device starts to move and trigger reconfiguration of the wireless network in response. I implement and evaluate many of these applications in the rest of this thesis, several have been investigated by other researchers in follow-on work, and some are left for future research.
+
+\begin{table}[tp]
+	\centering
+	\begin{tabular}{lc}
+	\toprule
+		\textbf{Application of CSI} & \textbf{Described in} \\
+	\midrule
+		Mobility classification & \chapref{chap:applications}\\
+		Indoor localization & FILA~\cite{Wu_FILA}, PinLoc~\cite{Sen_PinLoc}, SpinLoc~\cite{Sen_SpinLoc} \\ 
+	\bottomrule
+	\end{tabular}
+	\caption[A variety of applications of Channel State Information]{\label{tab:csi_uses}A variety of applications of Channel State Information.}
+\end{table}
+
 \section{Summary}
-In this chapter I have presented a detailed overview of wireless link and network configuration problems, and the statistics-based and channel-based approaches we take to solving them today. Generally, statistics are too specific, applying only to a single or a few configurations. Conversely, channel measurements used previously have been too general, not capturing the low-level details of the channel. I then described my channel-based approach, which uses low-level channel measurements of the MIMO and OFDM subchannels in conjunction with an Effective SNR-based model to provide a way to predict performance over the broad configuration space. In the next chapter, I flesh out this model and how to use it, and argue that it is indeed flexible and low-overhead. In the remainder of the thesis, I will show that my model makes accurate predictions that lead to good choices of operating points in practice.
+In this chapter I have presented a detailed overview of wireless link and network configuration problems, and the statistics-based and channel-based approaches we take to solving them today. Generally, statistics are too specific, applying only to a single or a few configurations. Conversely, channel measurements used previously have been too general, not capturing the low-level details of the channel. I then described my channel-based approach, which uses low-level channel measurements of the MIMO and OFDM subchannels in conjunction with an Effective SNR-based model to provide a way to predict performance over the broad configuration space. In the next chapter, I flesh out this model and how to use it, and argue that it is indeed flexible and has low overhead. In the remainder of the thesis, I will show that my model makes accurate predictions that lead to good choices of operating points in practice for many of the problems I described in this chapter.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined
