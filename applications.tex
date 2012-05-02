@@ -8,46 +8,9 @@
 \chapter{Further Applications of Effective SNR}
 \label{chap:applications}
 
-In the previous chapter, I showed that my Effective SNR model provides good performance when selecting rates for 802.11a/g and 802.11n links. To further illustrate the model's flexibility and power, this chapter presents my exploration of Effective SNR to various problems of wireless links and wireless networks.
+In the previous chapter, I showed that my Effective SNR model provides good performance when selecting rates for 802.11a/g and 802.11n links. To further illustrate the model's flexibility and power, this chapter presents my exploration of Effective SNR to four problems of wireless links and wireless networks.
 
-\begin{table}[htp]
-	\centering
-	\begin{tabular}{lc}
-	\toprule
-		\textbf{Application of Effective SNR} & \textbf{Described in} \\
-	\midrule
-		Bitrate/MCS selection & \chapref{chap:rate}, originally in \cite{Halperin_ESNR}\\
-		Channel width selection & \chapref{chap:rate}, originally in \cite{Halperin_ESNR}\\
-		Antenna selection & \chapref{chap:rate}, originally in \cite{Halperin_ESNR}\\
-		Transmit power control & \chapref{chap:rate}, originally in \cite{Halperin_ESNR}\\
-		Channel selection & \secref{sec:esnr_chansel}\\
-		AP selection & \secref{sec:esnr_apsel}\\
-		Path selection/BSS selection in WDS & \secref{sec:esnr_pathsel}\\
-		Interference planning \\
-		Partial packet recovery/FEC & Bhartia et al.~\cite{Bhartia_FreqDiv}\\
-		Beamforming \\
-		Multicast rate selection \\
-	\bottomrule
-	\end{tabular}
-	\caption[A variety of applications of Effective SNR]{\label{tab:esnr_uses}A variety of applications of Effective SNR\@.}
-\end{table}
-
-\tabref{tab:esnr_uses} shows a list of several potential applications of Effective SNR, as those described in \chapref{chap:problem}. These range from optimizing various parameters of a single Wi-Fi link, such as the MCS or antenna set used, to coordinating many 802.11 nodes in a dense wireless network. Additionally, I identify applications that can be implemented by looking at other aspects of the Channel State Information below in \tabref{tab:csi_uses}. These provide useful primitives that can enable systems to adapt behavior based on the location and movement of the user. Combined, I believe these form the critical building blocks for configuring dense 802.11 networks.
-
-\begin{table}[htp]
-	\centering
-	\begin{tabular}{lc}
-	\toprule
-		\textbf{Application of CSI} & \textbf{Described in} \\
-	\midrule
-		Mobility classification & \secref{sec:esnr_mobility}\\
-		Indoor localization & FILA~\cite{Wu_FILA},PinLoc~\cite{Sen_PinLoc},SpinLoc~\cite{Sen_SpinLoc} \\ 
-	\bottomrule
-	\end{tabular}
-	\caption[A variety of applications of Channel State Information]{\label{tab:csi_uses}A variety of applications of Channel State Information.}
-\end{table}
-
-In this chapter, I explore CSI and Effective SNR approaches to implementing four of the above applications. The first three are are selection algorithms for access points, operating channels, and multi-hop paths through networks that represent the main decisions (beyond rate) that need to be made in flexible topologies such as Wi-Fi Direct networks. The last application is to classify whether a device is mobile, to switch between algorithms designed for static vs mobile links, or trigger a search for a new, better operating point when the device begins to move.
+The first three are are selection algorithms for access points, operating channels, and multi-hop paths through networks that represent the main decisions (beyond rate) that need to be made in flexible topologies such as Wi-Fi Direct networks. The last application is to classify whether a device is mobile, to switch between algorithms designed for static vs mobile links, or trigger a search for a new, better operating point when the device begins to move.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{esnr_eval_dataset}
