@@ -2,7 +2,7 @@
 \section{Channel Selection}\label{sec:esnr_chansel}
 Using the new Wi-Fi Direct standard, 802.11 devices that wish to send data directly (instead of through the access point as in 802.11 infrastructure mode) can create a peer-to-peer link. Depending on the amount of interference in the network (e.g., from other clients of the access point) and the quality of the link between the two devices, they may wish to move the link to a different operating channel in order to improve performance. This is one example of the \emph{channel selection} problem: to quickly choose the best operating frequency for a pair of nodes to communicate. In this section, I define the ``best'' channel to be the channel that provides the highest throughput in the absence of interferers.
 
-The channel selection problem is similar to the access point selection problem, and has a similar algorithmic solution (\algref{alg:chan_sel_basic}). It can use the same \fcall{GetMetric} functions for Packet SNR (\algref{alg:snr_link_metric}) and Effective SNR (\algref{alg:eff_snr_link_metric}). The primary difference is a reordering of the parameters: rather a fixed receiver and channel choosing between multiple senders, a fixed sender and receiver must choose between multiple channels.
+The channel selection problem is similar to the access point selection problem, and has a similar algorithmic solution (\algref{alg:chan_sel_basic}). It can use the same \fcall{GetMetric} functions for Packet SNR (\algref{alg:snr_link_metric}) and Effective SNR (\algref{alg:eff_snr_link_metric}). The primary difference is a reordering of the parameters: rather than a fixed receiver with fixed channel choosing between multiple senders, a fixed sender and receiver must choose between multiple channels.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{algorithm}[thp]
@@ -21,7 +21,7 @@ The channel selection problem is similar to the access point selection problem, 
 \subsection{Characterization of 802.11 channels}
 To start my investigation of channel selection algorithms, I first measured how the operating frequency affects 802.11n links in practice.
 
-As in \secref{sec:esnr_apsel}, I filtered the data to the 11 uninterfered-with channels in the 5\GHz band. (Note that channel selection generally makes sense \emph{within} one frequency band. Selection across bands is trivial: due to better antenna gain and Friis' Law effects a 2.4\GHz channel has typically 10\dB--15\dB stronger SNR than a 5\GHz channel for the same nodes.) I further eliminated from consideration any pairs of devices that didn't obtain at least 6.5\Mbps throughput on at least 3 of the 11 channels. This left 201 unidirectional links, approximately a third of the $24*23=552$ unidirectional links in the testbed.
+As in \secref{sec:esnr_apsel}, I filtered the data to the 11 channels in the 5\GHz band for which there are not co-channel university APs. (Note that channel selection generally makes sense \emph{within} one frequency band. Selection across bands is trivial: due to better antenna gain and Friis' Law effects a 2.4\GHz channel has typically 10\dB--15\dB stronger SNR than a 5\GHz channel for the same nodes.) I further eliminated from consideration any pairs of devices that didn't obtain at least 6.5\Mbps throughput on at least 3 of the 11 channels. This left 201 unidirectional links, approximately a third of the $24*23=552$ unidirectional links in the testbed.
 
 \begin{figure}[t]
 	\centering
@@ -35,15 +35,21 @@ As in \secref{sec:esnr_apsel}, I filtered the data to the 11 uninterfered-with c
 	\caption[The absolute difference in throughput over 802.11n channels]{\label{fig:chan_sel_tpt_diff}The absolute difference in throughput over 802.11n channels.}
 \end{figure}
 
+\subsubsection{Results}
 \figref{fig:chan_sel_rel_diff} and \figref{fig:chan_sel_tpt_diff} show how the throughput of the worst, median, and average channels compares to the best channel for these links. Note that because the channel set is fixed and independent of connectivity, the worst channel might deliver no throughput at all---unlike AP selection, in which the client was choosing from only those nodes that responded to its probe. About a third of the links had at least one such channel.
 
 These figures demonstrate that the choice of channel can dramatically impact performance. \figref{fig:chan_sel_rel_diff} shows that the worst channel offers less than half of the best throughput for more than half the links. In absolute terms, this difference can be quite large: the worst channel is a median 33\Mbps worse than the best channel, and for a few links (about 7\%) the difference is more than 100\Mbps. For these links, some channel will deliver no packets at all, while another delivers packets at nearly the maximum bitrate. An unlucky choice of channel can cripple performance and result in little to no throughput.
 
 The median and average channels perform about equivalently in our testbed, and even these are significantly worse. These channels yield less than half the optimal throughput for 15\% of the links and for only one third of links do these come within 80\% of the best throughput. These figures show that for very few links do most channels perform about the same, and the median or average channel is 15\Mbps worse than the best channel for most links, and the gap is larger than 25\Mbps for 20\% of links.
 
-Note that in these graphs, the average/median channels are much closer to optimal than are the average/median access points we saw in \figref{fig:ap_sel_rel_diff} and \figref{fig:ap_sel_tpt_diff}. I hypothesized that this might be because different channels between the same two devices are likely to have similar total signal strengths (i.e., Packet SNR). If this is the case, the difference in performance will come mainly through subchannel fading effects---and while these subchannel effects can affect link quality significantly, as I showed in \chapref{chap:delivery}, the difference is likely not as much as when comparing access points located tens of meters apart.
+\subsubsection{Signal strength across channels}
+Note that the average/median channels are much closer to optimal in these graphs than were the average/median access points we saw in \figref{fig:ap_sel_rel_diff} and \figref{fig:ap_sel_tpt_diff}. Why should this be the case?
 
-To test this hypothesis, I analyzed the Packet SNR versus channel for the 11 channels supported by the IWL5300 in the 2.4\GHz band and the 24 channels in the 5\GHz band. Note that for these experiments, external interference does not pose a problem because accurate SNR measurements require only a single packet to be delivered successfully without interference during the preamble. I considered only links that had at least 10 packets delivered with consistent SNRs and supported at least 3 channels, for a total or 349 links in the 2.4\GHz band and 253 links in the 5\GHz band. \figref{fig:rssi_vs_freq_24} and \figref{fig:rssi_vs_freq_5} plots the normalized Packet SNR (Packet SNR across all channels minus the average Packet SNR) against channel for these links. The figures include one grey line per link, and the solid black line in each figure shows the median. We see that, indeed, Packet SNR stays within a few dB of the median for most channels. I believe that the shape of the black line in \figref{fig:rssi_vs_freq_5} shows the natural resonance of the antennas, which is consistently non-uniform across the approximately 600\MHz of spectrum the 5\GHz band covers.
+I hypothesized that this effect might arise because channels between the same two devices are likely to have similar total signal strengths (i.e., Packet SNR). When two channels have the same signal strength, the difference in performance would come mainly through subchannel fading effects---and while these subchannel effects can affect link quality significantly, as I showed in \chapref{chap:delivery}, the difference is likely not as much as when comparing access points located tens of meters apart.
+
+To test this hypothesis, I analyzed the Packet SNR versus channel for the 11 channels supported by the IWL5300 in the 2.4\GHz band and the 24 channels in the 5\GHz band.\footnote{I used all channels for these experiments, as external interference does not pose a problem. Accurate SNR measurements require only a single packet to be delivered successfully without interference during the preamble.} I considered only links that had at least 10 packets delivered with consistent SNRs and supported at least 3 channels, for a total or 349 links in the 2.4\GHz band and 253 links in the 5\GHz band.
+
+If different channels have similar signal strengths, the Packet SNR will vary only a few dB across the frequency band. \figref{fig:rssi_vs_freq_24} and \figref{fig:rssi_vs_freq_5} plot the normalized Packet SNR for a given link (Packet SNR across all channels minus the average Packet SNR) against channel. The figures include one grey line per link, and the solid black line in each figure shows the median. We see that, indeed, Packet SNR stays within a few dB of the median for most channels. I believe that the shape of the black line in \figref{fig:rssi_vs_freq_5} shows the natural resonance of the antennas, which is consistently non-uniform across the approximately 600\MHz of spectrum the 5\GHz band covers.
 
 \begin{figure}[htp]
 	\centering
@@ -131,7 +137,7 @@ From these results, I conclude that a strategy that picks a fixed channel or a r
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Channel selection accuracy}
-I evaluate Packet SNR and Effective SNR-based channel selection algorithms bases on \algref{alg:chan_sel_basic} and using the link metric functions described in \algref{alg:snr_link_metric} (Packet SNR) and \algref{alg:eff_snr_link_metric} (Effective SNR).
+I evaluate Packet SNR and Effective SNR-based channel selection algorithms based on \algref{alg:chan_sel_basic} and using the link metric functions described in \algref{alg:snr_link_metric} (Packet SNR) and \algref{alg:eff_snr_link_metric} (Effective SNR).
 
 \figref{fig:chan_sel_ratio_opt} shows the performance relative to the optimal algorithm when using Effective SNR or Packet SNR to choose between channels, using the same format as I used for access point selection in \figref{fig:ap_sel_ratio_opt}. Again, we see that both algorithms perform well, though Effective SNR is a better predictor of application performance. Effective SNR chooses an optimal channel for 121 links (60\%), whereas Packet SNR is optimal for only 71 links (35\%). The Effective SNR-based algorithm is within 90\% of optimal for 168 links (84\%), 80\% for 181 links (90\%), and 70\% for 191 links (95\%). In contrast, maximizing the Packet SNR only gets within 90\% of optimal for 112 links (56\%).
 
@@ -160,17 +166,17 @@ These results shows that both Effective SNR- and Packet SNR-based channel select
 
 Note also that, as hypothesized above, the accuracy of both channel selection algorithms is reduced relative to access point selection. Whereas Effective SNR chose an optimal AP for more than 80\% of clients, it indicates an optimal channel for only 60\% of links; the Packet SNR results exhibit similar a similar decline. This confirms that the similarity of channels leads to more ambiguity when choosing between them. Additionally, the benefits of Effective SNR relative to Packet SNR are larger for channel selection than they were for AP selection. Since most channels have similar Packet SNRs, the real reason for the improvement performance is that my model can accurately assess the impact of subchannel fading effects.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{\xxx{Further Evaluations?}}
-\heading{Channel discrimination.}
-\xxx{how many channels do we need to look at to get good performance?} \figref{fig:rel_diff_draws} shows that, depending on how close to optimal you want to be, need to look at 5, 10, or 15 of the 24 channels in 5\GHz band. If we can evaluate the rate offered by a channel quickly, we can look at more channels in the same amount of time to pick the best rate.
-
-\begin{figure}[htp]
-	\centering
-	\includegraphics[width=\textwidth]{figures/applications/chan_sel_rel_diff_draws.pdf}
-	\caption[The expected rate after choosing the best of $k$ 802.11n channels]{\label{fig:rel_diff_draws}The expected rate after choosing the best of $k$ 802.11n channels.}
-\end{figure}
-
-\heading{Performance.} \xxx{given time to hop $\mathcal{O}$(1\ms), time to execute a CSI probe $\mathcal{O}$(500\us), and time to execute a rate probe (unknown), how many channels can we look at in $T$ time? Reference \figref{fig:rel_diff_draws} to see what fraction of optimal this enables.}
-
-\heading{Completion Time.} \xxx{The difference between the Effective SNR and the SNR is a proxy for how ``good'' a channel is, based on how flat it is. Given that RSS is similar across channels, the flattest channel will likely offer the best rate. Can we use this to detect a good channel and stop looking early?}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\subsection{\xxx{Further Evaluations?}}
+%\heading{Channel discrimination.}
+%\xxx{how many channels do we need to look at to get good performance?} \figref{fig:rel_diff_draws} shows that, depending on how close to optimal you want to be, need to look at 5, 10, or 15 of the 24 channels in 5\GHz band. If we can evaluate the rate offered by a channel quickly, we can look at more channels in the same amount of time to pick the best rate.
+%
+%\begin{figure}[htp]
+%	\centering
+%	\includegraphics[width=\textwidth]{figures/applications/chan_sel_rel_diff_draws.pdf}
+%	\caption[The expected rate after choosing the best of $k$ 802.11n channels]{\label{fig:rel_diff_draws}The expected rate after choosing the best of $k$ 802.11n channels.}
+%\end{figure}
+%
+%\heading{Performance.} \xxx{given time to hop $\mathcal{O}$(1\ms), time to execute a CSI probe $\mathcal{O}$(500\us), and time to execute a rate probe (unknown), how many channels can we look at in $T$ time? Reference \figref{fig:rel_diff_draws} to see what fraction of optimal this enables.}
+%
+%\heading{Completion Time.} \xxx{The difference between the Effective SNR and the SNR is a proxy for how ``good'' a channel is, based on how flat it is. Given that RSS is similar across channels, the flattest channel will likely offer the best rate. Can we use this to detect a good channel and stop looking early?}

@@ -6,7 +6,7 @@ The practical state of the art in this area is the recent work by Bahl et al.~\c
 
 While this solution is practical and works well, the use of new techniques in 802.11n significantly complicates the picture. First, the scheme of Bahl et al.\ uses a link's RSSI (as a measure of Packet SNR) to select between the 8 available 802.11a rates. In contrast, as I have shown in \chapref{chap:delivery}, Packet SNR does not accurately predict the rate for 802.11n links, nor does it enable devices to choose between different MIMO modes. Second, Bahl et al.\ used a homogenous network of single-antenna 802.11a chipsets; but the set of devices in 802.11n networks will be heterogeneous and support differing numbers of antennas and asymmetric transmit/receive capabilities. While it is not clear how to handle these challenges via the Packet SNR, the Effective SNR offers the ability to overcome them. In this section, I evaluate the ability of Effective SNR to deliver the benefits of opportunistic repeaters in 802.11n networks.
 
-Note that the problem of path selection does not differ significantly from that of AP selection, except that when choosing between repeaters (or a direct link) the entire path must be considered rather than merely the last hop. For simplicity, I assume that the network diameter is small such that pipelining~\cite{Rodrig_thesis} is of limited benefit, and do not consider schemes that forward along multiple unreliable paths such as ExOR~\cite{Biswas_ExOR}. I next describe the basic path selection algorithm I evaluate and characterize the multi-hop paths in my testbed.
+Note that the problem of path selection is similar to AP selection, except that when choosing between repeaters (or a direct link) the entire path must be considered rather than merely the last hop. For simplicity, I assume that the network diameter is small such that pipelining~\cite{Rodrig_thesis} is of limited benefit, and do not consider schemes that forward along multiple unreliable paths such as ExOR~\cite{Biswas_ExOR}. I next describe the basic path selection algorithm I evaluate and characterize the multi-hop paths in my testbed.
 
 %Instead, in this section I focus on how 802.11n and heterogeneous devices change the opportunities available from relaying, and whether Effective SNR delivers these improvements.
 
@@ -60,7 +60,9 @@ As these results show that relay selection recoups most of the gains of full pat
 To define the function \fcall{PredictBitrate} for Effective SNR, we can simply use \fcall{GetMetric-EffectiveSNR} (\algref{alg:eff_snr_link_metric})---because the link metric of interest for Effective SNR is indeed simply the predicted bitrate of the link.
 
 \subsubsection{Relay selection with Packet SNR}
-Unfortunately, defining a \fcall{PredictBitrate-EffectiveSNR} function for Packet SNR is trickier. We have already seen in \chapref{chap:delivery} that Packet SNR is not a good indicator of packet delivery for a specific MCS, so we can't use the approach we used for Effective SNR in \algref{alg:eff_snr_link_metric}. But there should still be a positively correlated relationship between Packet SNR and expected bitrate, which I use instead to predict the bitrate. (Note that this will not tell \emph{which} specific modulation and coding schemes to use, only what the expected bitrate will be among the many choices.)
+Unfortunately, defining a \fcall{PredictBitrate-EffectiveSNR} function for Packet SNR is more complicated. We have already seen in \chapref{chap:delivery} that Packet SNR is not a good indicator of packet delivery for a specific MCS, so the approach we used for Effective SNR in \algref{alg:eff_snr_link_metric} would offer poor performance.
+
+Instead, I observe that there should still be a positively correlated relationship between Packet SNR and expected bitrate, which I use instead to predict the bitrate. (Note that this will not tell \emph{which} specific modulation and coding schemes to use, only what the expected bitrate will be given ideal rate selection among the many choices.) This approach will provide a better way to predict throughput from Packet SNR.
 
 \begin{figure}[t]
 	\centering
@@ -69,6 +71,9 @@ Unfortunately, defining a \fcall{PredictBitrate-EffectiveSNR} function for Packe
 \end{figure}
 
 To generate this function, measured the optimal throughput and Packet SNR for all the links in my testbed. I then divided this data into 1\dB-wide SNR bins, and took the median throughput of each bin as the throughput prediction for that Packet SNR value. By connecting these medians (and dropping some sparse bins with so that the line monotonically increases), I derived a monotonic function that uses the Packet SNR measurement to predict the throughput of a link. I plot the original data as a scatterplot in \figref{fig:snr_vs_mbps}, with the interpolated throughput prediction also shown as a solid line. To define \fcall{PredictBitrate-PacketSNR} in order to define a Packet SNR-based relay selection algorithm, I simply look up the Packet SNR of the link and return the throughput predicted by this line.
+
+\subsubsection{Practical coordination algorithm}
+\algref{alg:relay_sel_basic} describes the calculation of rate, but does not describe directly how the two bitrate predictions are obtained. Recall the access point selection algorithm, in which the client sent a probe to all potential APs, and evaluated the link performance from the probe response. For relay selection, the sender instead sends a probe to all potential \emph{relays}, estimating the link performance from their response. If the relays include in their response their predicted bitrate to the destination, the sender has all the information needed to estimate the performance of the relay path. This induces little added coordination on the network.
 
 Having defined both algorithms for relay selection, I next evaluate their performance.
 
