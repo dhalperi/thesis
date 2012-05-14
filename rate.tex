@@ -8,26 +8,34 @@
 \chapter{Application to Rate Selection}
 \label{chap:rate}
 
-In the last chapter, I showed that my Effective SNR model can accurately predict packet delivery for 802.11n. Here, I close the loop, demonstrating how my model can be applied to solve an 802.11n configuration problem. This chapter presents an in-depth study of the application of Effective SNR to the problem of rate selection for 802.11.
+In the last chapter, I showed that my Effective SNR model can accurately predict packet delivery for 802.11n. Here I close the loop, demonstrating how my model can be applied to solve an 802.11n configuration problem.
 
-I first compare against state-of-the-art schemes for single-antenna 802.11a/g systems. In these measurements, the goal is to show that Effective SNR performs as well as or better than the existing, well-studied probe- and channel metric-based schemes on their home ground, using my method which has the advantages of simplicity, deployability, and generality. To enable comparison with state-of-the-art algorithms that cannot be implemented in commodity hardware today, I use 802.11n physical-layer simulations driven by collected channel state information traces to perform my evaluation.
+This chapter presents an in-depth study of the application of Effective SNR to the problem of rate selection for 802.11. This is a fundamental, well-studied problem because selecting a good rate at which to encode data is crucial for a link to work perform well, and if links do not perform well then no higher-level applications can be built. Though there is a wide variety of rate control algorithms, these probe- and channel-based schemes generally do not extend well to 802.11n and/or fast mobile channels.
 
-I then show that this model extends well to 802.11n (MIMO) and so provides ongoing value. In subsequent chapters, I will explain how to apply Effective SNR to other configuration problems.
+I first compare an Effective SNR-based rate selection algorithm against state-of-the-art schemes for single-antenna 802.11a/g systems, which generally work well for SISO links. The goal is to show that Effective SNR performs as well as or better than these existing, well-studied probe- and channel metric-based schemes on their home ground, while using my method which has the advantages of simplicity, deployability, and generality.
+
+I then show that my Effective SNR model extends well to 802.11n (MIMO) and so provides ongoing value. The results in this chapter will show that Effective SNR provides an accurate and response rate selection algorithm that provides good performance across SISO and MIMO configurations and a range of mobile channels.
+
+This chapter contains a detailed study of Effective SNR for rate selection to make its benefits concrete. In the next chapter, I will highlight the flexibility of my model by explaining how to apply Effective SNR a a wide class of other configuration problems.
 
 %Rate adaptation is an open problem for 802.11n. Most schemes in the literature were not designed for MIMO systems, and none of the ones that were have been tested on real 802.11 channels.\footnote{The only experimental evaluation of MIMO rate adaptation we know of is on Hydra~\cite{Kim_Hydra}. It uses the USRP radios for 2\MHz channels that are relatively narrowband and flat.} 
 
-\section{Rate Selection Algorithms}
-I experiment with ESNR, an algorithm based on my model, plus SampleRate~\cite{Bicket_SampleRate}, the de facto rate selection algorithm in use today, and SoftRate~\cite{Vutukuru_SoftRate}, a research algorithm with the best published results.
+\section{Experimental Methodology}
+I experiment with Effective SNR, an algorithm based on my model, plus SampleRate~\cite{Bicket_SampleRate}, the de facto rate selection algorithm in use today, and SoftRate~\cite{Vutukuru_SoftRate}, a research algorithm with the best published results.
 
+Although my Effective SNR algorithm runs in real time on a mobile client with the Intel 802.11 NIC,\footnote{I implemented a version of Effective SNR that randomly probes other antenna modes to collect CSI and that also sends Effective SNR estimates back to the transmitter, and ran it online against SampleRate in human-scale mobility. The results show that the probing and feedback have little penalty, and match the simulator: the two algorithms are separated by a small (5\%--10\%) margin.} I turn to simulations to compare Effective SNR to other algorithms. This is for two reasons. First, SoftRate runs on a software-defined radio, and cannot be implemented on a currently available commercial NIC. Second, I want to compare the algorithms over varied channel conditions, from static to rapidly changing, to assess how consistently they perform. 
+For example, no algorithm will beat SampleRate by a significant margin on static channels, because it will eventually adapt to the channel. In contrast, SoftRate performs well even when the channel is changing rapidly due to mobility. However, it is hard to generate controllable high-mobility experimental settings, while traces let us perform these evaluations directly.
+
+In this section, I first describe the rate selection (or adaptation) algorithms studied, and then present my trace-driven simulator that I use to perform the comparisons between the different strategies.
+
+\subsection{Rate Selection Algorithms}
 \textbf{SampleRate}~\cite{Bicket_SampleRate} is an implicit feedback scheme that uses only information about packet reception or loss.
 It maintains delivery statistics for different rates to compute the expected airtime to send a packet, including retries.
 It falls back to a lower rate when the airtime of the chosen rate exceeds (due to losses) the airtime of a lower rate.
 Standard implementations send a packet to probe 1 or 2 higher rates every 10 packets, to determine whether to switch to higher rates.
 
 The main weakness of SampleRate is its slow reaction to change. If the wireless channel quickly degenerates, SampleRate will incur multiple losses while it falls back through intermediate rates.\footnote{The original SampleRate~\cite{Bicket_SampleRate} did not reduce rate for retries, but some implementations~\cite{Judd_CHARM} and the version used in modern kernels~\cite{Minstrel} do. This turns out to be important for good performance.} When the channel suddenly recovers, SampleRate's infrequent probing converges to the new highest rate slowly. Algorithms such as 
-RRAA~\cite{Wong_RRAA} aim to improve on SampleRate's weaknesses, but as they are less widely used we stick with SampleRate as a representative probe-based algorithm.
-
-SampleRate is only defined for SISO links. MIMO breaks some of its assumptions, as higher rates can work when lower ones do not due to different antenna modes. Thus, I only compare it for 802.11a/g experiments.
+RRAA~\cite{Wong_RRAA} aim to improve on SampleRate's weaknesses, but as they are less widely used we stick with SampleRate as a representative probe-based algorithm, based on the Minstrel~\cite{Minstrel} implementation in the Linux kernel. For 802.11n (MIMO) links, I use a version of SampleRate adapted for multiple streams, and based on the Linux Minstrel\_HT~\cite{Minstrel_HT} algorithm.
 
 \textbf{SoftRate}~\cite{Vutukuru_SoftRate} is an explicit feedback scheme that uses information gleaned during packet reception at a given rate to predict how well different rates will work. The input to these predictions is the bit error rate (BER) as estimated from side-information provided by the convolutional decoder. SoftRate chooses rates based on the performance curves that relate the BERs for one rate (a combination of modulation and coding) to another. %the BER for a different modulation and coding. 
 Each rate will be the best choice only during a predictable BER range. These predictions can help SoftRate quickly identify the best rate. SoftRate has been shown to dominate trained SNR-based algorithms such as CHARM~\cite{Judd_CHARM} and I do not evaluate against those directly.
@@ -36,28 +44,20 @@ Each rate will be the best choice only during a predictable BER range. These pre
 
 SoftRate is defined for SISO channels, like SampleRate, 
 and its predictions hold only for fixed transmit power and antenna modes, so it does not extend to MIMO systems.
-Thus I only use it for 802.11a/g experiments. To cover the full SISO range, I extended the MIT implementation of SoftRate to QAM-64 and 2/3 and 5/6 rate codes.
+Thus I only use it for 802.11a/g experiments. To cover the full SISO range, I extended the MIT implementation of SoftRate to the 64-QAM modulation and added support for 2/3 and 5/6 rate codes.
 
-\textbf{ESNR} uses my model in a very simple way: given recent channel state information, compute the highest rate configuration that is predicted to successfully deliver packets (PRR $>90\%$). It runs at the receiver, measuring CSI on received packets and returning rate changes to the sender along with the ACK like SoftRate. Finally, to protect against poor choices near a rate boundary in our model, I fall back one rate if consecutive packets must be retried and the Effective SNR level has not changed. This is a fixed rule.
+\textbf{Effective SNR} uses my model in a very simple way, based on \algref{alg:eff_snr_basic}. Given recent channel state information and per-MCS Effective SNR thresholds, it computes the highest rate configuration that is predicted to successfully deliver packets. It runs at the receiver, measuring CSI on received packets and returning rate changes to the sender along with the ACK like SoftRate. Finally, to protect against poor choices near a rate boundary in our model, I fall back one rate if consecutive packets must be retried and the Effective SNR level has not changed. This is a fixed rule.
 
 Like SoftRate, this algorithm obviates the search phase. There is no calibration of dynamic thresholds. This is not rate \emph{adaptation} so much as rate \emph{selection} that changes only because it tracks the channel's evolution. And unlike SoftRate, the predictions of the model hold over different antenna modes. This lets it run over 802.11n rates as easily and in the same way that it runs over 802.11a/g rates. Thus, I report results from both 802.11a/g and 802.11n runs for this algorithm.
 
-\textbf{Optimal.} I also take advantage of simulation to add upper bounds on achievable performance. This lets me assess how well the algorithms perform on an absolute scale. The OPT scheme has an oracle that knows the true highest rate that can be successfully delivered at any given time. The Previous-OPT scheme knows the optimal rate that worked on the channel for the previous packet and uses it for the next transmission; it just does not know the future. Since SoftRate and ESNR use an estimate of this previous channel state, and SampleRate infers the recent channel state, they are unlikely to beat Previous-OPT. The gap between Previous-OPT and OPT is also likely to be significant because of inherent wireless channel variability.
-%OPT gets the benefit of transient improvements and faster rates with low, but non-zero delivery probability for free.
+\textbf{Optimal.} Finally, I take advantage of simulation to add upper bounds on achievable performance. This lets me assess how well the algorithms perform on an absolute scale. The Optimal scheme has an oracle that knows the true highest rate that can be successfully delivered at any given time. The Delayed Optimal scheme knows the optimal rate that worked on the channel for the previous packet and uses it for the next transmission; it just does not know the future. Since SoftRate and Effective SNR use an estimate of this previous channel state, and SampleRate infers the recent channel state, they are unlikely to beat Delayed Optimal. The gap between Delayed Optimal and Optimal is also likely to be large because of inherent wireless channel variability---the Optimal algorithm gets the benefit of transient improvements and faster rates with low, but non-zero delivery probability for free.
 
+\subsection{Trace-driven Simulator}
 
-\section{Trace-driven Simulator}
+The simulator I build uses a trace from a real mobile channel and implementations of all algorithms described above.
 
-%We use a simulator to compare these algorithms running on the same channel. Our ESNR algorithm runs in real time on a mobile client with the Intel 802.11 NIC\@. However, we turn to simulation for two reasons. First, SoftRate runs on a software-defined radio, not a commercial NIC, so we need to use simulation to compare the two. Second, good algorithms have consistently good performance over a range of channels. For example, no algorithm will beat SampleRate by a significant margin on static channels because it will quickly adapt to the channel. However, algorithms like SoftRate perform well even when the channel is changing rapidly due to mobility. With a simulator, we can compare algorithms over this range of conditions. 
-
-Although the ESNR algorithm runs in real time on a mobile client with the Intel 802.11 NIC,\footnote{I implemented a version of ESNR that randomly probes other antenna modes to collect CSI and that also sends Effective SNR estimates back to the transmitter, and ran it online against SampleRate in human-scale mobility. The results show that the probing and feedback have little penalty, and match the simulator: the two algorithms are separated by a small (5\%--10\%) margin.} I turn to simulations to compare these algorithms. %running on the same channel. 
-This is for two reasons. First, SoftRate runs on a software-defined radio, and cannot be implemented on a currently available commercial NIC. Second, U want to compare the algorithms over varied channel conditions, from static to rapidly changing, to assess how consistently they perform. 
-For example, no algorithm will beat SampleRate by a significant margin on static channels, because it will eventually adapt to the channel. In contrast, SoftRate performs well even when the channel is changing rapidly due to mobility. However, it is hard to generate controllable high-mobility experimental settings, while traces let us perform these evaluations directly.
-
-
-%The simulator we build is trace-driven. 
-
-\subsection{Trace} I collected real channel information for the simulations. I walked around UW CSE while carrying a laptop configured to send short, back-to-back packets to stationary testbed nodes that record the CSI. The CSI reflects frequency-selective fading over real, varying 20\MHz MIMO channels that is typically not observed with more narrowband experimentation, e.g., on the USRP. Recall that CSI is estimated during the preamble of the packet transmission, independent of the modulation and coding of the payload. Therefore, the mobile transmitter can quickly cycle through all antenna configurations (SIMO, MIMO2 and MIMO3) by sending a single short UDP packet at the lowest rate for each configuration. This enables fine grained sampling of the channel, approximately every 650\us. The following results are derived from a trace with approximately 85,000 channel measurements taken over 55 seconds, spanning varying RF channels that range from the best 3-stream rates to SISO speeds.
+\subsubsection{Channel Trace}
+I collected real channel information for the simulations. I walked around UW CSE while carrying a laptop configured to send short, back-to-back packets to stationary testbed nodes that record the CSI. The CSI reflects frequency-selective fading over real, varying 20\MHz MIMO channels that is typically not observed with more narrowband experimentation, e.g., on the USRP. Recall that CSI is estimated during the preamble of the packet transmission, independent of the modulation and coding of the payload. Therefore, the mobile transmitter can quickly cycle through all antenna configurations (SIMO, MIMO2 and MIMO3) by sending a single short UDP packet at the lowest rate for each configuration. This enables fine grained sampling of the channel, approximately every 650\us. The following results are derived from a trace with approximately 85,000 channel measurements taken over 55 seconds, spanning varying RF channels that range from the best 3-stream rates to SISO speeds.
 
 \begin{figure}[ht]
 \centering
@@ -66,89 +66,100 @@ For example, no algorithm will beat SampleRate by a significant margin on static
 \end{figure}
 
 
-\subsection{Simulator} I feed this trace to a custom 802.11a/g/n simulator written in a combination of MATLAB and the MIT C++ GNU Radio code. The simulator implements packet reception as shown in \figref{fig:ofdm_decoding}, including demodulation for BPSK through QAM-64, deinterleaving, and convolutional decoding with soft inputs and soft outputs. The measured CSI is interpolated to 56 carriers and serves as the ground truth for the channel, and packets are correctly received when there are no bit errors, or are lost. SampleRate, SoftRate, and ESNR are implemented as described previously. To ensure that ESNR is not given the unrealistic advantage of ground truth CSI, we corrupt the CSI at the level of ADC quantization, which typically induces an error of $\pm$1.5\dB in the output Effective SNRs. SoftRate estimates the BER directly during decoding.
+\subsubsection{Simulator} I feed this trace to a custom 802.11a/g/n simulator written in a combination of MATLAB and the MIT C++ GNU Radio code. The simulator implements packet reception as shown in \figref{fig:ofdm_decoding}, including demodulation for BPSK through 64-QAM, deinterleaving, and convolutional decoding with soft inputs and soft outputs. The measured CSI is interpolated to 56 carriers and serves as the ground truth for the channel. Packets are correctly received when there are no bit errors, or are lost. SampleRate, SoftRate, and Effective SNR are implemented as described previously. To ensure that Effective SNR is not given the unrealistic advantage of ground truth CSI, I corrupt the CSI at the level of ADC quantization, which typically induces an error of $\pm$1.5\dB in the output Effective SNRs. SoftRate estimates the BER directly during decoding.
 
-To vary mobility, we can replay the trace at different speeds. For example, 4$\times$ mobility gives ESNR the CSI from every fourth trace record. However, packet reception still uses all trace records. For a packet to be correctly received in the accelerated trace, it must be received over the intermediate records. The simulator requires correct reception at $\geq$80\% of the records to allow for coding. This models a varying channel that I can only sample for CSI periodically, as happens when CSI is measured during the packet preamble. SoftRate operates using the 80th percentile soft estimate from the range.
+The simulator implements the 802.11n MAC, including randomized backoff and link-layer packet aggregation, for an isolated link. The sender sends packet batches up to 65,000 bytes long, but often shorter for slower rates where the transmission time is instead limited by the standard's 4\ms restriction on transmission duration. As a single packet batch transmission can last up to 4\ms, this may comprise multiple channel probes. The simulator requires correct reception at $\geq$80\% of the channel records in order for the batch to be received (this allowed for the effects of coding). To vary mobility, I scale the trace at different speeds; for example, 4$\times$ mobility means that the records are assumed to arrive 4$\times$ faster than they were measured.
 
-The goal is to evaluate the ability of these algorithms to respond to changing channel conditions. Thus, the primary metric is the delivered PHY layer rate per trace index. Higher-layer factors such as MAC backoff, link-layer packet aggregation, and TCP reactions to loss, will affect how this rate translates to throughput.
+The Effective SNR feedback for a particular packet batch is given from the CSI of the first measurement overlapping that transmission. This models a varying channel that I can only sample for CSI periodically, as happens when CSI is measured during the packet preamble. SoftRate operates using the 80th percentile soft estimate from the range.
 
-\begin{figure}[t]
-      \centering
-      \includegraphics[width=\textwidth]{figures/rate/siso_rate_time_opt_eff.pdf}
-      \caption[OPT and ESNR SISO performance in human-speed mobility]{\label{fig:siso_rate_time_opt_eff} OPT and ESNR SISO performance in human-speed mobility.}
-\end{figure}
-
-\begin{figure}[t]
-      \centering
-      \includegraphics[width=\textwidth]{figures/rate/siso_rate_skip_opt_eff.pdf}
-      \caption[OPT and ESNR SISO performance in fast mobile channels]{\label{fig:siso_rate_skip_opt_eff} OPT and ESNR SISO performance in fast mobile channels.}
-\end{figure}
-
-
+The goal is to evaluate the ability of these algorithms to respond to changing channel conditions. Thus, the primary metric is the delivered PHY layer rate per time, modeling a UDP application. Higher-layer factors such as TCP reactions to loss, will affect how this rate translates to throughput.
 
 \section{SISO Rate Adaptation Results}
-I first examine the performance of ESNR for SISO rates. \figref{fig:siso_rate_time_opt_eff} shows the rate over time for ESNR and OPT over the trace. The performance metric is the average rate over an interval because each algorithm gets an opportunity to send a packet at the same point in the trace. The rate is averaged over a window of 100 packets to smooth the data for readability. ESNR performs excellently. It is below OPT but consistently overlaps Previous-OPT, which is an upper bound for schemes that track the channel and do not predict the future. ESNR is accurate on 75\% of packets, with the expected 10\% target over-selection.
+I first examine the performance of Effective SNR for SISO rates. The goal of this experiment is to establish a reasonable baseline, showing that Effective SNR performs as well or better than existing well-studied SISO rate adaptation algorithms on their home ground, though using a much simpler algorithm. If so, this will provide initial validation that the accurate packet delivery predictions provided by my Effective SNR model are useful in practice.
+
+\begin{figure}[t]
+      \centering
+      \includegraphics[width=\textwidth]{figures/rate/siso_rate_time.pdf}
+      \caption[Effective SNR SISO performance versus Optimal in human-speed mobility]{\label{fig:siso_rate_time_opt_eff} Effective SNR SISO performance versus Optimal in human-speed mobility.}
+\end{figure}
 
 \subsection{Effective SNR vs Optimal}
-\figref{fig:siso_rate_skip_opt_eff} shows the effects of mobility on SISO channels. Each line plots the average rate as a function of the speed at which the trace is played. These results cover a large range of speeds to show trends, in doubling increments from 1$\times$ (walking speed, $\approx$3\mph) to 128$\times$ ($>$300\mph). All schemes fall off with increased speed, and the gap between OPT and Previous-OPT grows from 20\% at human speeds to 1/3 at the fastest speeds. However, even in these mobile channels, ESNR holds up very well and tracks Previous-OPT within 10\%.
+I begin by comparing Effective SNR performance against the Optimal algorithm. \figref{fig:siso_rate_time_opt_eff} shows the rate over time for Effective SNR and Optimal over the SISO trace. The rate is averaged over a window of 200\ms to smooth the data for readability. Effective SNR performs excellently. It is below Optimal but consistently overlaps the Delayed Optimal algorithm, which is an upper bound for schemes that track the channel and do not predict the future. Effective SNR delivers 90\% of packets, with about 10\% over-selection of rates.
+
+
 Note that Packet SNR was observed to fare quite poorly~\cite{Vutukuru_SoftRate} in mobile channels, but since Effective SNR reflects actual link quality its estimates are more accurate (\chapref{chap:delivery}) and stable (2$\times$--3$\times$ less variance).
+
 %Note this is much better than trained SNR techniques~\cite{Vutukuru_SoftRate}, because packet SNR primarily reflects strong subcarriers, while Effective SNR reflects actual performance and is hence more stable.
 
 \begin{figure}[t]
       \centering
-      \includegraphics[width=\textwidth]{figures/rate/siso_rate_time_opt_eff_sr_so.pdf}
-      \caption[SISO algorithm performance in human-speed mobility]{\label{fig:siso_rate_time_opt_eff_sr_so} ESNR, SampleRate, and SoftRate SISO performance in human-speed mobility.}
+      \includegraphics[width=\textwidth]{figures/rate/siso_rate_time_all.pdf}
+      \caption[SISO algorithm performance in human-speed mobility]{\label{fig:siso_rate_time_opt_eff_sr_so} Effective SNR, SoftRate, and SampleRate SISO performance in human-speed mobility.}
 \end{figure}
 \begin{figure}[t]
       \centering
-      \includegraphics[width=\textwidth]{figures/rate/siso_rate_skip_opt_eff_sr_so.pdf}
-      \caption[SISO algorithm performance in fast mobile channels]{\label{fig:siso_rate_skip_opt_eff_sr_so} OPT, ESNR, SampleRate, and SoftRate SISO performance in fast mobile channels.}
+      \includegraphics[width=\textwidth]{figures/rate/siso_rate_skip_ratio.pdf}
+      \caption[SISO algorithm performance in fast mobile channels]{\label{fig:siso_rate_skip_opt_eff_sr_so} OPT, Effective SNR, SampleRate, and SoftRate SISO performance in fast mobile channels.}
 \end{figure}
-
 
 \subsection{Effective SNR vs 802.11a/g algorithms}
-Next, I compare ESNR with SampleRate and SoftRate. The corresponding rate versus time and rate versus mobility speedup graphs are shown 
-in \figref{fig:siso_rate_time_opt_eff_sr_so} and \figref{fig:siso_rate_skip_opt_eff_sr_so}. While it is hard to separate the lines on the graph, at 1$\times$ speed, ESNR slightly outperforms SampleRate which slightly outperforms SoftRate. These results were surprising: SampleRate performs better than expected, and SoftRate performs less well. 
+Next, I compare Effective SNR with SampleRate and SoftRate, in order to see how it performs against current practical state-of-the-art SISO rate adaptation algorithms.
 
+\figref{fig:siso_rate_time_opt_eff_sr_so} shows the delivered rate of each algorithm versus time. While it is hard to separate the lines on the graph, at 1$\times$ speed, Effective SNR slightly outperforms SoftRate, which slightly outperforms SoftRate. These results were surprising, because the SoftRate work~\cite{Vutukuru_SoftRate} indicated a large gap between SoftRate and SampleRate. In deeper analysis, I discovered that dropping rate on retry is an important factor that gives it short-term adaptability. Without this rate fallback (the ``SampleRate without fallback'' line), it loses 25\%--50\% of its performance, and this is the SampleRate algorithm that was the basis for earlier comparisons.\footnote{M. Vutukuru, personal communication, and code inspection.}
 
-SampleRate's lagging channel estimate makes it degrade fastest with increasing mobility. However, it maintains a 10\%--25\% margin with ESNR, still performing well even with large speedups. In deeper analysis, I discovered that dropping rate on retry is an important factor that gives it short-term adaptability. Without this rate fallback (the ``SampleRate fixed'' line), it loses 25\%--50\% of its performance.
+\figref{fig:siso_rate_skip_opt_eff_sr_so} shows the effects of mobility on SISO channels. Each line plots the total amount of data delivered during the trace as a function of the speed at which the trace is played. The speeds range from $1\times$ to $16\times$, corresponding to movement speeds of between walking speeds $\approx$3\mph when using the normal simulation, to about 50\mph for the fastest playback. The $y$-axis value is normalized by the Optimal algorithm's performance to better illustrate how the relative performance changes at different speeds.
 
-SoftRate has among the slowest falloff with mobility speedup because it directly and accurately measures the channel, and performs the best at maximum speed. However, at slow speeds it is slightly slower on average than SampleRate, though it easily beats a SampleRate without fallback that was the basis for earlier comparisons.\footnote{M. Vutukuru, personal communication, and code inspection.}
-This gap is likely not fundamental, as SoftRate's post-decoding BER estimate should match or even slightly improve on ESNR. Further tuning will likely improve SoftRate. Note that the task for SoftRate is harder in our setting than in the original evaluation. I have added QAM-64 and other coding rates, so it must now chose among 8 SISO rates.
+This plot shows that all schemes fall off with increased speed; the gap between Optimal and the Delayed Optimal algorithm increases from about 20\% to about 30\% at the fastest speeds. However, even in these mobile channels, Effective SNR holds up quite well and tracks the Delayed Optimal algorithm within 5\%.
 
-Finally, while the performance differences between schemes are significant, they are always less than a factor of two (ignoring OPT). To put this in perspective, note that other evaluations have reported throughput based on TCP traffic, which will magnify performance gaps by reacting to packet loss.
+SoftRate performs slightly worse at the normal human speeds, but maintains at nearly a constant performance, about 70\% of Optimal, as the trace speed increases. SampleRate degrades the fastest with increasing mobility, and the version that does not reduce rate on retries finally attains less than 40\% of the Optimal performance, while the other algorithms maintain better than 60\% of Optimal performance at all speeds.
+
+Finally, I note that while the performance differences between schemes can be significant, they are always less than a factor of two. While other evaluations have reported larger differences, not that they studied throughput based on TCP traffic, which will magnify performance gaps by reacting to packet loss. The UDP-like results I generated using my simulator capture the underlying accuracy of the individual schemes instead.
 
 \begin{figure}[t]
       \centering
-      \includegraphics[width=\textwidth]{figures/rate/mimo_skip_time.pdf}
-      \caption[OPT and ESNR MIMO performance in human-speed mobility]{\label{fig:mimo_eff_snr_time} OPT and ESNR MIMO performance in human-speed mobility.}
+      \includegraphics[width=\textwidth]{figures/rate/mimo_rate_time.pdf}
+      \caption[OPT and Effective SNR MIMO performance in human-speed mobility]{\label{fig:mimo_eff_snr_time} OPT and Effective SNR MIMO performance in human-speed mobility.}
 \end{figure}
 
 \begin{figure}[ht]
       \centering
-      \includegraphics[width=\textwidth]{figures/rate/mimo_rate_skip.pdf}
-      \caption[OPT and ESNR MIMO performance in fast mobile channels]{\label{fig:mimo_eff_snr_speedup} OPT and ESNR MIMO performance in faster mobile channels.}
+      \includegraphics[width=\textwidth]{figures/rate/mimo_rate_skip_ratio.pdf}
+      \caption[OPT and Effective SNR MIMO performance in fast mobile channels]{\label{fig:mimo_eff_snr_speedup} OPT and Effective SNR MIMO performance in faster mobile channels.}
 \end{figure}
 
 \section{MIMO Rate Adaptation}
-To show the generality of the model, \figref{fig:mimo_eff_snr_time} and \figref{fig:mimo_eff_snr_speedup} show the performance of an unmodified ESNR algorithm running for 802.11n MIMO rates. These results do not include SampleRate or SoftRate as they are SISO schemes. Instead, I use OPT as a benchmark.
+Now I extend the evaluation to MIMO channels. This will show the generality of my model, which can flexibly support multiple spatial streams, and demonstrate whether its good performance extends to 802.11n. I also compare Effective SNR to an 802.11n-enabled version of SampleRate, to understand whether the larger search space will increase the performance gap between the two schemes.
+
+\figref{fig:mimo_eff_snr_time} and \figref{fig:mimo_eff_snr_speedup} show the performance of an unmodified Effective SNR algorithm running for 802.11n MIMO rates, as well as SampleRate and the two Optimal algorithms. This graph does not include a line for SoftRate, as it is not defined for multiple streams.
 %\figref{fig:mimo_eff_snr_time} and \figref{fig:mimo_eff_snr_speedup} show the rate versus time and rate versus speedup graphs. 
-These figures are in the same form as for SISO, except the range of rates has grown by a factor of 3 to support up to 195\Mbps. 
+These figures are in the same form as for SISO, except the range of rates has grown by a factor of 3 to support up to 195\Mbps. The MIMO trace is longer and has more packets-per-second, and thus includes enough data to speed up the trace by a factor of up to 256$\times$.
 
-The trends in these graphs are similar to those in the SISO graphs: at human mobility speeds, ESNR tracks Previous-OPT and delivers excellent performance, with 80\% accuracy and 10\% over-selection. In faster mobile channels, there is a slightly larger gap with Previous-OPT for MIMO than for SISO, likely because ESNR must now choose between 24 rates instead of 8. It is more likely to choose rates under the highest rate that would have worked. 
+Overall, the Effective SNR trends in these graphs are similar to those in the SISO graphs. At human mobility speeds, Effective SNR tracks the Delayed Optimal algorithm and delivers excellent performance, with 75\% accuracy and 10\% over-selection. In faster mobile channels, Effective SNR tracks the Delayed Optimal algorithm until the speeds increase to about 128$\times$, after which there is a slightly larger gap with for MIMO than for SISO. This arises likely because Effective SNR must now choose between 24 rates instead of 8. It is slightly more likely to choose rates lower than the highest rate that would have worked.
 
-Finally, note that with 3 antennas there are only four two- and three-stream rates over 117\Mbps (130, 156, 175.5 and 195 Mbps). The visible gap between indices 25--50 in \figref{fig:mimo_eff_snr_time} reflects only the difference between 1 or 2 rates of potentially different antenna modes. Taken together, these results imply that ESNR's MIMO performance is highly competitive.
+These graphs also show that---as with SISO links---SampleRate performs well in human speed mobility, only slightly worse than Effective SNR. But for SampleRate, this trend \emph{does not hold}, and as the speed of the trace gets faster the performance degrades rapidly to around one-third of Optimal, and less than half of Effective SNR. The difference between SampleRate and Effective SNR highlights that Effective SNR is able to handle the large MIMO rate space even in rapidly-changing channels, while the probe-based SampleRate algorithm cannot.
+
+%Finally, note that with three antennas there are only four two- and three-stream rates over 117\Mbps (130, 156, 175.5 and 195 Mbps). The visible gap between indices 25--50 in \figref{fig:mimo_eff_snr_time} reflects only the difference between 1 or 2 rates of potentially different antenna modes. Taken together, these results imply that Effective SNR's MIMO performance is highly competitive.
 
 
 \section{Enhancements: Transmit Antenna Selection}
-One strength of my model is that it can accommodate choices other than rates. This lets us add other functionality to ESNR without increasing complexity. \chapref{chap:delivery} demonstrated an example enhancement to trim excess transmit power.
+I conclude this chapter with an example that highlights the strength of my Effective SNR that lets it accommodate choices other than just rate. In particular, I amended my Effective SNR algorithm to select the best transmit antenna set.
 
-A second enhancement is to select the best transmit antenna when there are spare antennas. An 802.11n AP can select antennas to use to send packets to a legacy 802.11a/g client (plus use all antennas to receive packets). With three antennas to choose from, the expected gain in SNR is a little over 2.5\dB~\cite{Goldsmith}. This is often enough to advance to a higher rate.
+Transmit antenna selection can be useful in practice, for instance in an 802.11n AP that selects which antennas to use to send packets to a legacy 802.11a/g client (plus uses all antennas to receive packets). With three antennas to choose from, the expected theoretical gain in SNR is a little over 2.5\dB~\cite{Goldsmith}. For a SISO link, this gain is likely enough to advance to a higher rate.
 
-I ran a version of SISO ESNR that chose the antenna with the highest ESNR for the next transmission. This gave a gain in the average rate of 5\%.  For comparison, OPT achieved a 10\% increase by always knowing which antenna was best. No other rate adaptation schemes directly support these enhancements.
+I ran my antenna selection-enabled Effective SNR algorithm for the SISO trace using the MIMO CSI but to measure all three antennas, but filtered to use a single receive antenna. These measurements correspond to those that would be measured if the transmitter exploited the ``extension spatial streams'' CSI probe that can measured the 3x1 MISO channel as I described in \secref{sec:csi_collection}.
+
+Using the MISO CSI feedback, the Effective SNR algorithm chose the antenna with the highest Effective SNR for the next transmission. This gave a gain in the total packet delivery of 5\%. For comparison, the Optimal antenna selection algorithm achieved a 10\% increase by always knowing which antenna was best.
+
+While transmit antenna selection presents a relatively small gain for this trace, it comes at no cost and does not complicate the Effective SNR algorithm. In contrast, no other rate adaptation schemes directly support these enhancements, and would instead require customized, multi-dimensional probing algorithms and coarse adaptation of antennas to implement antenna selection.
+
+Antenna selection is one of many ways that my Effective SNR model can be applied beyond simple rate selection. In the next chapter, I present a study of four different network configuration applications.
 
 \section{Summary}
-In this chapter, I presented a detailed evaluation of Effective SNR in the context of configuring the rate for 802.11a/g and 802.11n links. The results for the single-antenna 802.11a/g systems showed that Effective SNR performs as well as or better than existing state-of-the-art algorithms for rate adaptation, with a much simpler rate \emph{selection} algorithm. I also showed that this good performance extends to 802.11n, and additional enhancements such as antenna selection. In the next chapter, I will flesh out Effective SNR applications by applying my model to a range of other configuration problems.
+In this chapter, I presented a detailed evaluation of Effective SNR in the context of configuring the rate for 802.11a/g and 802.11n links. The results for the single-antenna 802.11a/g systems showed that Effective SNR performs as well as or better than existing state-of-the-art algorithms for rate adaptation, with a much simpler rate selection algorithm.
+
+A key result of this evaluation is that this good performance extends to 802.11n, while the probe-based SampleRate algorithm suffered in the larger search space. This validates my fundamental claim that probe-based algorithms will suffer in large search spaces with dynamic channels, and motivates the need and benefits of my Effective SNR approach.
+
+Finally, I also showed that Effective SNR easily supports additional enhancements such as antenna selection. In the next chapter, I will flesh out Effective SNR applications by applying my model to a range of other configuration problems.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifx\mainfile\undefined

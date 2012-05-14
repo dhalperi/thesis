@@ -329,6 +329,7 @@ A challenge is that this information is spread across the transmitter and receiv
 In the next few subsections, I first discuss how CSI is obtained, as this is the main run-time measurement needed to run this algorithm. I then describe the transmitter- and receiver-side ways to implement \algref{alg:eff_snr_basic} and the tradeoffs of the various approaches. The primary tradeoff is between the amount of data shared (because the party performing the calculation needs up-to-date CSI) and protocol complexity.
 
 \subsection{CSI Collection}
+\label{sec:csi_collection}
 As with RSSI, receivers gather channel state information automatically while receiving a packet; the OFDM and MIMO equalizers described in \secref{sec:model_receiver} fundamentally rely on CSI to decode the received signal. This \emph{passive collection} of CSI via overheard transmissions suffices for most applications, such as rate selection. When a more comprehensive CSI measurement is needed, the transmitter can send a sounding packet~\cite[\S20.3.13.1]{80211n} at a wider bandwidth or using more streams to probe the extra dimensions. For the special case of additional spatial streams, 802.11n includes a mechanism to send a modified packet with \define{extension spatial streams}~\cite[\S20.3.9.4.6]{80211n} such that the receiver can measure the full channel during the preamble but that does not change the rate or number of streams used for the data portion.
 
 \subsection{Transmitter-side Computation}
