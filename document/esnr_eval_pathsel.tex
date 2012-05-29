@@ -77,6 +77,11 @@ To generate this function, measured the optimal throughput and Packet SNR for al
 
 Having defined both algorithms for relay selection, I next evaluate their performance.
 
+\subsection{Relay selection performance}
+I evaluated the performance of \algref{alg:relay_sel_basic} using Packet SNR or Effective SNR to predict performance on the same dataset.
+
+\figref{fig:relay_ratio_opt} plots the relative performance of each algorithm to the optimal relay algorithm, and has a truncated $y$-axis. Note that the algorithms, which choose to use a relay or not based on predictions of performance, do not choose to use a relay for the same number or set of links. Taking the union of the links for which either algorithm chooses a relay, \figref{fig:relay_ratio} shows the ratio of the path chosen using Effective SNR to the path chosen with Packet SNR. Both algorithms perform very well, choosing an optimal relay in more than 80\% of cases.
+
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\textwidth]{figures/applications/relay_ratio_opt.pdf}
@@ -88,12 +93,7 @@ Having defined both algorithms for relay selection, I next evaluate their perfor
 	\caption[The relative throughput selecting relays by Packet SNR or by Effective SNR]{\label{fig:relay_ratio}The relative throughput selecting relays by Packet SNR or by Effective SNR.}
 \end{figure}
 
-\subsection{Relay selection performance}
-I evaluated the performance of \algref{alg:relay_sel_basic} using Packet SNR or Effective SNR to predict performance on the same dataset.
-
-\figref{fig:relay_ratio_opt} plots the relative performance of each algorithm to the optimal relay algorithm, and has a truncated $y$-axis. Note that the algorithms, which choose to use a relay or not based on predictions of performance, do not choose to use a relay for the same number or set of links. Taking the union of the links for which either algorithm chooses a relay, \figref{fig:relay_ratio} shows the ratio of the path chosen using Effective SNR to the path chosen with Packet SNR. Both algorithms perform very well, choosing an optimal relay in 80\% of cases.
-
-The head-to-head comparison shows a potentially surprising result: the Packet SNR and Effective SNR-based algorithms have nearly indistinguishable performance. Effective SNR chooses a better path for 473/3347 (14\%) of links and a worse path for 393 (12\%), but this is a tiny (2.4\%) difference overall. The Effective SNR and Packet SNR lines in \figref{fig:relay_ratio_opt} are nearly indistinguishable. Unlike for access point or channel selection, the ability of Effective SNR to account for subchannel effects does not improve performance over simply using Packet SNR for relay selection.
+The head-to-head comparison shows a potentially surprising result: the Packet SNR and Effective SNR-based algorithms have nearly indistinguishable performance (and thus I truncated the $y$-axis in \figref{fig:relay_ratio_opt}). Effective SNR chooses a better path for 471/3326 (14\%) of links and a worse path for 289 (9\%), but this is a small (5.5\%) difference overall. The Effective SNR and Packet SNR lines in \figref{fig:relay_ratio_opt} are tight. Unlike for access point or channel selection, the ability of Effective SNR to account for subchannel effects does not improve performance over simply using Packet SNR for relay selection.
 
 To explain this phenomenon, recall from \figref{fig:relay_sel_gains} that the links for which performance improves using a relay are those links with low speeds (somewhat less than 100\Mbps). This is because the best possible relay path---a path with two maximum-rate hops (195\Mbps)---would have an idealized rate of 97.5\Mbps. Consequently, direct links that are faster will not benefit from a one-hop relay. Then, these results indicate that the interpolated throughput values in \figref{fig:snr_vs_mbps} are fairly accurate for slower links.
 
