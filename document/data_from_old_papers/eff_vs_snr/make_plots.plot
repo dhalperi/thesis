@@ -35,3 +35,8 @@ plot \
 '' using 1:7 ls 6 w l notitle, \
 '' using 1:(4) ls 7 w l, \
 '' using 1:(8) ls 7 w l
+
+set size 0.8,0.7
+set output 'eff_vs_snr_qpsk_fortalk.pdf'
+set ytics 2
+replot

@@ -31,3 +31,17 @@ plot \
 'fsf_shape_plottable.txt' using 1:3 ls 2 w lp title 'PRR 78%, SNR 27.1 dB', \
 'fsf_shape_plottable.txt' using 1:4 ls 3 w lp title 'PRR 74%, SNR 18.2 dB', \
 'fsf_shape_plottable.txt' using 1:5 ls 4 w lp title 'PRR 80%, SNR 16.5 dB'
+
+# For talk
+set size 0.8,0.7
+set term pdf color enhanced fsize 14 dashed
+set output 'fsf_shape_fortalk.pdf'
+set key off
+set yrange [0:40]
+set xtics font "Helvetica,10" 14
+set ytics font "Helvetica,10" 10
+set noxlabel
+set noylabel
+plot \
+	'fsf_shape_plottable.txt' using 1:2 ls 2 w lp notitle, \
+	'fsf_shape_plottable.txt' using 1:5 ls 3 w lp notitle
