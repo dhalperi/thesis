@@ -10,16 +10,24 @@ set term pdf color enhanced fsize 10 dashed
 set grid ls 9
 set output 'shannon.pdf'
 
-set size 1,0.7
+set size 0.5,0.7
 set xrange [0:1000]
 set yrange [0:12]
 set border lw 4
-set key bottom right
+set key top left
 set ylabel "Capacity (bps/Hz)"
-set xlabel "SNR"
+set xlabel "SNR (linear scale)"
 set ytics 2
 set mytics 2
 plot log(1+x)/log(2) title "Shannon-Hartley" ls 1
+#
+set output 'shannon_log.pdf'
+set logscale x
+set xlabel "SNR (dB)"
+set xrange [0.1:1000]
+set xtics ("-10" 0.1, "0" 1, "10" 10, "20" 100, "30" 1000)
+replot
+set nolog x
 
 #############################################################
 reset
