@@ -122,7 +122,6 @@ Effective SNR provides a clear indicator of the best rate for nearly all links.}
 	\end{leftfullpage}
 \end{figure}
 
-\setcounter{figure}{0}
 \begin{figure}
 \begin{xtrafullpage}
 	\centering	
@@ -154,6 +153,86 @@ the two Effective SNR lines overlap almost all the time, and mostly appear to be
 Interestingly, these results show that Packet SNR predictions are much better for the SIMO and MIMO2 cases, though still not as accurate as Effective SNR, particularly for the highest rates. The reason is \emph{spatial diversity}: spare receive antennas gather the received signal and combine to make the channel more frequency-flat, thus bringing the Packet SNR closer to the Effective SNR. This effect is well-known, though typically not observable using real 802.11 NICs which, except my prototype implementation, do not export CSI. This result suggests that Packet SNR \emph{is} a reasonable predictor for an 802.11 configuration with significant diversity. Still, observe that Packet SNR does not transfer well across the antenna modes (as diversity gains and inter-stream interference change unpredictably) which makes this less useful. This is one reason that SISO rate adaptation schemes do not translate to MIMO.
 
 Finally, I note that neither Effective SNR nor Packet SNR performs extremely well at the lowest modulation at low SNRs. I believe this artifact arises from errors in the AGC values reported by the NIC, observed by Judd et al.~\cite{Judd_CHARM} and confirmed by my data for Intel's hardware.
+
+\subsection{XXX TITLE HERE RATE SELECTION XXX}
+This is mainly a setup to test whether I can fit all 24 graphs in well.
+
+\begin{figure}[p]
+	\begin{leftfullpage}
+	\centering
+	\begin{tabular}{cccc}
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_0.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_1.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_2.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_3.pdf} \\
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_4.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_5.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_6.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_7.pdf} \\
+
+	\midrule
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_8.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_9.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_10.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_11.pdf} \\
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_12.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_13.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_14.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_15.pdf} \\
+
+	\midrule
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_16.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_17.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_18.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_19.pdf} \\
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_20.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_21.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_22.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/esnr_goodbad_23.pdf}
+	\end{tabular}
+
+	\caption[Thresholds and False Negative/Positive Rates with Effective SNR]{\label{fig:esnr_goodbad}False negative and false positive error rates as a function of Effective SNR threshold. The figure shows results for wireless links that use one- (\emph{top}), two- (\emph{middle}), and three-stream (\emph{bottom}) rates (\mcs{0}--\mcs{23}).}
+	\end{leftfullpage}
+\end{figure}
+
+\begin{figure}[p]
+	\begin{xtrafullpage}
+	\centering
+	
+	\begin{tabular}{cccc}
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_0.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_1.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_2.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_3.pdf} \\
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_4.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_5.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_6.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_7.pdf} \\
+
+	\midrule
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_8.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_9.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_10.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_11.pdf} \\
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_12.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_13.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_14.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_15.pdf} \\
+
+	\midrule
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_16.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_17.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_18.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_19.pdf} \\
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_20.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_21.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_22.pdf} &
+	\includegraphics[height=1.3in]{figures/delivery_figures/goodbad/packet_snr_goodbad_23.pdf}
+	\end{tabular}
+
+	\caption[Thresholds and False Negative/Positive Rates with Packet SNR]{\label{fig:packet_snr_goodbad}False negative and false positive error rates as a function of Packet SNR threshold. The figure shows results for wireless links that use one- (\emph{top}), two- (\emph{middle}), and three-stream (\emph{bottom}) rates (\mcs{0}--\mcs{23}).}
+	\end{xtrafullpage}
+\end{figure}
 
 \subsection{Summary}
 In this section, I analyzed whether Effective SNR accurately predicts packet delivery. I found that viewing wireless links through the lens of Effective SNR can lead to visual separation between rates and narrow transition regions within rates. The second half of this study showed that Effective SNR is a clear indicator of rate, usually narrowing down the possible set of best rates to one or two MCS within an antenna configuration.
