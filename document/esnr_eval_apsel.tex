@@ -34,7 +34,7 @@ In this section, I evaluate the ability of Effective SNR to improve this decisio
 \end{algorithm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Characterization of access points}
+\subsection{Characterization of Access Points}
 I begin by characterizing whether access point selection matters in my testbed. How much does a good or bad choice of access point impact performance?
 
 To generate data for this evaluation, I first filtered the data set to the 11 channels in the 5\GHz band for which there is no overlapping UW Wi-Fi network. Then I considered the access point selection problem by considering each client and channel in turn. In particular, for node $c$ playing the role of a client, I defined $A$ to be the the set of access points that responded to a probe from that client on a particular channel, using the Packet SNRs measured from potential AP $a \in A$. By considering each channel independently each client generates 11 data points, for a total of $11*24=264$ simulated client association attempts. To ensure that AP choice can matter, I eliminated 17 clients that had fewer than 3 responding APs on a particular channel, leaving 247 total.
@@ -53,7 +53,7 @@ To generate data for this evaluation, I first filtered the data set to the 11 ch
 	\caption{\label{fig:ap_sel_tpt_diff}For each client, the absolute difference throughput loss over access points.}
 \end{figure}
 
-\subsection{Access point selection performance}
+\subsection{Access Point Selection Performance}
 As presented above, \algref{alg:ap_sel_basic} shows the framework for selecting access points typically used today, with Packet SNR (\algref{alg:snr_link_metric}) usually used as the metric of comparison between access points. I calculate the Effective SNR link metric as in \algref{alg:eff_snr_link_metric}---a simple instantiation of the procedure described in \chapref{chap:model}. 
 
 \begin{figure}[p]
@@ -92,7 +92,7 @@ Recall that these algorithms compute channel metrics using a single RSSI or CSI 
 
 %\xxx{Another interesting experiment would be to randomly assign APs to have 1, 2, or 3 transmit antennas. RSSI would see roughly the same SNR, but ESNR can capture the effects of heterogeneity. (Is this unfair? One could design RSSI-based algs that take streams into account; just don't think there are any yet.)}
 
-%\subsection{Evaluation methodology}
+%\subsection{Evaluation Methodology}
 %Compare the following strategies:
 %\begin{itemize}
 %\item first AP seen

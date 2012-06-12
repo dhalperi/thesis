@@ -37,13 +37,13 @@ I have released this tool publicly, and at the time of writing it is in use at 2
 \section{Future Work}
 In this section, I consider paths for future research.
 
-\subsection{Practical benefits of beamforming}
+\subsection{Practical Benefits of Beamforming}
 Transmit beamforming is a well-studied area of research in communications theory. Most theoretical systems aim to optimize Shannon capacity using ideal hardware, in which case the well known waterfilling approach~\cite[p. 183]{Tse} optimizes performance by allocating power across subchannels proportional to SNR, using the singular value decomposition. This approach may be inefficient in practice for two reasons. First, real transmit hardware can only support signals with a particular dynamic range, and so cannot perfectly support waterfilling. Secondly, in practical systems like 802.11, different subchannels are modulated identically and thus cannot make good use of the asymmetric power across subchannels. Instead, the Effective SNR model can be used to evaluate allocations of power with the goal of minimizing bit errors and finding the best working modulation and coding scheme across all subchannels.
 
-\subsection{Spatial reuse}
+\subsection{Spatial Reuse}
 Another area of further research is understanding and managing spatial reuse, that is, understanding when multiple transmitters can send concurrently on the same frequency band. This problem is the subject of great importance in today's AP wireless networks, but will likely be ameliorated to a large extent in future wireless networks that can take advantage of multiple channels. Still, existing work has shown large gains from spatial reuse especially in the area of eliminating corner cases of hidden terminals that can degrade link performance to almost nothing. Today's solutions such as CSMA/CA use expensive distributed coordination mechanisms (i.e., RTS/CTS~\cite{Karn_MACA}) with large overheads that are often disabled in practice, and today's research proposals on spatial reuse for Wi-Fi~\cite{Shrivastava_CENTAUR,Vutukuru_CMAP} have simply fixed the entire network to a single rate during experiments because of the large search space. Communications theory has also defined an Effective SINR notion that takes interference into account; extending my model to support a practical version of this notion would likely be useful as well.
 
-\subsection{Saving energy with Effective SNR}
+\subsection{Saving Energy with Effective SNR}
 Effective SNR could be highly integrated into the development of better methods to manage the power consumption of battery-operated devices. In particular, clients could select access points or relays with the express aim of minimizing wake time. By choosing a close relay that uses fast rates, a client can spend less time awake. By disabling receive antennas on the mobile device and using advanced mechanisms such as beamforming on the transmitter, the client can make further power savings. I highlighted the importance of these 802.11n parameters in an earlier measurement study~\cite{Halperin_Power}, but have not performed follow-up research.
 
 \subsection{Integration into Wi-Fi Direct}
