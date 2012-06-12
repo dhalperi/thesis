@@ -131,6 +131,7 @@ Note that the BER mapping and hence Effective SNR are functions of the modulatio
 
 To compute the output decision bit that indicates whether the link will deliver packets, we simply compare the Effective SNR to an MCS-dependent threshold $\tau$:
 \begin{equation}
+\label{eq:threshold}
 \text{works?}_m = (\rho_{\text{eff},k} > \tau_m).
 \end{equation}
 Note that the \mcs{$m$} specifies the modulation and hence determines which $k$ to use. The thresholds $\tau_m$ are determined by the \emph{receiver implementation}, but are not link- or device-dependent. We can choose $\tau$ in a variety of ways, the most straightforward of which is via measurements over a wired link as in \figref{fig:snr_prr_attenuator}. As in CHARM~\cite{Judd_CHARM}, this model can support different packet lengths with different SNR thresholds.

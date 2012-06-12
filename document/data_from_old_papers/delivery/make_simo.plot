@@ -41,3 +41,33 @@ plot \
 	'data/rssi_opt2_maxmin_rate_1x3_90.octave' using 1:2 w l ls 1 title 'Best Link', \
 	'' using 1:3 w l ls 2 title 'Worst Link'
 set nomultiplot
+
+###############
+set output "simo_rate_confusion_lr.pdf"
+
+set size 0.48,0.5
+set xrange [0:50]
+set yrange [0:8]
+set key font "Helvetica,7" box vertical bottom right width -1.5 samplen 1
+set tics nomirror
+set border 3 lw 4
+set mxtics 2
+set grid xtics mxtics ytics mytics ls 9
+set xtics font "Helvetica,7" 10
+set ytics font "Helvetica,7" ("    0" 0, "6.5" 1, "13" 2, "19.5" 3, "26" 4, \
+			      "39" 5, "52" 6, "58.5" 7, "65" 8)
+set ylabel "SIMO Bitrate"
+
+set multiplot
+set xlabel "Effective SNR (dB)"
+set origin 0.5,0
+plot \
+	'data/eff_maxmin_rate_1x3_90.octave' using 1:2 w l ls 3 title 'Best Link', \
+	'' using 1:3 w l ls 4 title 'Worst Link'
+
+set xlabel "Packet SNR (dB)"
+set origin 0,0
+plot \
+	'data/rssi_opt2_maxmin_rate_1x3_90.octave' using 1:2 w l ls 1 title 'Best Link', \
+	'' using 1:3 w l ls 2 title 'Worst Link'
+set nomultiplot
