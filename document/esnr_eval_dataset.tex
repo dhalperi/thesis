@@ -7,7 +7,7 @@ I measured the links between 24 static devices in my testbed at the University o
 I took measurements on all 35 channels, each 20\MHz wide, that the IWL5300 devices support. Of these 35 channels, 11 overlap in the 83\MHz-wide unlicensed 2.4\GHz band, and the remaining 24 non-overlapping channels are spread across three non-contiguous bands between 5.170\GHz and 5.835\GHz. In an experiment, one sender transmits packets with random payloads to 23 receivers. The transmitter sends a total of 2400 packets by interleaving 100 packets from each of the 24 MCS that correspond to 1-, 2-, or 3-stream 802.11n rates. Each receiver uses 3 antennas for spatial diversity and/or spatial multiplexing. I cycled through all transmitters and all channels over the course of a few hours, and took data at night to attempt to minimize the impact of interference.
 
 \subsection{Computing Ground Truth Packet Delivery}
-The above measurements included 100 packets for each link, MCS, and channel. From these data, it is straightforward to compute the ground-truth packet reception ratio (PRR) for each of these configurations. Then for each link $\ell$, I compute the Performance ($P$) of that link at each MCS ($m$):
+The above measurements included 100 packets for each link, MCS, and channel. From these data, it is straightforward to compute the ground-truth packet reception rate (PRR) for each of these configurations. Then for each link $\ell$, I compute the Performance ($P$) of that link at each MCS ($m$):
 \begin{equation}
 	\label{eq:prr_throughput}
 	P_{\ell,m} = \frac{R_{\ell,m}}{100} \cdot B(m),

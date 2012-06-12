@@ -19,7 +19,7 @@ set xrange [0:35]
 set yrange [0:100]
 set border 3 lw 4
 set key font "Helvetica,7" box vertical center right
-set ylabel "Packet Reception Ratio"
+set ylabel "Packet Reception Rate"
 set xlabel "SNR (dB)"
 set mxtics 5
 set mytics 2
