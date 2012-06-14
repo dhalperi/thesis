@@ -8,9 +8,9 @@
 \chapter{Further Applications of Effective SNR}
 \label{chap:applications}
 
-The detailed evaluation presented in the previous chapter showed that my Effective SNR model provides good performance when selecting rates for 802.11a/g and 802.11n links, one important application in wireless link configuration. In this chapter, I present my exploration of Effective SNR to solve four wireless configuration problems that further illustrate the broad applicability of my work.
+The detailed evaluation presented in the previous chapter showed that my Effective SNR model provides good performance when selecting rates for 802.11a/g and 802.11n links, one important application in wireless link configuration. In this chapter, I present an evaluation of the Effective SNR for four wireless configuration problems to further illustrate the broad applicability of my work.
 
-I chose four problems that represent the key applications needed to configure a network. The first three are are selection algorithms for access points, operating channels, and multi-hop paths through networks that represent the main decisions (beyond rate) that need to be made in flexible topologies such as Wi-Fi Direct networks. The last application is to classify whether a device is mobile, in order to switch between algorithms designed for static vs mobile links, or trigger a search for a new, better operating point when the device begins to move. Together these are the building blocks used to build an automatically reconfiguring network that provides good performance.
+I chose four problems that represent the key applications needed to configure a future wireless network. The first three are selection algorithms for access points, operating channels, and multi-hop paths through networks. These represent the main decisions (beyond rate) that need to be made in flexible topologies such as Wi-Fi Direct networks. The last application is to classify whether a device is mobile, in order to switch between algorithms designed for static vs. mobile links, or to trigger a search for a new, better operating point when the device begins to move. Together these are the building blocks of an automatically-reconfiguring network that provides good performance.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{esnr_eval_dataset}
@@ -20,13 +20,11 @@ I chose four problems that represent the key applications needed to configure a 
 \input{esnr_eval_mobility}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Summary}
-In the previous two chapters, I showed that my Effective SNR model can predict packet delivery for MIMO and OFDM networks, and that these predications can be used to accurately select rates for 802.11a/g and 802.11n links. In this chapter, I focused on problems that go beyond simple rate selection for a link. In particular, I evaluated three algorithms using Effective SNR and one algorithm using Channel State Information that both illustrate the flexibility of my model and also flesh out the application space of Wi-Fi network configurations. My Effective SNR-based algorithms offer good performance for these applications and make them practical.
+In this chapter, I evaluated three algorithms using Effective SNR and one algorithm using Channel State Information to illustrate the flexibility of my model and also flesh out the space of Wi-Fi network configurations. My Effective SNR-based algorithms offer good performance for these applications and make them practical.
 
-Effective SNR provides strong performance improvements over the Packet SNR for the access point and channel selection applications. Interestingly, I found that although Effective SNR works to inform multi-hop path selection in the network, it does not perform significantly better than Packet SNR because of the 802.11n spatial diversity techniques that improve the accuracy of Packet SNR.
+Effective SNR provides strong performance improvements over the Packet SNR for the access point and channel selection applications. Interestingly, I found that although Effective SNR can inform multi-hop path selection in the network, it does not perform significantly better than Packet SNR because of the 802.11n spatial diversity techniques that improve the accuracy of Packet SNR.
 
-Finally, inspired by recent work that uses information from onboard sensors about whether a device is mobile to improve link- and network-level performance, I designed and evaluated a pure CSI-based mobility classifier. This classifier can be used to complement the prior applications in a variety of ways, such as informing the nodes in the network when it might be worth looking for a new operating point.
-
-This chapter concludes the evaluation of my Effective SNR model for future wireless networks and my exploration of its power. The applications I have presented here capture the inherent flexibility of this model, and it can be used in many more applications. In the next chapter, I discuss where my work fits in the space of related research on wireless networks.
+Finally, inspired by recent work that uses information from onboard sensors to improve link- and network-level performance, I designed and evaluated a pure CSI-based mobility classifier. This classifier can be used to complement the prior applications in a variety of ways, such as informing the nodes in the network when it might be worth looking for a new operating point.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
