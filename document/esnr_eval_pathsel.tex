@@ -4,7 +4,7 @@ While today's access point and wireless distribution system (WDS) infrastructure
 
 The practical state of the art in this area is the recent work by Bahl et al.~\cite{Bahl_repeater} on an opportunistic repeater scheme for 802.11a. In this design, when a client with a strong link detects \define{rate anomaly}~\cite{Heusse_RateAnomaly}---that is, that its throughput is hurt by a client with a weak link monopolizing airtime---the strong client evaluates whether relaying that client's packets would improve throughout for both. In certain scenarios, they showed that this could improve aggregate performance of the network by 50\%--200\%.
 
-While this solution is practical and works well, the use of MIMO and other hardware techniques in 802.11n significantly complicates the picture. First, the scheme of Bahl et al.\ uses a link's RSSI (as a measure of Packet SNR) to select between the 8 available 802.11a rates. In contrast, as I have shown in \chapref{chap:delivery}, Packet SNR does not accurately predict the rate for 802.11n links, nor does it enable devices to choose between different MIMO modes. Second, Bahl et al.\ used a homogenous network of single-antenna 802.11a chipsets; but the set of devices in most 802.11n networks will be heterogeneous, with differing numbers of antennas and asymmetric transmit/receive capabilities. While it is not clear how to handle these challenges via Packet SNR, Effective SNR offers the ability to overcome them. In this section, I evaluate the ability of Effective SNR to deliver the benefits of opportunistic repeaters in 802.11n networks.
+While this solution is practical and works well, the use of MIMO and other hardware techniques in 802.11n significantly complicates the picture. First, the scheme of Bahl et al.\ uses a link's RSSI (as a measure of Packet SNR) to select between the 8 available 802.11a rates. In contrast, as I have shown in \chapref{chap:delivery}, Packet SNR does not accurately predict the rate for 802.11n links, nor does it enable devices to choose between different MIMO modes. Second, Bahl et al.\ used a homogeneous network of single-antenna 802.11a chipsets; but the set of devices in most 802.11n networks will be heterogeneous, with differing numbers of antennas and asymmetric transmit/receive capabilities. While it is not clear how to handle these challenges via Packet SNR, Effective SNR offers the ability to overcome them. In this section, I evaluate the ability of Effective SNR to deliver the benefits of opportunistic repeaters in 802.11n networks.
 
 Note that the problem of path selection is similar to AP selection, except that when choosing between repeaters (or a direct link) the entire path must be considered rather than merely the last hop. For simplicity, I assume that the network diameter is small such that pipelining~\cite{Rodrig_thesis} is of limited benefit, and do not consider schemes that forward along multiple unreliable paths such as ExOR~\cite{Biswas_ExOR}. I next describe the basic path selection algorithm I evaluate and characterize the multi-hop paths in my testbed.
 
@@ -40,13 +40,13 @@ How much can relaying help in this testbed? To evaluate this, I calculated the b
 \begin{minipage}{0.48\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{figures/applications/relay_gains.pdf}
-	\caption[Performance of the direct link and the multihop paths]{\label{fig:relay_sel_gains}Performance of the direct link and the optimal relay or multi-hop path.}
+	\caption[Performance of the direct link and the multi-hop paths]{\label{fig:relay_sel_gains}Performance of the direct link and the optimal relay or multi-hop path.}
 \end{minipage}
 \hfill
 \begin{minipage}{0.48\textwidth}
 	\centering
 	\includegraphics[width=\textwidth]{figures/applications/relay_gains_mbps.pdf}
-	\caption[Performance gain from multihop paths]{\label{fig:relay_sel_gains_mbps}Performance gain from relay or multi-hop path.}
+	\caption[Performance gain from multi-hop paths]{\label{fig:relay_sel_gains_mbps}Performance gain from relay or multi-hop path.}
 \end{minipage}
 \end{figure}
 
