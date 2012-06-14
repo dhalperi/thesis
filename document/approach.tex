@@ -223,7 +223,7 @@ As described above, the input to my Effective SNR-based system is a set of low-l
 A single comprehensive CSI measurement captures the low-level channel details that enable my model to calculate the Effective SNR for a wide configuration space. I next summarize how these measurements are used.
 
 \subsection{Model Output, and how to Apply it}
-I describe the model and how it's used in in complete detail in the next chapter, but the basic structure of the model is simple: given (1) a current CSI measurement of the RF channel between transmitter and receiver, and (2) a target physical layer configuration of the transmit and receive NICs, it predicts whether that link will reliably deliver packets in that configuration.
+I describe the model and how it's used in complete detail in the next chapter, but the basic structure of the model is simple: given (1) a current CSI measurement of the RF channel between transmitter and receiver, and (2) a target physical layer configuration of the transmit and receive NICs, it predicts whether that link will reliably deliver packets in that configuration.
 
 With this simple decision primitive, we can easily build higher layer optimization protocols. These include solutions to all of the problems mentioned in this chapter, such as selecting the best rate, number of spatial streams, or transmit antenna set; whether to use 20\MHz or the entire 40\MHz channel; or choosing the lowest transmit power at which the link supports a particular rate.
 

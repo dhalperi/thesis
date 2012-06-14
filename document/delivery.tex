@@ -319,7 +319,7 @@ In the rest of this chapter I demonstrate that Effective SNR has a few other use
 
 \section{Transmit Power Control}
 \label{sec:tx_power_trim}
-The data above showed that my Effective SNR model can predict delivery for measurements taken over a range of transmit powers, among other choices of rate and spatial streams. I now show apply this model to the \emph{joint interaction} of transmit power and rate, and I show that that CSI measured at one transmit power level is useful to predict delivery at a \emph{different power level}. This is valuable for power control applications, e.g., pruning excess power to reduce co-channel interference. Earlier work has shown that Packet SNR based on RSSI does not do this well~\cite{Monks_PowerMAC,Ramachandran_Symphony,Son_PowerStudy}. 
+The data above showed that my Effective SNR model can predict delivery for measurements taken over a range of transmit powers, among other choices of rate and spatial streams. I now show apply this model to the \emph{joint interaction} of transmit power and rate, and I show that CSI measured at one transmit power level is useful to predict delivery at a \emph{different power level}. This is valuable for power control applications, e.g., pruning excess power to reduce co-channel interference. Earlier work has shown that Packet SNR based on RSSI does not do this well~\cite{Monks_PowerMAC,Ramachandran_Symphony,Son_PowerStudy}. 
 
 \subsection{Transmit Power Control in Faded Channels}
 First, I analyze the effect of changing transmit power in faded channels. To do this, I simply scale the CSI measured at maximum transmit power for a link and compute the resulting Effective SNR over a range of power levels.
