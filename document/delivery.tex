@@ -179,7 +179,7 @@ For the SISO (\figref{fig:snr_rate_step_1x1}) and MIMO3 (\figref{fig:snr_rate_st
 In sharp contrast, %looking at bottom lines in the graphs, 
 the two Effective SNR lines overlap almost all the time, and mostly appear to be a single line. This is almost an ideal result. Effective SNR is a clear indicator of best rate. When there is slight separation, the spread is only between rates that use the same modulation but different amounts of coding, just as I described in the last section. These combinations are also close together in our wired experiments. 
 
-Interestingly, these results show that Packet SNR predictions are much better for the SIMO and MIMO2 cases, though still not as accurate as Effective SNR, particularly for the highest rates. The reason is \emph{spatial diversity}: spare receive antennas gather the received signal and combine it to make the channel more frequency-flat~\cite{Halperin_dummies}, thus bringing the Packet SNR closer to the Effective SNR. This effect is well-known, though typically not observable using real 802.11 NICs which, except my prototype implementation, do not export CSI. This result suggests that Packet SNR \emph{is} a reasonable predictor for an 802.11 configuration with significant diversity, using measured in that configuration. Still, Packet SNR does not transfer well across the antenna modes, because diversity gains and inter-stream interference change unpredictably. This makes Packet SNR less useful as a method of selecting rates, as we will see in the next section.
+Interestingly, these results show that Packet SNR predictions are much better for the SIMO and MIMO2 cases, though still not as accurate as Effective SNR, particularly for the highest rates. The reason is \emph{spatial diversity}: Spare receive antennas gather the received signal and combine it to make the channel more frequency-flat~\cite{Halperin_dummies}, thus bringing the Packet SNR closer to the Effective SNR. This effect is well-known, though typically not observable using real 802.11 NICs which, except my prototype implementation, do not export CSI. This result suggests that Packet SNR \emph{is} a reasonable predictor for an 802.11 configuration with significant diversity, using measured in that configuration. Still, Packet SNR does not transfer well across the antenna modes, because diversity gains and inter-stream interference change unpredictably. This makes Packet SNR less useful as a method of selecting rates, as we will see in the next section.
 
 %Finally, I note that neither Effective SNR nor Packet SNR performs extremely well at the lowest modulation at low SNRs. I believe this artifact arises from errors in the AGC values reported by the NIC, observed by Judd et al.~\cite{Judd_CHARM} and confirmed by my data for Intel's hardware.
 
@@ -362,7 +362,7 @@ To show that this trimming is tight, I considered the effect of using more aggre
 
 Finally, I compared this algorithm to a scheme that uses Packet SNR to save power. The results show Packet SNR the savings are roughly similar, but more links have degraded performance and several stop working altogether.
 
-%\xxx{@Dan: redo these graphs}
+%\xxx{@Dan: Redo these graphs}
 
 \section{Interference}
 \label{sec:interference}
