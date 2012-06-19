@@ -617,7 +617,6 @@
 \def\textofDate#1{\gdef\@textofDate{#1}}  \textofDate{Date}
 
 \def\textofChair#1{\gdef\@textofChair{#1}}
-       \textofChair{Chair of the Supervisory Committee: }
 
 \newcount\@Chair \@Chair0
 \def\Chair#1#2#3{
@@ -694,6 +693,11 @@
 
 \newsavebox\abs@savebox% (\abs@savebox compliments of blerner@cs.washington.edu)
 \long\def\abstract#1{
+   \ifnum\@Chair>1
+      \textofChair{Co-Chairs of the Supervisory Committee: }
+   \else
+      \textofChair{Chair of the Supervisory Committee: }
+   \fi
    \cleardoublepage
    \begin{center}
       \@School
