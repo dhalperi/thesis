@@ -24,7 +24,7 @@ I conclude this chapter by presenting the hypothesis of my research and my appro
 \section{Problem: Rate Control for a Single Link}
 \begin{figure}[t]
 	\centering
-	\includegraphics[width=\textwidth]{figures/rate_configs.pdf}
+	\includegraphics[width=\textwidth]{figures/approach/rate_configs.pdf}
 	\caption[The rate-related 802.11n configurations that use three antennas]{\label{fig:rate_configs}The different rate-related 802.11n configurations that use three antennas and 802.11n physical layer enhancements.}
 \end{figure}
 
@@ -42,7 +42,7 @@ Now having defined the basic problem of rate control, in the next two sections I
 \section{Existing Statistics-based Approaches}
 \begin{figure}[t]
       \centering
-      \includegraphics[scale=0.4]{figures/approach_figs/search_11a.pdf}
+      \includegraphics[scale=0.4]{figures/approach/search_11a.pdf}
       \caption[Rate adaptation search pattern for 802.11a]{\label{fig:search_11a}A typical rate adaptation search pattern for 802.11a.}
 \end{figure}
 The majority of rate control algorithms today rely on packet loss statistics to adapt the operating rate. These algorithms use a large number of losses as a signal that the link quality is too poor to support the current rate, and hence fall back to a lower rate that is more easily received. Conversely, when a link experiences a very small number of losses using its current rate, it sends some \emph{packet probes} at a rate, and switches to the faster rate if it also works well. \figref{fig:search_11a} shows a typical 802.11a adaptation search pattern, where each box corresponds to an 802.11a rate and the arrows show the faster (solid) and slower (dashed) rates that might be probed.
@@ -63,12 +63,12 @@ But 802.11n rate configurations are \emph{non-monotonic}. That is, it is not nec
 
 \begin{figure}[t]
       \centering
-      \includegraphics[width=\textwidth]{figures/rate_table_2d.pdf}
+      \includegraphics[width=\textwidth]{figures/approach/rate_table_2d.pdf}
       \caption[Three different rate maps for 802.11n links]{\label{fig:rate_table_2d}Three different rate maps for 802.11n links. On these links, \mcs{12} (the black box) is the highest reliable 2-stream rate, and gray boxes indicate other reliable transmit configurations. A (\emph{left}): The worst possible situation in which no 3-stream rates and no higher single-stream configurations work. B (\emph{middle}): The best case in which all single stream rates work and all 3-stream rates work up to 39~Mbps each. C (\emph{right}): An average case in which the set of reliable rates decreases as more spatial streams are used.}
 \end{figure}
 \begin{figure}[t]
       \centering
-      \includegraphics[width=\textwidth]{figures/rate_table_1d.pdf}
+      \includegraphics[width=\textwidth]{figures/approach/rate_table_1d.pdf}
       \caption[Rate maps for the links in \figref{fig:rate_table_2d} mapped into one dimension]{\label{fig:rate_table_1d}Rate maps for the links in \figref{fig:rate_table_2d} now mapped into one dimension and sorted by total link speed (Mbps).
       %Ties (e.g., 1x39 and 3x13) are broken such that configurations with fewer streams come first.
       In this view, the strict monotonicity assumed by rate adaptation algorithms is violated, and the violations occur in a channel-dependent way. Thus, 802.11n rate adaptation requires optimization along multiple dimensions.}
@@ -81,7 +81,7 @@ The key is that each of these three links is plausible, which means that the sea
 \subsection{Current 802.11n Statistics-based Approaches}
 \begin{figure}[t]
       \centering
-      \includegraphics[width=\textwidth]{figures/approach_figs/search_11n.pdf}
+      \includegraphics[width=\textwidth]{figures/approach/search_11n.pdf}
       \caption[Rate adaptation search pattern for 802.11n]{\label{fig:search_11n}A typical rate adaptation search pattern for 802.11n.}
 \end{figure}
 \figref{fig:search_11n} illustrates the multi-dimensional search challenge with a concrete example. Each row corresponds to a transmit configuration with one, two, or three spatial streams. The eight boxes correspond to the eight 802.11n MCS combinations, placed in columns that reflect the aggregate link speed.
@@ -111,13 +111,13 @@ To understand which effects still hold for 802.11n hardware, I generated perform
 \begin{figure}[t!]
 	\centering
 %	\includegraphics[width=\textwidth,viewport=13 0 364 204,clip]{figures/esnr/embed_attenuator_snr_prr.pdf}
-	\includegraphics[width=\textwidth]{figures/snr_prr_atten.pdf}
+	\includegraphics[width=\textwidth]{figures/approach/snr_prr_atten.pdf}
 	\caption[SNR vs PRR for a wired 802.11n link]{\label{fig:snr_prr_attenuator}A wired 802.11n link with variable attenuation has a predictable relationship between SNR and packet reception rate (PRR) and clear separation between rates.}
 \end{figure}
 \begin{figure}[t!]
 	\centering
 %	\includegraphics[width=\textwidth,viewport=2 0 217 124,clip]{figures/esnr/embed_scatterplot_meas_snr_small.pdf}
-	\includegraphics[width=\textwidth]{figures/snr_prr_scatter.pdf}
+	\includegraphics[width=\textwidth]{figures/approach/snr_prr_scatter.pdf}
 	\caption[SNR vs PRR for many wireless 802.11n channels]{\label{fig:snr_prr_26_65} Over real wireless channels in our testbeds, the transition region varies by 10\dB or more. The wireless channel loses the clear separation between rates (and so only three rates are shown for legibility).}%
 \end{figure}
 
@@ -134,7 +134,7 @@ I listed above several reasons that Packet SNR calculated from RSSI has historic
 \begin{figure}[t]
   \centering
 %  \includegraphics[width=\columnwidth,viewport=2 9 185 108,clip]{figures/esnr/embed_fsf-shape-two-links.pdf}
-  \includegraphics[width=0.8\textwidth]{figures/fsf_shape.pdf}
+  \includegraphics[width=0.8\textwidth]{figures/approach/fsf_shape.pdf}
   \caption[Channel gains on four links that perform about equally well at 52\Mbps]{Channel gains on four links that perform about equally well at 52\Mbps. The more faded links require larger RSSIs (i.e., more transmit power) to achieve similar PRRs.}
   \label{fig:example_fsf_shape}
   % information for the links used to make above plot: 
@@ -208,7 +208,7 @@ In this thesis, I scope my model to devices that use MIMO and OFDM, which captur
  
 \begin{figure}[t!]
 	\centering
-	\includegraphics[width=\textwidth]{figures/esnr_intuitive.pdf}
+	\includegraphics[width=\textwidth]{figures/approach/esnr_intuitive.pdf}
 	\caption[Simplified overview of an RF link operating over multiple subchannels]{\label{fig:esnr_intuitive}Simplified overview of an RF link operating over multiple subchannels.}
 \end{figure}
 
