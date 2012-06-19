@@ -54,12 +54,12 @@ In \figref{fig:snr_prr_siso}, I present a version of that plot that now includes
 
 \begin{figure}[t!]
 	\centering
-	\includegraphics[width=\textwidth]{figures/delivery_figures/snr_prr_scatter_siso.pdf}
+	\includegraphics[width=\textwidth]{figures/delivery/snr_prr_scatter_siso.pdf}
 	\caption[PRR vs SNR for all SISO modulations]{\label{fig:snr_prr_siso} A scatterplot of packet reception rate versus Packet SNR for wireless links in the testbed. There are wide transition regions and significant overlap between rates.}
 \end{figure}
 \begin{figure}[t!]
 	\centering
-	\includegraphics[width=\textwidth]{figures/delivery_figures/esnr_prr_scatter_siso.pdf}
+	\includegraphics[width=\textwidth]{figures/delivery/esnr_prr_scatter_siso.pdf}
 	\caption[PRR vs Effective SNR for all SISO modulations]{\label{fig:esnr_prr_siso}A scatterplot of PRR versus Effective SNR for the same wireless links. Relative to Packet SNR, there are narrower transition regions and cleaner separation between rates. The overlap that is present is generally between links that use the same modulation but different coding schemes (see \tabref{tab:siso_mcs}).}
 \end{figure}
 
@@ -109,12 +109,12 @@ This section showed that my Effective SNR model provides a channel metric that c
 %	\begin{leftfullpage}
 %	\centering
 %	\subfigure[SISO configurations]{
-%		\includegraphics[width=0.8\textwidth]{figures/delivery_figures/siso_rate_confusion.pdf}%
+%		\includegraphics[width=0.8\textwidth]{figures/delivery/siso_rate_confusion.pdf}%
 %		\label{fig:snr_rate_step_1x1}%
 %	}%
 %	
 %	\subfigure[SIMO configurations]{
-%		\includegraphics[width=0.8\textwidth]{figures/delivery_figures/simo_rate_confusion.pdf}%
+%		\includegraphics[width=0.8\textwidth]{figures/delivery/simo_rate_confusion.pdf}%
 %		\label{fig:snr_rate_step_1x3}%
 %	}
 %	\caption[Rate confusion with Packet SNR and Effective SNR for different antenna configurations]{\label{fig:snr_rate_steps}Rate confusion with Packet SNR and Effective SNR. Excepting very low and high SNRs, one Packet SNR value maps to multiple best rates for different links. For the same data, 
@@ -128,12 +128,12 @@ This section showed that my Effective SNR model provides a channel metric that c
 %	\centering	
 %	\setcounter{subfigure}{2}
 %	\subfigure[MIMO2 configurations]{
-%		\includegraphics[width=0.8\textwidth]{figures/delivery_figures/mimo2_rate_confusion.pdf}%
+%		\includegraphics[width=0.8\textwidth]{figures/delivery/mimo2_rate_confusion.pdf}%
 %		\label{fig:snr_rate_step_2x3}%
 %	}%
 %
 %	\subfigure[MIMO3 configurations]{
-%		\includegraphics[width=0.8\textwidth]{figures/delivery_figures/mimo3_rate_confusion.pdf}%
+%		\includegraphics[width=0.8\textwidth]{figures/delivery/mimo3_rate_confusion.pdf}%
 %		\label{fig:snr_rate_step_3x3}%
 %	}
 %	\vspace{36pt}
@@ -153,22 +153,22 @@ In \figref{fig:snr_rate_steps}, I show the rate confusion by plotting the rate v
 \begin{figure}[p]
 	\centering
 	\subfigure[SISO configurations]{
-		\includegraphics[width=0.85\textwidth]{figures/delivery_figures/siso_rate_confusion_lr.pdf}%
+		\includegraphics[width=0.85\textwidth]{figures/delivery/siso_rate_confusion_lr.pdf}%
 		\label{fig:snr_rate_step_1x1}%
 	}%
 	
 	\subfigure[SIMO configurations]{
-		\includegraphics[width=0.85\textwidth]{figures/delivery_figures/simo_rate_confusion_lr.pdf}%
+		\includegraphics[width=0.85\textwidth]{figures/delivery/simo_rate_confusion_lr.pdf}%
 		\label{fig:snr_rate_step_1x3}%
 	}%
 	
 	\subfigure[MIMO2 configurations]{
-		\includegraphics[width=0.85\textwidth]{figures/delivery_figures/mimo2_rate_confusion_lr.pdf}%
+		\includegraphics[width=0.85\textwidth]{figures/delivery/mimo2_rate_confusion_lr.pdf}%
 		\label{fig:snr_rate_step_2x3}%
 	}%
 	
 	\subfigure[MIMO3 configurations]{
-		\includegraphics[width=0.85\textwidth]{figures/delivery_figures/mimo3_rate_confusion_lr.pdf}%
+		\includegraphics[width=0.85\textwidth]{figures/delivery/mimo3_rate_confusion_lr.pdf}%
 		\label{fig:snr_rate_step_3x3}%
 	}
 	\caption[Rate confusion with Packet SNR and Effective SNR for different antenna configurations]{\label{fig:snr_rate_steps}Rate confusion with Packet SNR and Effective SNR. Excepting very low and high SNRs, one Packet SNR value maps to multiple best rates for different links, though it works better in configurations that use spatial diversity (SIMO and MIMO2). For the same data, Effective SNR provides a clear indicator of the best rate for nearly all links.}
@@ -196,34 +196,34 @@ To find the threshold for a particular MCS value, I use the following procedure.
 	\centering
 	
 	\begin{tabular}{cccc}
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_0.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_1.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_2.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_3.pdf} \\
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_4.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_5.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_6.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_7.pdf} \\
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_0.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_1.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_2.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_3.pdf} \\
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_4.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_5.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_6.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_7.pdf} \\
 
 	\midrule
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_8.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_9.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_10.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_11.pdf} \\
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_12.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_13.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_14.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_15.pdf} \\
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_8.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_9.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_10.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_11.pdf} \\
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_12.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_13.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_14.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_15.pdf} \\
 
 	\midrule
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_16.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_17.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_18.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_19.pdf} \\
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_20.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_21.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_22.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/packet_snr_goodbad_23.pdf}
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_16.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_17.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_18.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_19.pdf} \\
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_20.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_21.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_22.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/packet_snr_goodbad_23.pdf}
 	\end{tabular}
 
 	\caption[Thresholds and False Negative/Positive Rates with Packet SNR]{\label{fig:packet_snr_goodbad}False negative and false positive error rates as a function of Packet SNR threshold. The figure shows results for wireless links that use one- (\emph{top}), two- (\emph{middle}), and three-stream (\emph{bottom}) rates (\mcs{0}--\mcs{23}).}
@@ -234,34 +234,34 @@ To find the threshold for a particular MCS value, I use the following procedure.
 	\begin{xtrafullpage}
 	\centering
 	\begin{tabular}{cccc}
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_0.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_1.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_2.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_3.pdf} \\
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_4.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_5.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_6.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_7.pdf} \\
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_0.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_1.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_2.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_3.pdf} \\
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_4.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_5.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_6.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_7.pdf} \\
 
 	\midrule
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_8.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_9.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_10.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_11.pdf} \\
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_12.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_13.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_14.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_15.pdf} \\
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_8.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_9.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_10.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_11.pdf} \\
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_12.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_13.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_14.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_15.pdf} \\
 
 	\midrule
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_16.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_17.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_18.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_19.pdf} \\
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_20.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_21.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_22.pdf} &
-	\includegraphics[height=1.2in]{figures/delivery_figures/goodbad/esnr_goodbad_23.pdf}
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_16.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_17.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_18.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_19.pdf} \\
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_20.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_21.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_22.pdf} &
+	\includegraphics[height=1.2in]{figures/delivery/goodbad/esnr_goodbad_23.pdf}
 	\end{tabular}
 
 	\caption[Thresholds and False Negative/Positive Rates with Effective SNR]{\label{fig:esnr_goodbad}False negative and false positive error rates as a function of Effective SNR threshold. The figure shows results for wireless links that use one- (\emph{top}), two- (\emph{middle}), and three-stream (\emph{bottom}) rates (\mcs{0}--\mcs{23}).}
@@ -271,21 +271,21 @@ To find the threshold for a particular MCS value, I use the following procedure.
 \begin{figure}[htbp]
   \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{figures/delivery_figures/goodbad/error_rates.pdf}
+  \includegraphics[width=\textwidth]{figures/delivery/goodbad/error_rates.pdf}
   \caption[Balanced error rates for Effective SNR and Packet SNR]{Balanced error rates for Effective SNR and Packet SNR in wireless testbed links.}
   \label{fig:balanced_error}
   \end{minipage}
   \hfill
   \begin{minipage}{0.48\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{figures/delivery_figures/goodbad/error_ratio.pdf}
+  \includegraphics[width=\textwidth]{figures/delivery/goodbad/error_ratio.pdf}
   \caption[Balanced error rate for Effective SNR relative to Packet SNR]{The balanced error rate for Effective SNR relative to Packet SNR in wireless testbed links.}
   \label{fig:balanced_error_ratio}
   \end{minipage}
 \end{figure}
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\textwidth]{figures/delivery_figures/goodbad/selection_performance.pdf}
+  \includegraphics[width=\textwidth]{figures/delivery/goodbad/selection_performance.pdf}
   \caption[Performance from selecting rates with Effective SNR and Packet SNR]{The performance of selecting rates based on Effective SNR and Packet SNR thresholds for 2163 wireless testbed links.}
   \label{fig:selection_performance}
 \end{figure}
@@ -326,7 +326,7 @@ First, I analyze the effect of changing transmit power in faded channels. To do 
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\textwidth]{figures/eff_vs_snr_qpsk.pdf}
+  \includegraphics[width=\textwidth]{figures/delivery/eff_vs_snr_qpsk.pdf}
   \caption[Effective SNR vs Packet SNR for four faded links]{Effective SNR (for QPSK) versus Packet SNR for flat (left) to faded (right) links.}
   \label{fig:eff_vs_rssi}
 \end{figure}
@@ -343,11 +343,11 @@ These experiments start with 88 SISO links from the Intel Labs Testbed configure
 \begin{figure}[t]
       \centering
       \subfigure[Predicted and measured power saving]{%
-      \includegraphics[width=0.5\columnwidth,viewport=0 7 195 110,clip]{figures/power_save_1x1.pdf}%
+      \includegraphics[width=0.5\columnwidth,viewport=0 7 195 110,clip]{figures/delivery/power_save_1x1.pdf}%
       \label{fig:power_save_cdf}%
       }%
       \subfigure[Measured PRR corresponding to reduced TX power levels]{%
-      \includegraphics[width=0.5\columnwidth,viewport=0 7 195 110,clip]{figures/power_save_final_prr_1x1.pdf}%
+      \includegraphics[width=0.5\columnwidth,viewport=0 7 195 110,clip]{figures/delivery/power_save_final_prr_1x1.pdf}%
       \label{fig:power_prr_cdf}%
       }%
       \caption[Impact of pruning excess transmit power]{\label{fig:power_save_1x1} Power saving and performance impact of pruning excess transmit power. Pruning with Effective SNR is tight (within 0.5\dB) and does not degrade performance. Pruning with packet SNR degrades performance more without much extra savings.} 
