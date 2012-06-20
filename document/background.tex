@@ -15,7 +15,7 @@ Electromagnetic (EM) communications, which send data using \define{electromagnet
 
 Data transmission using EM signals works by \define{modulating} a pure sine wave with frequency $f$, i.e.\ by transforming the sine wave to reflect the underlying data. The simplest modulation scheme might be to turn the sine wave on or off depending on whether the bit to be transmitted is a 1 or a 0. The rate at which the transmitter varies the signal---in this example, the rate the sine wave is turned on or off---is called the \define{symbol rate}, and determines the \emph{bandwidth} of the channel $B$ measured in Hertz (Hz).
 
-The \emph{amplitude} of the sine wave, e.g. how much the peak varies from the zero (usually measured in volts (V)), determines the \define{power} of the signal. These two quantities are related by a quadratic relationship: Doubling the amplitude of a signal results in a quadrupling of the signal power.
+The \emph{amplitude} of the sine wave, e.g., how much the peak varies from the zero (usually measured in volts (V)), determines the \define{power} of the signal. These two quantities are related by a quadratic relationship: Doubling the amplitude of a signal results in a quadrupling of the signal power.
 
 In a \define{link}, that is a sender communicating data to a receiver, the sender generates a signal with \define{transmit (signal) power} level $T$ that propagates through the \define{channel} connecting the two. The channel could be a \define{wire} or it could be the free-space \define{radio frequency (RF)} environment in which signals propagate from the transmitter's antenna to the receiver's antenna over the air.
 
@@ -130,7 +130,7 @@ In a wireless link, the electromagnetic signal is emitted from an antenna as a \
 \label{eq:friis}
 	S \propto \frac{T}{d^n},
 \end{equation}
-where $d$ is the distance between transmitter and receiver, and $n$ is the path loss exponent. In free space, $n$ has a value of 2, reflecting the fact that the energy transmitted at a particular time is spread out over the two-dimensional surface of a sphere, an area that grows with $d^2$. (For a directional antenna, the energy is spread over a different geometric shape, e.g. a cone, but this shape will still have a two-dimensional surface area).
+where $d$ is the distance between transmitter and receiver, and $n$ is the path loss exponent. In free space, $n$ has a value of 2, reflecting the fact that the energy transmitted at a particular time is spread out over the two-dimensional surface of a sphere, an area that grows with $d^2$. (For a directional antenna, the energy is spread over a different geometric shape, e.g., a cone, but this shape will still have a two-dimensional surface area).
 
 The path loss exponent varies in different indoor environments, but empirically tends to take on a value between 2 and 4~\cite{Sklar}. This empirical result is explained as the sum of many complex effects that result from the interaction of radio waves with objects in the environment. One such effect is \define{shadowing}, in which materials such as glass or metal prevent radio waves from passing through. I explain more additional, more complicated channel effects below.
 
