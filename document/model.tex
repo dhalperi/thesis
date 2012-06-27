@@ -11,7 +11,7 @@
 In this chapter, I detail my Effective SNR-based model for Wi-Fi. I set the stage for the discussion with a detailed description of the operation of a MIMO-OFDM link.
 
 I then present the core Effective SNR model, showing how the input channel state is processed to determine how well a particular transmitter/receiver configuration set will deliver packets. %Conceptually, this is a simple process: Simply determine the SNRs of the individual subchannels, compute the individual BERs, average these BERs to calculate the Effective BER, and then determine the Effective SNR.
-This process is conceptually simple, but each step is complex, because the model must be able to handle a wide range of transmitter and receiver techniques and their implementations. The challenge is to capture these complexities in a relatively simple model (\secref{sec:model_overview}--\secref{sec:model_receiver}).
+This process is conceptually simple, but each step is complex, because the model must be able to handle a wide range of transmitter and receiver techniques and their implementations. The challenge is to capture these complexities in a relatively simple model.
 
 Having described my model and how it meets this goal, I then explain how an algorithm can use it make configuration decisions. I also describe what the wireless on-air protocols for using my model actually look like. I conclude this chapter by comparing my Effective SNR approach to other state-of-the-art techniques for understanding and predicting the performance of wireless channels.
 
@@ -25,9 +25,9 @@ Having described my model and how it meets this goal, I then explain how an algo
 \section{Overview of a MIMO-OFDM Link}
 \label{sec:11n_overview}
 
-I begin with a detailed description of a MIMO-OFDM link in the context of 802.11n in order to explain the configuration space and implementation-specific choices that my model my model must support (\figref{fig:11n_link_simplified}). The first block shows standard transmitter processing that generates $S$ spatial streams of modulated symbols from the packet. The internals of this block scramble the original packet to randomize the bits, add error correction, then split the coded bits across the $S$ spatial streams and interleave them between the OFDM subcarriers. These steps spread bits that are coded together across frequency- and spatially-diverse subchannels, after which the transmitter modulates the spread bits into the $S$ streams.
+I begin with a detailed description of a MIMO-OFDM link in the context of 802.11n in order to explain the configuration space and implementation-specific choices that my model my model must support (\figref{fig:11n_link_simplified}). The first block shows standard transmitter processing that generates $S$ spatial streams of modulated symbols from the bits of a packet. The internals of this block scramble the original packet to randomize the bits, add error correction, then split the coded bits across the $S$ spatial streams and interleave them between the OFDM subcarriers. These steps spread bits that are coded together across frequency- and spatially-diverse subchannels, after which the transmitter modulates the spread bits into the $S$ streams.
 
-The second block is the \define{spatial mapper} $\mathbf{V}$, which maps the $S$ spatial streams to the $M$ transmit antennas. Different spatial mapping algorithms might map each stream to a single antenna, send a linear combination of each stream to each antenna, or (when $S<M$) use \define{Space-Time Block Codes (STBC)} to take advantage of the extra spatial diversity.
+The second block is the \define{spatial mapper} $\mathbf{V}$, which maps the $S$ spatial streams to the $M$ transmit antennas. Different spatial mapping algorithms might map each stream to a single antenna, send a linear combination of each stream to each antenna, or (when $S<M$) use \define{Space-Time Block Codes (STBC)} to take advantage of the extra spatial diversity provided by excess transmit antennas.
 
 These signals then propagate across the RF channel $\mathbf{H}$ to the $N$ receive antennas. Note that although the figure shows a single RF channel $\mathbf{H}$, the channel can actually be different for every OFDM subcarrier. Consequently, transmitters with the ability to use beamforming can choose for each subcarrier $i$ a different spatial mapping $\mathbf{V}_i$ designed to make the best use of the channel $\mathbf{H}_i$.
 
@@ -112,7 +112,7 @@ QPSK & 2 & $Q\left(\sqrt{\rho}\right)$\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Computing Effective SNR from Subchannel SNRs}
-At the core of my model is the Effective $E_b/N_0$ algorithm from Nanda and Rege~\cite{Nanda_EffectiveSNR}, which uses information about the fading properties of individual subchannels used in a link to compute an SNR value for that link that is directly tied to its overall error rate. This process works as follows:
+At the core of my model is the Effective $E_b/N_0$ algorithm from Nanda and Rege~\cite{Nanda_EffectiveSNR}, which uses information about the fading properties of the individual subchannels in a link to compute an SNR value for that link that is directly tied to its overall error rate. This process works as follows:
 
 Suppose that we are given a set of Subchannel SNRs, indexed such that $\rho_i$ corresponds to the SNR for the $i$th subchannel, $i\in1\dots C$. The first step is to convert the Subchannel SNRs to Subchannel BERs. In \tabref{tab:ber_snr}, I give the formulas that relate SNR to BER for the modulations used in 802.11. These are adapted from textbook formulas~\cite[\S3.7.1 and \S7.9.3.1]{Sklar} to use the SNR that is measured by wireless NICs instead of the $E_b/N_0$ that is traditionally used in textbooks. Because different modulations have distinct constellations, each modulation has a slightly different error rate function identified as $\text{BER}_k$, where $k$ is the number of bits encoded by one symbol. I use $\text{BER}_k^{-1}$ to denote the inverse mapping from BER to SNR.
 
@@ -131,6 +131,37 @@ That is, the Effective BER is the average bit error rate across subchannels. The
 %SoftRate estimates BER using internal receiver state~\cite{Vutukuru_SoftRate}. We compute it from channel measurements instead.
 
 Note that the BER mapping and hence Effective SNR depend on the modulation ($k$), because different constellations have different densities (recall \figref{fig:constellations}). That is, unlike the RSSI, fixing all parameters but rate for a particular 802.11n wireless channel will still result in four different Effective SNR values, each one describing performance for each of the modulations. (IEEE 802.11ac will have five.) In practice, the interesting regions for the four Effective SNRs do not overlap because at a particular Effective SNR value only one modulation will be near the transition from useless (BER $\approx$0.5) to lossless (BER $\approx$0). When graphs in this paper are presented with an Effective SNR axis, I use all four values, each in the appropriate SNR range.
+
+Here, I use the Effective SNR $\rho_{\text{eff},k}$ to represent the Effective SNR for a particular modulation scheme. To generalize to configuration problems beyond rate, I use $\rho_{\text{eff},c}$ to denote the Effective SNR of a link in a particular configuration $c$. Note that $c$ includes both the choice of modulation as well as the other Wi-Fi physical layer parameters.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figures/model/eff_snr_example.pdf}
+  \caption[Packet SNR and Effective SNRs for a sample faded link]{Sample faded link showing the Packet SNR and Effective SNRs for different modulations. BPSK has the lowest Effective SNR, but it needs less energy to decode.}
+  \label{fig:eff_example}
+\end{figure}
+
+\begin{table}[t]
+	\centering
+	\begin{tabular}{ccc}
+	\toprule%
+	Modulation & $\rho_\text{eff}$ (dB) & $\text{BER}_\text{eff}$\\
+	\midrule%
+	BPSK   &  9.7 & $8\times10^{-6}$\\
+	QPSK   & 10.9 & $2\times10^{-4}$\\
+	16-QAM & 13.9 & $1\%$\\
+	64-QAM & 16.1 & $5\%$\\
+	\bottomrule
+	\end{tabular}
+	\caption[Effective SNRs and Effective BERs for the example link in \figref{fig:eff_example}]{\label{tab:example_bers}Effective SNRs and Effective BERs for the example link in \figref{fig:eff_example}.}
+\end{table}
+
+\subsection{Effective SNR Example}
+To make this description concrete, I present an Effective SNR calculation using this core model for an example SISO 802.11n link in \figref{fig:eff_example}.  The subchannels of this single-antenna link are simply the OFDM subcarriers, illustrated by the solid line. There is also one line for the Packet SNR, i.e., the average SNR across all subchannels. The figure includes four lines that each represent the Effective SNR for a different modulation. \tabref{tab:example_bers} shows the Effective SNRs and Effective BERs for this link.
+
+Note that the Effective SNRs are well below the Packet SNR, which is biased towards the stronger subcarriers (note the logarithmic $y$-axis scale). This link does a poor job of harnessing the received power because it is badly faded, so its Packet SNR is a poor predictor of its rate. The simpler modulations have lower Effective SNRs than the denser modulations, but also perform much better at low SNR (recall \figref{fig:mod_ber_snr}).
+
+%In this example, when the Effective SNRs are compared with the pre-determined thresholds for each rate, the model will correctly predict that the best working rate will be \mcs{4}, a 39\Mbps that uses 16-QAM modulation and a 3/4-rate code.
 
 \subsection{Predicting Performance with Effective SNR}
 Recall that the model output is a prediction of how well the link will work in a particular configuration. Generically, this prediction can be generated using a metric function $\mathcal{M}(c, \rho_{\text{eff},c})$. This function takes as input a configuration $c$ and the Effective SNR of the link in that configuration, and it outputs a task-specific prediction of how well the link can work. I define this metric function in a generic way because the form of the output depends on the objective function of the configuration algorithm.
@@ -166,35 +197,6 @@ A metric can also have a different output than throughput. For instance, suppose
 
 I leave exploration of these more advanced Effective SNR metrics for future work. In this thesis, the simple threshold-based metric (\algref{alg:threshold_metric}) is sufficient to implement the configuration algorithms studied and provides good performance, as my results will show.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.9\textwidth]{figures/model/eff_snr_example.pdf}
-  \caption[Packet SNR and Effective SNRs for a sample faded link]{Sample faded link showing the Packet SNR and Effective SNRs for different modulations. BPSK has the lowest Effective SNR, but it needs less energy to decode.}
-  \label{fig:eff_example}
-\end{figure}
-
-\begin{table}[t]
-	\centering
-	\begin{tabular}{ccc}
-	\toprule%
-	Modulation & $\rho_\text{eff}$ (dB) & $\text{BER}_\text{eff}$\\
-	\midrule%
-	BPSK   &  9.7 & $8\times10^{-6}$\\
-	QPSK   & 10.9 & $2\times10^{-4}$\\
-	16-QAM & 13.9 & $1\%$\\
-	64-QAM & 16.1 & $5\%$\\
-	\bottomrule
-	\end{tabular}
-	\caption[Effective SNRs and Effective BERs for the example link in \figref{fig:eff_example}]{\label{tab:example_bers}Effective SNRs and Effective BERs for the example link in \figref{fig:eff_example}.}
-\end{table}
-
-\subsection{Effective SNR Example}
-To make this description concrete, I present an Effective SNR calculation using this core model for an example SISO 802.11n link in \figref{fig:eff_example}.  The subchannels of this single-antenna link are simply the OFDM subcarriers, illustrated by the solid line. There is also one line for the Packet SNR, i.e., the average SNR across all subchannels. The figure includes four lines that each represent the Effective SNR for a different modulation. \tabref{tab:example_bers} shows the Effective SNRs and Effective BERs for this link.
-
-Note that the Effective SNRs are well below the Packet SNR, which is biased towards the stronger subcarriers (note the logarithmic $y$-axis scale). This link does a poor job of harnessing the received power because it is badly faded, so its Packet SNR is a poor predictor of its rate. The simpler modulations have lower Effective SNRs than the denser modulations, but also perform much better at low SNR (recall \figref{fig:mod_ber_snr}).
-
-%In this example, when the Effective SNRs are compared with the pre-determined thresholds for each rate, the model will correctly predict that the best working rate will be \mcs{4}, a 39\Mbps that uses 16-QAM modulation and a 3/4-rate code.
-
 \subsection{A Note About Coding}
 The astute reader will notice that I did not mention error-correction in the calculations I laid out above. One key decision that makes my model practical is that it is coding-agnostic.
 
@@ -211,22 +213,22 @@ In the last section, I showed how the model of Nanda and Rege~\cite{Nanda_Effect
 
 The \define{Effective CSI} is a $N$x$S$ channel state matrix $\mathbf{H}'$, where each entry describes the gain and phase of each spatial stream as measured at each receive antenna. The columns of the Effective CSI represent \emph{spatial streams}, not \emph{transmit antennas} as in the CSI matrix $\mathbf{H}$. From the point of view of receiver processing the number of transmit antennas used is not relevant, just how the transmitted streams are received after sender-side processing and propagation through the RF channel. I discuss how to compute the Effective CSI in the next section.
 
-Note that the IEEE 802.11 standards do not specify which algorithms the receiver uses to process received signals. However, a small set of techniques are likely chosen in practice: Optimal algorithms or near-optimal techniques that have known, good complexity/optimality tradeoffs. My contact with Intel engineers and marketing documents from other chipset manufacturers confirm that the techniques I present here are the ones used in practice.
+Note that the IEEE 802.11 standards do not specify which algorithms the receiver uses to process received signals. However, a small set of techniques are likely chosen in practice: optimal algorithms or near-optimal techniques that have known, good complexity/optimality tradeoffs. My contact with Intel engineers and marketing documents from other chipset manufacturers confirm that the techniques I present here are the ones used in practice.
 
 Of course, which techniques the receiver might use to process the Effective CSI depends on the dimensionality of the effective channel. In a SISO system, there is little processing to be done, while MIMO systems that use spatial multiplexing and spatial diversity offer lots of options. Hence, I frame my presentation of these techniques around the number of streams and antennas available.
 
-\subsection{SISO links: $S=1,N=1$}
+\subsection{SISO Links: $S=1,N=1$}
 As in the example of \figref{fig:eff_example}, the SNR of a $1$x$1$ channel matrix is simply the power of the single entry in the CSI matrix. There is one Subchannel SNR for each OFDM subcarrier:
 \begin{equation}
 	\rho_i = \left| \mathbf{H}'_i \right|^2.
 \end{equation}
 
-\subsection{SIMO links: $S=1,N>1$}
+\subsection{SIMO Links: $S=1,N>1$}
 When there is a single stream and more than one receive antenna, there are two dominant algorithms used. The simpler technique is \define{antenna selection}, in which the antenna with the largest SNR is chosen, and then the SISO algorithm is used on that antenna's signal. The same antenna selection applies to all OFDM subcarriers.
 \begin{equation}
 	\rho_i = \left| \mathbf{H}'_{i,\hat{a}} \right|^2, \text{where antenna } \hat{a} \text{ has maximal Packet SNR}.
 \end{equation}
-Some older chipsets, such as the Intel PRO/Wireless 3945~\cite[\S3.5]{ipw3945} and Atheros AR5007~\cite{madwifi_diversity} used antenna selection by default.
+Some older chipsets, such as the Intel PRO/Wireless 3945~\cite[\S3.5]{ipw3945} and Atheros AR5007~\cite{madwifi_diversity} use antenna selection by default.
 
 The optimal SIMO technique is \define{maximal-ratio combining (MRC)}~\cite{Tse}, which combines the multiple copies of the signal from the different receive antennas. The resulting subcarrier SNR is simply the sum of the SNRs of the individual entries:
 \begin{equation}
@@ -237,7 +239,7 @@ MRC requires more hardware than antenna selection---one receive chain per antenn
 
 Devices with more antennas than receive chains can use \define{hybrid selection-combining} algorithms. Such a device might first select the $n < N$ antennas that have the strongest Packet SNRs and then apply MRC to those.
 
-\subsection{MIMO links: $S>1$}
+\subsection{MIMO Links: $S>1$}
 When the transmitter uses spatial multiplexing, i.e.\ $S>1$, the receiver uses a MIMO equalizer to disentangle the streams from its $N\geq S$ receive antennas. For a MIMO link, there are a total of $C=TS$ values for Subchannel SNRs, one per subcarrier (tone) per stream. I denote these $\rho_{i,j}$ where $i$ is an index over tones and $j$ an index over streams. There are several possible techniques in use; here I discuss the two algorithms most likely to be used in practice.
 
 A \define{Minimum Mean Square Error (MMSE)} MIMO receiver is used by the Intel Wireless Wi-Fi Link 5300 and perhaps other 802.11n devices. For a single stream, MMSE is optimal and equivalent to MRC, and MMSE is near optimal for spatial multiplexing.
@@ -275,7 +277,7 @@ Recall that for a given CSI measurement and a target configuration, the Effectiv
 
 \heading{MCS (Rate) Selection.} For any of the above transmitter and receiver configurations, my model can predict whether a particular MCS will reliably deliver packets. The CSI matrix may need to be slightly modified depending on the MCS, however. For instance, when using multiple streams the total amount of power is generally kept constant, so the Effective CSI must include a division of the transmit power across antennas. Similarly, some chipsets (e.g., IWL5300 and the Atheros-based Ubiquiti SR71-A~\cite{sr71a}) are unable to send at full power when using the highest modulations, because the peak-to-average power ratio (PAPR) is higher than the transmit amplifier(s) can support. For these chipsets, the Effective CSI must be scaled to compensate for the reduced transmit power when predicting the performance of the relevant modulations.
 
-\heading{Spatial Mapping.} Spatial mapping algorithms determine how the different transmit streams are mapped to transmit antennas. These are implemented by the $N$x$S$ matrices $\mathbf{V}_i$, such that the Effective SNR is
+\heading{Spatial Mapping.} Spatial mapping algorithms determine how the different transmit streams are mapped to transmit antennas. These are implemented by the $M$x$S$ matrices $\mathbf{V}_i$, such that the Effective SNR is
 \begin{equation}
 	\mathbf{H}'_i = \mathbf{H}_i\mathbf{V}_i.
 \end{equation}
@@ -313,24 +315,24 @@ I discuss the four types of spatial mapping techniques from the simplest to the 
 	\item When using \define{spatial expansion}, $S$ spatial streams are mapped to $M > S$ transmit antennas. Here, $\mathbf{V}$ is the product of an expansion matrix and one of the direct or indirect mapping matrices above. I show the case of $S=2$ and $M=3$ using a sample expansion matrix from the 802.11n standard:
 	\begin{equation*}
 		\tag{$3$x$2$ Spatial Expansion}
-		\mathbf{V} = \sqrt{\frac{2}{3}}\begin{pmatrix}
+		\mathbf{V} = \mathbf{V}'\sqrt{\frac{2}{3}}\begin{pmatrix}
 		1 & 0\\
 		0 & 1\\
 		1 & 0
-		\end{pmatrix}\mathbf{V}',
+		\end{pmatrix},
 	\end{equation*}
 	where $\mathbf{V}'$ is a direct or indirect mapping matrix. The $\sqrt{2/3}$ factor above represents the even spreading of the power from 2 streams across 3 antennas.
 %
 	\item Finally, \define{beamforming} is a general technique for mapping streams to antennas. Beamforming can be thought of as a synthesis of indirect mapping, spatial expansion (if applicable) and transmit power control. The distinctive feature of beamforming compared with the above is that it is \emph{channel-aware}; in other words, the beamforming matrix is chosen to improve performance based on the known current channel $\mathbf{H}$. This means that beamforming can use different mapping matrices $\mathbf{V}_i$ for each subcarrier, unlike the prior techniques which are applied uniformly across tones. There are a large variety of techniques that use beamforming to improve the channel, but all can be represented in matrix form.
 \end{itemize}
 
-\heading{Higher-level Applications.} To implement applications that require the composition of multiple measurements, such as channel selection, path selection, or access point selection, we can repeat the steps above. For instance, two devices that wish to find the operating channel on which their link is fastest need only frequency-hop in unison and take CSI measurements for each frequency. They can then use the model to predict the achievable bitrate of each measured operating channel and select the fastest.
+\heading{Higher-level Tasks.} To solve configuration problems that require the composition of multiple measurements, such as channel selection, path selection, or access point selection, we can repeat the steps above. For instance, two devices that wish to find the operating channel on which their link is fastest need only frequency-hop in unison and take CSI measurements for each frequency. They can then use the model to predict the achievable bitrate of each measured operating channel and select the fastest.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Protocol Details}
 \label{sec:model_protocol}
 
-In this section I make concrete the actual protocols and algorithms by which my Effective SNR model can be used. Decisions about which configuration to choose can be made by either end of the link, and each has its advantages. I begin by presenting an algorithmic overview of my model and the set of information needed to compute it. I then discuss transmit-side and receiver-side procedures for calculating the Effective SNR, including what information needs to be communicated between endpoints, and when that exchange happens, for these approaches to work.
+In this section I make concrete the actual protocols and algorithms by which my Effective SNR model can be used. Decisions about which configuration to choose can be made by either end of the link, and each has its advantages. I begin by presenting an algorithmic overview of my model and the set of information needed to compute it. I then discuss transmit-side and receiver-side procedures for calculating the Effective SNR, including what information needs to be communicated between endpoints (and when that exchange happens) for these approaches to work.
 
 \subsection{Protocol Overview}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -377,13 +379,13 @@ Alternatively, the transmitter can attempt to estimate the CSI implicitly when r
 Finally, the implicit feedback approach induces all the problems of receiver-side computation (see below) with few of the benefits, and I do not find it to be practical. Instead choosing to make decisions at the transmit side of the link, I recommend that the transmitter obtain CSI feedback explicitly when making an Effective SNR decision.
 
 \subsection{Receiver-side Computation}
-The other approach is for the receiver to perform the computations and make the application decisions, feeding them back to the transmitter when necessary. This obviates sending CSI and speeds up the protocols, but instead requires that the receiver understand the transmitter's behavior.
+The other approach is for the receiver to perform the computations and make the application decisions, feeding them back to the transmitter when necessary. This obviates sending CSI and speeds up the protocols, but instead requires that the receiver understand the transmitter's behavior and capabilities.
 
 Today, the transmitter shares some of these details, such as number of transmit antennas and whether it supports optional 802.11n features, with the receiver during association. But the standard does not include a method by which a transmitter can share its spatial mapping matrices, and it is not immediately clear that this would sufficiently capture all implementation artifacts such as those described above.
 
 The other drawback to this approach is that it complicates receiver algorithms. For instance, if the transmitter is an access point and the client a cell phone, the former device is likely to have much more sophisticated silicon. We have seen this today as many 802.11 manufacturers have targeted systems with asymmetric capabilities such that the access point shoulders all the computation load, reducing the complexity and hence cost of the client which need only support basic functionality. The receiver-side approach requires that the receiver shoulder the computational load of running the model and making decisions; in contrast for the transmitter-side approach it must only support CSI feedback.
 
-Still, I believe that the receiver-side approach is fundamentally the best. It has the primary advantage of putting the computation near the data, so that rather than feeding back the full CSI measurement to the transmitter it need only send the application decision over the air. This is similar to the approach taken by RBAR~\cite{Holland_RBAR}, and support for this has been added to 802.11 with the new 802.11n Link Adaptation Control field~\cite[\S7.1.3.5a]{80211n} that can embed feedback in packet headers, including ACKs, to directly request a particular MCS, select transmit antennas, or request a particular beamforming (or other spatial mapping) matrix.
+Still, I believe that the receiver-side approach is fundamentally the best. This approach has the primary advantage of putting the computation near the data, so that rather than feeding back the full CSI measurement to the transmitter, the receiver need only send the application decision over the air. This is similar to the approach taken by RBAR~\cite{Holland_RBAR}, and support for this has been added to 802.11 with the new 802.11n Link Adaptation Control field~\cite[\S7.1.3.5a]{80211n} that can embed feedback in packet headers, including ACKs, to directly request a particular MCS, select transmit antennas, or request a particular beamforming (or other spatial mapping) matrix.
 
 To make the receiver-side algorithm work best, I suggest a simple new contract be added to 802.11n as a standard requirement. Since today transmitters may use fundamentally different spatial mapping matrices for different numbers of streams, it is hard to compute the Effective CSI for a different number of streams. Indeed, the Intel IWL5300 uses spatial mapping matrices such that the 2-stream CSI bears no obvious relation to the 3-stream CSI without knowledge of the possible mappings, and uses different matrices for 20\MHz and 40\MHz channels. In my experiments using the IWL5300, I assumed that the receiver knows the spatial mapping matrices a priori, but sharing the full extent of these mappings is hard to fit into a clean protocol. As a cleaner solution, I propose that transmitter spatial mapping matrices be restricted such that when a receiver subsets a large (e.g., MIMO3) CSI measurement to simulate a smaller (e.g., MIMO2) configuration, the result indeed corresponds to the channel that would be measured if the transmitter used that mode. I think this new contract would best resolve the situation without greatly compromising transmitter performance or flexibility.
 
@@ -447,7 +449,7 @@ In contrast, Effective SNR applies in more settings than the other techniques be
 \subsection{Overheads and Response Time}
 \tabref{tab:algorithm_properties} summarizes my qualitative comparison of these algorithms in terms of their practical overheads and the achievable response times.
 
-Packet SNR-based algorithms, AccuRate, and Effective SNR all require only a packet preamble to record their measurements. SoftRate, which uses the output of the error correction blocks to estimate Effective BER requires a packet that contains at least a few MIMO-OFDM symbols that fully utilize the available subchannels. EEC requires slightly more bits to accurately estimate the BER (around a full packet), and the standard probe-based approaches today require multiple full-length packet probes to estimate the loss rate of a particular configuration.
+Packet SNR-based algorithms, AccuRate, and Effective SNR all require only a packet preamble to record their measurements. SoftRate, which uses the output of the error correction blocks to estimate Effective BER, requires a packet that contains at least a few MIMO-OFDM symbols that fully utilize the available subchannels. EEC requires slightly more bits to accurately estimate the BER (around a full packet), and the standard probe-based approaches today require multiple full-length packet probes to estimate the loss rate of a particular configuration.
 
 None of the schemes have much additional communication overhead beyond the existing 802.11 protocol, feeding back only configuration decisions or concise metrics such as SNR or BER estimates. When using Effective SNR to make decisions that require transmit-side computation (which other algorithms cannot handle at all) Effective SNR must feed CSI back to the transmitter, though the feedback can be compressed and may only need to be sent periodically.
 
@@ -458,7 +460,7 @@ Finally, I compare the algorithms on the basis of their responsiveness. The algo
 \section{Summary}
 This section has presented my Effective SNR model and how to use it. The key idea is to use CSI measurements made by the receiver from a single packet preamble to efficiently infer how well other configurations would work. When used with my Effective SNR model, the CSI can easily and efficiently handle a wide range of transmitter, receiver, and rate configurations. My model provides a flexible API to support many different configuration tasks and includes considerations for real receivers with practical implementations operating over real wireless channels.
 
-I concluded with a comparison of my Effective SNR-based model to other techniques with similar goals. Effective SNR can handle a much larger problem space than comparable algorithms, because my model is able to capture the underlying RF details of the MIMO-OFDM channel, rather than high-level observations of the channel, packet delivery, or error rates. In terms of overheads and response time, Effective SNR comes close to matching the best of the other algorithms, with the upside of having wider applicability to new Wi-Fi technologies..
+I concluded with a comparison of my Effective SNR-based model to other techniques with similar goals. Effective SNR can handle a much larger problem space than comparable algorithms, because my model is able to capture the underlying RF details of the MIMO-OFDM channel, rather than high-level observations of the channel, packet delivery, or error rates. In terms of overheads and response time, Effective SNR comes close to matching the best of the other algorithms, with the upside of having wider applicability to new Wi-Fi technologies.
 
 Of course, I have not yet shown that my Effective SNR model is accurate. In order to understand whether this is the case, I built a prototype implementation of my model using a commercial Intel wireless chipset. In the next chapter I describe this implementation. I use this implementation in the rest of this thesis to demonstrate that my Effective SNR model works well and supports a wide space of applications.
 

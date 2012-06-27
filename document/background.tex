@@ -43,7 +43,7 @@ $\theta$ & Phase & radians \\
 $N$ & Noise power & dBm \\
 $K$ & Temperature & kelvins \\
 $\rho$ & Signal-to-noise ratio (SNR) & dB \\
-$R$ & Shannon Capacity & bits \\
+$R$ & Shannon Capacity & bits per second (bps) \\
 $d$ & Distance & m \\
 $n$ & Path loss exponent & unitless \\
 $I$ & Interference power & dBm \\
@@ -72,7 +72,7 @@ Now that we have defined the signal and noise powers, we can discuss the limits 
 \begin{equation}
 \rho = \frac{S}{N}.
 \end{equation}
-For the example signal power of $-80\dBm$ and noise power of $-91\dBm$, this corresponds to an SNR of $11\dB$.
+The example signal power of $-80\dBm$ and noise power of $-91\dBm$ correspond to an SNR of $11\dB$.
 
 
 The Shannon-Hartley Theorem~\cite{Shannon_capacity} establishes what is called the \define{Shannon capacity} to be
@@ -88,7 +88,7 @@ R = B\log_2(1+\rho).
 \caption[The Shannon Capacity of a communications channel with Gaussian noise]{\label{fig:shannon}The Shannon Capacity of a communications channel with Gaussian noise, presented in both linear and logarithmic (dB) scales.}
 \end{figure}
 
-The Shannon-Hartley Theorem determines a bound on the maximum rate achievable as a function of the bandwidth and signal strength. However, it does not give a practical scheme that realizes this bound, and instead systems like 802.11 use many different modulations that achieve different points along the $y$-axis, and choose among these in practice depending on the underlying channel conditions.
+The Shannon-Hartley Theorem determines a bound on the maximum rate achievable as a function of the bandwidth and signal strength. However, it does not give a practical scheme that realizes this bound. Instead, systems like 802.11 use many different modulations that achieve different points along the $y$-axis and choose among these in practice depending on the underlying channel conditions.
 
 Note that for real links, the values of $S$ and $N$ are not known a priori. Instead, transmitters choose an encoding, and the receiver will be able to decode it successfully if the choice falls below the curve for the SNR experienced. The general problem of choosing the modulation to use, as well as the selection of other physical layer parameters, is the focus of my thesis. I describe this problem in more detail in the next chapter.
 
@@ -130,7 +130,7 @@ In a wireless link, the electromagnetic signal is emitted from an antenna as a \
 \label{eq:friis}
 	S \propto \frac{T}{d^n},
 \end{equation}
-where $d$ is the distance between transmitter and receiver, and $n$ is the path loss exponent. In free space, $n$ has a value of 2, reflecting the fact that the energy transmitted at a particular time is spread out over the two-dimensional surface of a sphere, an area that grows with $d^2$. (For a directional antenna, the energy is spread over a different geometric shape, e.g., a cone, but this shape will still have a two-dimensional surface area).
+where $d$ is the distance between transmitter and receiver, and $n$ is the \define{path loss exponent}. In free space, $n$ has a value of 2, reflecting the fact that the energy transmitted at a particular time is spread out over the two-dimensional surface of a sphere, an area that grows with $d^2$. (For a directional antenna, the energy is spread over a different geometric shape, e.g., a cone, but this shape will still have a two-dimensional surface area).
 
 The path loss exponent varies in different indoor environments, but empirically tends to take on a value between 2 and 4~\cite{Sklar}. This empirical result is explained as the sum of many complex effects that result from the interaction of radio waves with objects in the environment. One such effect is \define{shadowing}, in which materials such as glass or metal prevent radio waves from passing through. I explain more additional, more complicated channel effects below.
 
@@ -139,7 +139,7 @@ In wireless systems, multiple devices might send at the same time and in the sam
 \label{eq:sinr}
 \rho_I = \frac{S}{I+N}.
 \end{equation}
-While interference is an important problem, many systems, including 802.11, use \define{medium access control (MAC)} protocols to ensure that at most one device transmit at a time.
+While interference is an important problem, many systems, including 802.11, use \define{medium access control (MAC)} protocols to ensure that at most one device transmits at a time.
 
 Beyond path loss, the most important channel effect is the inherent \emph{multi-path} nature of indoor wireless environments. At 2.4\GHz and 5\GHz, RF signals bounce off metal and glass surfaces that are common indoors. This scattering leads to a situation in which many copies of the signal arrive at the receiver having traveled along many different paths. The net effect of this RF superposition depends on the phases of the individual signals. When these copies combine they may add constructively, giving a good overall signal, or destructively, mostly canceling the overall signal.
 
@@ -148,16 +148,16 @@ The phase-dependent nature of multi-path effects means that they vary over both 
 With regard to spatial variation, the small 12\cm and 6\cm wavelengths of Wi-Fi signals means that small changes in path lengths can alter a situation from good to bad. Statistical models tell us that multi-path fading effects are independent for locations separated by as little as half a wavelength. This means that multi-path causes rapid signal changes or fast fading as the receiver moves, or in the case of a stationary node as the surrounding environment changes.  Movement at fast speed also induces \define{Doppler effect}, which aggravates multi-path effects and makes the channel even more variable.
 %This means that some unlucky frequencies in a wide channel may be wiped out while others are unaffected.
 
-The net effect of multi-path fading is that the received wireless signal can vary significantly over time, frequency and space. This is a problem for good performance because at any given time there is a significant probability of a deep fade that will reduce the SNR of the channel below the level needed for a given communication scheme.
+The net effect of multi-path fading is that the received wireless signal can vary significantly over time, frequency, and space. This is a problem for good performance because at any given time there is a significant probability of a deep fade that will reduce the SNR of the channel below the level needed for a given communication scheme.
 
-However, an alternative way of looking at the effects of multi-path fading is that they provide \define{diversity}. In a sufficiently rich multi-path environment, there are so many combining copies of signals that the channel observed on different, nearby frequencies can be considered to be independently faded. For this reason among others, many systems including 802.11 use a scheme called Orthogonal Frequency Division Multiplexing (OFDM). In OFDM, a wide frequency band is split into many \define{subcarriers} that each carry different modulated bits in parallel, with a higher level error-correcting code across them to take advantage of this \define{frequency diversity}.
+However, an alternative way of looking at the effects of multi-path fading is that they provide \define{diversity}. In a sufficiently rich multi-path environment, there are so many combining copies of signals that the channel observed on different, nearby frequencies can be considered to be independently faded. For this reason among others, many systems including 802.11 use a scheme called \define{Orthogonal Frequency Division Multiplexing (OFDM)}. In OFDM, a wide frequency band is split into many \define{subcarriers} that each carry different modulated bits in parallel, with a higher level error-correcting code across them to take advantage of this \define{frequency diversity}.
 
 To get fast rates while only using sending a single symbol at a time, a wideband system must have a fast symbol rate. Since OFDM sends many symbols in parallel on smaller subcarriers, an OFDM system sends each symbol for a longer period of time. Thus by turning a single fast channel into many parallel slower channels, OFDM allows more time for the channel to average out temporal fades and provides \define{time diversity}.
 
 One more type of diversity is \emph{spatial diversity}: Antennas separated by at least half a wavelength see independently-faded channels. Devices with multiple antennas can use schemes that take advantage of the spatial diversity these antennas provide. For example, a multi-antenna receiver measures multiple independent copies of each transmitted signal. Thus with clever signal processing, such a receiver can align the phases of these copies and add them together, which averages out the noise and improves overall channel performance. In a complementary manner, a multi-antenna transmitter with knowledge of the fading properties of the individual paths between pairs of antennas can steer its signal such that the multiple copies arriving at the receiver's antenna combine optimally. This process, in which the gain and phase of the signal emitted by each antenna are adjusted (with OFDM, this adjustment may be different for each subcarrier) is called \define{beamforming}.
 %A different technique called \define{space-time codes} to achieve the same effect, but 
 
-Finally, suppose that both the transmitter and receiver have multiple antennas. The foundational work by Foschini, Gans~\cite{Foschini_Gans} and Telatar~\cite{Telatar_MIMO} in the mid 1990s introduced \define{spatial multiplexing}, which uses this new spatial degree of freedom to improve capacity. Instead of sending the same data out each antenna as above, a transmitter with $M$ antennas can use its different antennas to send up to $M$ independent \define{spatial streams} of data. An $N$-antenna receiver will then measure $N$ copies of each stream, each antenna an independent linear combination of the $M$ transmitted streams. If $M \leq N$, the receiver has enough information to solve the linear system and separate the streams, thus providing an $M$-fold gain in performance. Thus spatial multiplexing, with $N$ antennas at each side, results in a modified capacity theorem:
+Finally, suppose that both the transmitter and receiver have multiple antennas. The foundational work by Foschini and Gans~\cite{Foschini_Gans} and Telatar~\cite{Telatar_MIMO} in the mid 1990s introduced \define{spatial multiplexing}, which uses this new spatial degree of freedom to improve capacity. Instead of sending the same data out each antenna as above, a transmitter with $M$ antennas can use its different antennas to send up to $M$ independent \define{spatial streams} of data. An $N$-antenna receiver will then measure $N$ different signals, each signal an independent linear combination of the $M$ transmitted streams. If $M \leq N$, the receiver has enough information to solve the linear system and separate the streams, thus providing an $M$-fold gain in performance. Thus spatial multiplexing, with $N$ antennas at each side, results in a modified capacity theorem:
 \begin{equation}
 \label{eq:mimo_capacity}
 R = BN\log_2(1+\rho).
@@ -182,10 +182,10 @@ I conclude this discussion by mentioning one last channel effect relevant to 802
 %\end{itemize}
 
 \subsection{Summary}
-\label{sec:background_80211n}
 In this section, I have presented the fundamental principles of digital communication of wired and wireless channels, including the limits of noisy RF channels and how data is encoded. I have also described the most relevant channel effects that communicating devices must overcome, and the primary techniques used to do so. In the next section, I make this discussion concrete in the context of Wi-Fi by describing the specifics of the IEEE 802.11n standard. 
 
 \section{The IEEE 802.11n Standard}
+\label{sec:background_80211n}
 The IEEE 802.11 (Wi-Fi) standard~\cite{80211} is targeted towards defining a mode of operation for a \define{wireless local area network (WLAN)}, intended to provide medium-range connectivity ($\approx$100\m) using low transmit power (at most 1\W). It was first introduced in 1997, and has been amended many times since. In this thesis, I limit my discussion to the features of 802.11n, the newest physical layer amendment, and 802.11a, its predecessor.
 
 Wi-Fi devices use unlicensed spectrum in the 2.4\GHz and 5\GHz bands, and must coexist with consumer electronics such as microwaves, cordless phones, and baby monitors. In addition to this cross-device interference, nearby Wi-Fi networks in separate administrative domains---such as neighboring apartments---may need to share the same channel. As a result, Wi-Fi networks are not planned in a centralized fashion, but rather use decentralized protocols that work towards a good solution in a distributed fashion. For instance, 802.11 includes a \define{carrier-sense multiple access (CSMA)} protocol to manage which devices send: In essence, a transmitter listens to ensure no other devices are transmitting before sending a packet, and reduces its sending probability exponentially (via \define{exponential backoff}) if its transmission is not acknowledged.
@@ -209,12 +209,12 @@ MCS & Modulation & Coding Rate & Data Rate (Mbps) \\
 7 & 64-QAM & 5/6 & 65.0\\
 \bottomrule
 \end{tabular}
-\caption[The 802.11n single-stream rates]{\label{tab:siso_mcs} The single-stream 802.11n modulation and coding schemes (MCS). These are only slightly different than the 802.11a MCS that achieved up to 54\Mbps. The increase in maximum rate comes from slightly more efficient use of OFDM subcarriers and a new, less redundant 5/6-rate code.}
+\caption[The 802.11n single-stream rates]{\label{tab:siso_mcs} The single-stream 802.11n modulation and coding schemes (MCS). These are only slightly different than the 802.11a MCS combinations that achieved up to 54\Mbps. The increase in maximum rate comes from slightly more efficient use of OFDM subcarriers and a new, less redundant 5/6-rate code.}
 \end{table}
 
 The standard link metric is the \define{receive signal strength indicator (RSSI)}. The RSSI was included in the 802.11 standard from the beginning as ``a measure by the [physical layer hardware] of the energy observed at the antenna used to receive the current [packet]''~\cite[\S 17.2.3.2]{80211}. There are no specified requirements on its accuracy, instead, it is only required to be ``a monotonically increasing function of the received power''~\cite[\S 17.2.3.2]{80211}, and is generally used by the hardware to tell whether another device is transmitting. In practice, however, the RSSI reported by commercial Wi-Fi chipsets is an estimate of the received signal power and can be meaningfully translated into units of dBm. In this case, RSSI can be used in combination with noise measurements to compute the SNR of the link.
 
-The 2009 standard amendment to IEEE 802.11n~\cite{80211n} added functionality and protocols for multi-antenna techniques such as spatial diversity, spatial multiplexing, and beamforming. The 802.11n enhancements are shown in \tabref{tab:11n_enhancements}. Most of improvement in the maximum data rate---from 54\Mbps in 802.11a to 600\Mbps in 802.11n---comes from the ability to use wider channels and multiple spatial streams. Together, these add $2\cdot2\cdot4=16$ times as many configurations to the space of a single link. Beamforming is effectively an analog parameter and adds nearly unbounded options.\footnote{For transmitter and receiver each using 4 antennas on a 40\MHz channel, representing the beamforming matrices at maximal resolution takes 29,184 bits.} The gains of beamforming vary depending on the channel---for strong links, they tend to be small, but for weak links they can provide dramatic performance improvements~\cite{Atheros_11nTechPaper}.
+The 2009 standard amendment to IEEE 802.11n~\cite{80211n} added functionality and protocols for multi-antenna techniques such as spatial diversity, spatial multiplexing, and beamforming. The 802.11n enhancements are shown in \tabref{tab:11n_enhancements}. Most of improvement in the maximum data rate---from 54\Mbps in 802.11a to 600\Mbps in 802.11n---comes from the ability to use wider channels and multiple spatial streams. Together, these enhancements add $2\cdot2\cdot4=16$ times as many configurations to the space of a single link. Beamforming is effectively an analog parameter and adds nearly unbounded options.\footnote{For transmitter and receiver each using 4 antennas on a 40\MHz channel, representing the beamforming matrices at maximal resolution takes 29,184 bits.} The gains of beamforming vary depending on the channel---for strong links, they tend to be small, but for weak links beamforming can provide dramatic performance improvements~\cite{Atheros_11nTechPaper}.
 
 \begin{table}[t]
 \centering

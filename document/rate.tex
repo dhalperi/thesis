@@ -56,29 +56,29 @@ Like SoftRate, this algorithm obviates the search phase. There is no calibration
 
 \subsection{Trace-driven Simulator}
 
-The simulator I build uses a trace from a real mobile channel and implements all algorithms described above.
+The simulator I built uses a trace from a real mobile channel and implements all algorithms described above.
 
 \subsubsection{Channel Trace}
 I collected real channel information for the simulations. I walked around UW CSE while carrying a laptop configured to send back-to-back small packets to stationary testbed nodes that record the CSI. The CSI measures frequency-selective fading over real, varying 20\MHz MIMO channels. This is typically not observed with more narrowband experimentation, e.g., on the USRP. Recall that CSI is estimated during the preamble of the packet transmission, independent of the modulation and coding of the payload. Therefore, the mobile transmitter can quickly cycle through all antenna configurations (SIMO, MIMO2 and MIMO3) by sending a single short UDP packet at the lowest rate for each configuration.\footnote{Cycling through antenna modes to measure the full MIMO CSI could be avoided using the 802.11n extension spatial streams (\secref{sec:csi_collection}), but the IWL5300 does not yet support this technique.} This enables fine grained sampling of the channel, approximately every 650\us. The following results are derived from a trace with approximately 85,000 channel measurements taken over 55 seconds, spanning varying RF channels that range from the best 3-stream rates to SISO speeds.
 
 The measured CSI from the trace is interpolated to 56 carriers and serves as the ground truth for the channel in the packet simulator I describe next.
-\begin{figure}[ht]
-\centering
-\includegraphics[width=6in]{figures/esnr/mimo_ofdm_decoding_process.pdf}
-\caption[The 802.11n MIMO-OFDM decoding process]{\label{fig:ofdm_decoding} The 802.11n MIMO-OFDM decoding process. MIMO receiver separates the RF signal~(0) for each spatial stream~(1). Demodulation converts the separated signals into bits~(2). Bits from the multiple streams are deinterleaved and combined~(3) followed by convolutional decoding~(4) to correct errors. Finally, scrambling that randomizes bit patterns is removed and the packet is processed~(5).}
-\end{figure}
-
 
 \subsubsection{Simulator}
 To simulate rate selection algorithms operating over a mobile channel, I built a simulator from three interacting parts: (1) An 802.11n packet simulator, which determines whether packets will be delivered successfully given a particular instance of the wireless channel. This simulator also computes the physical-layer feedback used by the SoftRate and Effective SNR algorithms. (2) Implementations of the SampleRate, SoftRate, and Effective SNR algorithms. (3) An 802.11n MAC simulator, which maintains the state of the 802.11n protocol, including the current time, the length of transmissions, and MAC backoff parameters. The MAC simulator acts as a bridge between the packet simulator and the rate selection algorithms, taking rate choices from the rate selection algorithm and returning to it information about packet success or failure and the appropriate physical-layer feedback at that point in time.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=6in]{figures/esnr/mimo_ofdm_decoding_process.pdf}
+\caption[The 802.11n MIMO-OFDM decoding process]{\label{fig:ofdm_decoding} The 802.11n MIMO-OFDM decoding process. The MIMO receiver separates the RF signal~(0) for each spatial stream~(1). Demodulation converts the separated signals into bits~(2). Bits from the multiple streams are deinterleaved and combined~(3) followed by convolutional decoding~(4) to correct errors. Finally, scrambling that randomizes bit patterns is removed and the packet is processed~(5).}
+\end{figure}
+
 \heading{802.11n Packet Simulator.}
-I wrote a custom 802.11a/g/n packet simulator in a combination of MATLAB and the MIT C++ GNU Radio code. Given the CSI describing  a particular wireless channel, the simulator implements packet reception as shown in \figref{fig:ofdm_decoding}. This includes demodulation for BPSK through 64-QAM, deinterleaving, and convolutional decoding with soft inputs and soft outputs. Packets are correctly received when there are no uncorrected bit errors, or else they are lost. Thus given a measured CSI trace, the packet simulator computes which MCS combinations would successfully deliver packets for each CSI record in the trace.
+I wrote a custom 802.11a/g/n packet simulator in a combination of MATLAB and the MIT C++ GNU Radio code for SoftRate. Given the CSI describing  a particular wireless channel, the simulator implements packet reception as shown in \figref{fig:ofdm_decoding}. This includes demodulation for BPSK through 64-QAM, deinterleaving, and convolutional decoding with soft inputs and soft outputs. Packets are correctly received when there are no uncorrected bit errors, or else they are lost. Thus given a measured CSI trace, the packet simulator computes which MCS combinations would successfully deliver packets for each CSI record in the trace.
 
 The physical-layer feedback values are computed by the packet simulator. While applying error correction decoding to the received bitstream, the simulator also computes SoftRate's soft-output BER estimate for each CSI record and for each SISO rate. The simulator also computes the Effective SNR values for each CSI, but to reflect real-world NIC limits, Effective SNR is not given the measured CSI. Instead, I corrupt the CSI at the level of ADC quantization. This typically induces an error of $\pm$1.5\dB in the output Effective SNRs.
 
 \heading{802.11n MAC Simulator.}
-A second component of the simulator implements the 802.11n MAC. This includes randomized backoff and link-layer packet aggregation. Initially, the simulator is reset to time 0 with default parameters for the MAC protocols, and then a rate selection algorithm will choose a rate for the next transmission. The simulator calculates whether that transmission is received, updates its internal MAC state, and then returns information about packet delivery to the rate control algorithm, as well as the appropriate physical-layer feedback. After every transmission, the simulator 802.11n's randomized backoff process and computes the new time for the start of the next transmission.
+A second component of the simulator implements the 802.11n MAC. This includes randomized backoff and link-layer packet aggregation. Initially, the simulator is reset to time 0 with default parameters for the MAC protocols, and then a rate selection algorithm will choose a rate for the next transmission. The simulator calculates whether that transmission is received, updates its internal MAC state, and then returns information about packet delivery to the rate control algorithm, as well as the appropriate physical-layer feedback. After every transmission, the simulator executes 802.11n's randomized backoff process and computes the new time for the start of the next transmission.
 
 In 802.11n, transmitters send aggregated packet batches up to 65,000 bytes long. Batches are shortened for slower rates, when the transmission time is instead limited by the 802.11n standard's 4\ms restriction on transmission duration. Given an MCS, the simulator computes how long the transmission will last, then whether the batch is received successfully. As a single packet batch transmission can last up to 4\ms, this may overlap multiple channel probes in the trace. As senders use a fixed MCS for the entire transmission, the MAC simulator requires that $\geq$80\% of simulated packets for those channel records be received correctly in order for the batch to be received (this allows for the effects of coding).
 
@@ -88,7 +88,7 @@ SoftRate operates using the 80th percentile soft estimate from the range of pack
 The SampleRate, SoftRate, and Effective SNR algorithms are implemented as described previously, and get their inputs and outputs from the packet and MAC simulator components. Each algorithm chooses a rate based on its internal state, and the simulator returns whether the rate succeeds as well as any physical layer feedback, namely SoftRate's BER estimates and the Effective SNR values, measured during the transmission.
 
 \heading{Metrics.}
-The goal is to evaluate the ability of these algorithms to respond to changing channel conditions. Thus, the primary metric is the delivered PHY layer rate per time, modeling a UDP application. Higher-layer factors, such as TCP reactions to loss, will affect how this rate translates to throughput. These effects are ignored in the results presented here.
+The goal is to evaluate the ability of these algorithms to respond to changing channel conditions. Thus, the primary metric is the delivered MAC layer rate per time, modeling a UDP application. Higher-layer factors, such as TCP reactions to loss, will affect how this rate translates to throughput. These effects are ignored in the results presented here.
 
 The results reported are the median of five trials where the simulator is initialized with different random seeds. To vary mobility, I scale the trace at different speeds; for example, 4$\times$ mobility means that the records are assumed to arrive 4$\times$ faster than they were measured.
 
@@ -136,13 +136,13 @@ Finally, I note that while the performance differences between the schemes can b
 \begin{figure}[t]
       \centering
       \includegraphics[width=\textwidth]{figures/rate/mimo_rate_time.pdf}
-      \caption[OPT and Effective SNR MIMO performance in human-speed mobility]{\label{fig:mimo_eff_snr_time} OPT and Effective SNR MIMO performance in human-speed mobility.}
+      \caption[MIMO algorithm performance in human-speed mobility]{\label{fig:mimo_eff_snr_time} Optimal, Effective SNR, and SampleRate MIMO performance in human-speed mobility.}
 \end{figure}
 
 \begin{figure}[ht]
       \centering
       \includegraphics[width=\textwidth]{figures/rate/mimo_rate_skip_ratio.pdf}
-      \caption[OPT and Effective SNR MIMO performance in fast mobile channels]{\label{fig:mimo_eff_snr_speedup} OPT and Effective SNR MIMO performance in faster mobile channels.}
+      \caption[MIMO algorithm performance in fast mobile channels]{\label{fig:mimo_eff_snr_speedup} Optimal, Effective SNR, and SampleRate MIMO performance in faster mobile channels.}
 \end{figure}
 
 \section{MIMO Rate Adaptation}

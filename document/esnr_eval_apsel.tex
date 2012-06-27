@@ -40,12 +40,12 @@ I begin by characterizing whether access point selection matters in my testbed. 
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=\textwidth]{figures/applications/ap_sel_rel_diff.pdf}
-	\caption{\label{fig:ap_sel_rel_diff}For each client, the relative difference in throughput over access points compared to the best choice.}
+	\caption[The relative difference in throughput over 802.11n access points]{\label{fig:ap_sel_rel_diff}For each client, the relative difference in throughput over access points compared to the best choice.}
 \end{figure}
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=\textwidth]{figures/applications/ap_sel_tpt_diff.pdf}
-	\caption{\label{fig:ap_sel_tpt_diff}For each client, the absolute difference in throughput over access points compared to the best choice.}
+	\caption[The absolute difference in throughput over 802.11n access points]{\label{fig:ap_sel_tpt_diff}For each client, the absolute difference in throughput over access points compared to the best choice.}
 \end{figure}
 
 To generate data for this evaluation, I first filtered the data set to the 11 channels in the 5\GHz band for which there is no overlapping UW Wi-Fi network. Then I considered the access point selection problem by considering each client and channel in turn. In particular, for node $c$ playing the role of a client, I defined $A$ to be the set of access points that responded to a probe from that client on a particular channel. By considering each channel independently each client generates 11 data points, for a total of $11*24=264$ simulated client association attempts. To ensure that AP choice can matter, I excluded 17 clients that had fewer than 3 responding APs on a particular channel, leaving 247 total.
@@ -69,7 +69,7 @@ As presented above, \algref{alg:ap_sel_basic} shows the framework for selecting 
 	\caption[Throughput difference using APs selected by Packet SNR or Effective SNR]{\label{fig:ap_sel_delta_opt}CCDF of the throughput lost using APs selected by Packet SNR and Effective SNR, compared to Optimal.}
 \end{figure}
 
-Although both algorithms perform well, Effective SNR offers improved performance. The Effective SNR algorithm finds the best access point for 83\% (204) of clients, versus 72\% (177) for Packet Considering only the suboptimal choices, those made by Effective SNR are better: 3/4 (31/43) of incorrect choices are within 80\% of optimal, versus only half (35/70) when using Packet SNR.
+Although both algorithms perform well, Effective SNR offers improved performance. The Effective SNR algorithm finds the best access point for 83\% (204) of clients, versus 72\% (177) for Packet SNR. Considering only the suboptimal choices, those made by Effective SNR are better: 3/4 (31/43) of incorrect choices are within 80\% of optimal, versus only half (35/70) when using Packet SNR.
 
 Next, \figref{fig:ap_sel_delta_opt} shows the absolute performance loss of the two algorithms in choosing the access point. Here, each $(x,y)$ point represents the fraction of links $y$ that choose an access point within $x$\Mbps of the best access point. The area over the curves represents the performance lost by each algorithm: An accurate algorithm would be in the top left corner, losing little throughput for only a few links.
 
@@ -87,7 +87,7 @@ That Effective SNR is statistically better than Packet SNR over the testbed does
 
 Recall that these algorithms compute channel metrics using a single RSSI or CSI measurement. Generally, a single CSI probe is not as accurate as multiple measurements, because of error in the estimates of individual subcarriers. On the other hand, a single RSSI probe measures only the total power across carriers and is consistent across packets.
 
-\heading{Summary.} When selecting access points, both Packet SNR and Effective SNR make good choices; each algorithm selects the fastest access point in most cases. However, the ability of Effective SNR to capture channel effects leads to better choices more often, and generally closer-to-optimal performance when it makes a choice incorrectly.
+\heading{Summary.} When selecting access points, both Packet SNR and Effective SNR make good choices; each algorithm selects the fastest access point in most cases. However, the ability of Effective SNR to capture channel effects leads to better choices more often and generally closer-to-optimal performance when it makes a choice incorrectly.
 
 %\xxx{Another interesting experiment would be to randomly assign APs to have 1, 2, or 3 transmit antennas. RSSI would see roughly the same SNR, but ESNR can capture the effects of heterogeneity. (Is this unfair? One could design RSSI-based algs that take streams into account; just do not think there are any yet.)}
 
