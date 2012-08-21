@@ -1,0 +1,155 @@
+\documentclass[pdftex,letterpaper,twocolumn,10pt]{article}
+\usepackage{usenix_shorttitle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Paper info and meta-data                %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\AUTHORS}{Daniel Halperin}
+\newcommand{\TITLE}{An efficient and reliable network architecture for the wireless home}
+\newcommand{\TITLECLEAN}{An efficient and reliable network architecture for the wireless home}
+\newcommand{\KEYWORDS}{Put your keywords here} % Used below in ACM keywords
+\newcommand{\CONFERENCE}{Generals Document, University of Washington CSE}
+
+\usepackage[colorlinks,citecolor=blue,pdftex]{hyperref}
+\hypersetup{%
+pdfauthor = {\AUTHORS},
+pdftitle = {\TITLECLEAN},
+pdfsubject = {\CONFERENCE},
+%pdfkeywords = {\KEYWORDS},
+bookmarksopen = {false},
+pdfpagemode = {UseNone},
+pdfcreator = {},
+pdfproducer = {},
+}
+\title{\TITLE}
+\author{\rm Daniel Halperin}
+%\author{Daniel Halperin\\\\Advised by David Wetherall and Tom Anderson}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Fonts and mathy stuff                   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{xspace}
+\newcommand{\term}[1]{\texttt{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Fancy tables                            %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{tabulary}
+\usepackage{booktabs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Lists with reduced spacing              %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Figures                                 %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+% Caption package both lets you set the spacing between figure and caption
+% and also makes the \figref{} point to the right place.
+\usepackage[font=bf,aboveskip=6pt,belowskip=-4mm]{caption}
+%\usepackage{caption}
+% Get the caption package to work with ACM style
+\DeclareCaptionType[placement=b,within=none]{copyrightbox}
+% Allow subfigures, make them bold
+\usepackage[bf,BF,small]{subfigure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Formatting sections                     %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\secref}[1]{\S\ref{#1}}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+\newcommand{\heading}[1]{\vspace{4pt}\noindent\textbf{#1}}
+\newcommand{\topheading}[1]{\noindent\textbf{#1}}
+\newcommand{\noheading}[0]{\vspace{4pt}\noindent}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Units                                   %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\GHz}{\,\text{GHz}\xspace}
+\newcommand{\MHz}{\,\text{MHz}\xspace}
+\newcommand{\kHz}{\,\text{kHz}\xspace}
+\newcommand{\Gbps}{\,\text{Gbps}\xspace}
+\newcommand{\Mbps}{\,\text{Mbps}\xspace}
+\newcommand{\KB}{\,\text{KB}\xspace}
+\newcommand{\dB}{\,\text{dB}\xspace}
+\newcommand{\dBi}{\,\text{dBi}\xspace}
+\newcommand{\dBm}{\,\text{dBm}\xspace}
+\newcommand{\W}{\,\text{W}\xspace}
+\newcommand{\mW}{\,\text{mW}\xspace}
+\newcommand{\uW}{\,\text{$\mu$W}\xspace}
+\newcommand{\ms}{\,\text{ms}\xspace}
+\newcommand{\us}{\,\text{$\mu$s}\xspace}
+\newcommand{\h}{\,\text{h}\xspace}
+\newcommand{\m}{\,\text{m}\xspace}
+\newcommand{\cm}{\,\text{cm}\xspace}
+\newcommand{\mm}{\,\text{mm}\xspace}
+\newcommand{\um}{\,\text{$\mu$m}\xspace}
+\newcommand{\mi}{\,\text{mi}\xspace}
+\newcommand{\ft}{\,\text{ft}\xspace}
+\newcommand{\inch}{\,\text{in}\xspace}
+\newcommand{\insq}{\,\text{in}\ensuremath{^2}\xspace}
+\newcommand{\degree}{\ensuremath{^\circ}\xspace}
+\newcommand{\degrees}{\degree}
+\newcommand{\NB}{\text{NB}\xspace}
+\newcommand{\WB}{\text{WB}\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%        Start document                          %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\maketitle
+
+%\acmcopyright
+
+\input{abstract}
+\input{intro}
+\input{related}
+\input{preliminary}
+\input{proposed}
+\input{methodology}
+\input{timeline}
+\input{concl_future}
+
+%\vspace{-0.1in}
+%\section*{Acknowledgments}
+% Comments for people we need to ack in the final version
+% David Wetherall, Thomas Anderson
+% Jitu, JohnZ, Radha
+% Srikanth, Victor Bahl
+% Yoshi Kohno, Kevin Fu, William H. Maisel, Thomas S. Heydt-Benjamin, Ben Ransford, Shane Clark, Benessa Defend
+% Arvind
+% Shyam Gollakota, Kyle Jamieson, Hariharan Rahul
+% George Nychis, Eric Rozner
+% Nets lab (Harsha/Ethan/Colin-John-Mike-Tomas/Ivan/Buettner/Lisa/Sophia/Seunyeop-Vincent)
+% Ranveer, Thomas, James
+% Ratul
+
+%% Bibliography
+\let\oldthebibliography=\thebibliography
+\let\endoldthebibliography=\endthebibliography
+\renewenvironment{thebibliography}[1]{%
+    \begin{oldthebibliography}{#1}%
+      \setlength{\parskip}{0ex}%
+      \setlength{\itemsep}{0ex}%
+}%
+{%
+\end{oldthebibliography}%
+}
+%\small
+%\footnotesize % SPACE
+\bibliographystyle{abbrv}
+\bibliography{generals}
+
+\end{document}
+
+% Local Variables:
+% TeX-command-default: "LaTeX PDF"
+% End:

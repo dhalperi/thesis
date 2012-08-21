@@ -1,0 +1,24 @@
+\section{Conclusions and Future Work}
+\label{sec:conclusion}
+%Conclusions and future work that will not be covered in the dissertation research.
+We have long envisioned a networked home, in which services and functionality offered by different devices can be easily shared and combined to create a new style of rich applications. With over 1 billion Wi-Fi devices shipping this year alone, these applications are becoming practical. This leads to an ongoing shift in home wireless networks from a few computers that only need to access the Internet, to a dense network of diverse consumer electronics sharing data inside the home. These trends will quickly overload the access point networks we use today.
+
+In this thesis proposal, we advocated a network architecture for the wireless home that is efficient and reliable, so that it supports rich, demanding applications and these applications work well. The key is to add flexibility to the network topology and use more of the available spectrum to improve capacity and reduce contention between concurrent workloads. To take advantage of this flexibility, we leverage our preliminary work on Effective SNR for 802.11n to enable rapid and accurate configuration of the links in the network.
+
+There are many other ways in which home networks could be improved. One potentially powerful primitive to add in a multi-channel network is a device that can concurrently operate on multiple channels not by including multiple NICs, but by leveraging the fact that 802.11n NICs already have multiple RF front-ends and RF chains that could be used independently on different bands. Such a device would need more reconfigurability~\cite{hoffman_scc,ng_airblue} than available in today's NICs, but would cost little more than a single 802.11n NIC and have the same physical footprint and need only one set of antennas.
+
+A second avenue for future research is the development of better methods to manage the power consumption of battery operated devices. In particular, clients could select relays with the express aim of minimizing wake time. By choosing a close relay that uses fast rates, a client can spend less time awake. By disabling receive antennas on the mobile device and using advanced mechanisms such as beamforming on the repeater, the client can make further power savings. We highlighted the importance of these 802.11n parameters in an earlier measurement study~\cite{halperin_power}, but have not performed follow-up research.
+
+Finally, this proposal ignores the problems of coexistence between multiple networks or technologies. We used Wi-Fi only, not powerline networking, ZigBee, Bluetooth, limited use of Ethernet or fiber, or other home networking technologies. Building hybrid systems that enable multiple networking technologies to coexist peacefully and take advantage of the relative strengths of each is an important aspect of future work. Wi-Fi is a strong technology in this field, is unlikely to replace Bluetooth or ZigBee devices while there remains a large power consumption penalty for using Wi-Fi.
+
+\if 0
+\begin{itemize}
+\item one device operating on multiple concurrent channels
+\item shifting work around to balance power consumption among devices
+\item security -- setting up secure channels between mutually untrusting devices
+\item multicast in network
+\item spatial reuse on single channel
+\item coexistence between multiple home networks
+\item power control of devices
+\end{itemize}
+\fi
